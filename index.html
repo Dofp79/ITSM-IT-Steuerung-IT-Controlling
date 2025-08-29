@@ -1,4 +1,156 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="de" class="js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wir über uns – ITSM</title>
+
+  <!-- deine Styles -->
+  <link rel="stylesheet" href="css/hamburg.css">
+  <link rel="stylesheet" href="css/base.css">
+
+  <!-- SVG-Sprite: nur die Symbole, die du wirklich nutzt -->
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+    <defs>
+      <symbol id="icon-home" viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-6v-6H11v6H5v-9H2z"/></symbol>
+      <symbol id="icon-search" viewBox="0 0 24 24"><path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1 0 9 15.5l.3.3v.8l5 5 1.5-1.5-5-5zM4 9a5 5 0 1 1 10 0A5 5 0 0 1 4 9z"/></symbol>
+      <!-- weitere icons nach Bedarf -->
+    </defs>
+  </svg>
+</head>
+<body class="km1-page km1-page--one-col">
+
+  <!-- A11y-Opener (optional) -->
+  <aside aria-label="Assistenz öffnen">
+    <a class="sr-only" href="#search">Assistenz öffnen (ALT+1)</a>
+  </aside>
+
+  <!-- ===== HEADER ===== -->
+  <header class="km1-header">
+    <div class="km1-container km1-meta-navigation">
+      <ul class="km1-meta-navigation__list">
+        <li class="km1-meta-navigation__item">
+          <a class="km1-link" href="hilfe.html">
+            <span class="km1-label">Hilfe</span>
+          </a>
+        </li>
+        <li class="km1-meta-navigation__item km1-meta-navigation__item--search">
+          <a class="km1-button" href="#km1-search-dialog" data-a11y-dialog-show="km1-search-dialog" role="button">
+            <svg class="km1-icon" width="24" height="24" aria-hidden="true"><use xlink:href="#icon-search"/></svg>
+            <span class="km1-label">Suche</span>
+          </a>
+        </li>
+      </ul>
+      <a class="km1-logo km1-header__logo" href="index.html" title="Startseite">
+        <img src="assets/logo.png" alt="Logo" class="km1-img">
+      </a>
+    </div>
+
+    <div class="km1-container">
+      <!-- Hauptnavigation Level 1 -->
+      <nav class="km1-main-navigation__link-container" aria-label="Hauptnavigation">
+        <div id="km1-main-navigation__level-1" class="km1-main-navigation__level km1-main-navigation__level--1" data-js-level="1" aria-hidden="false" tabindex="-1">
+          <strong class="km1-heading km1-heading--3 km1-main-navigation__link-group-heading">
+            <a class="km1-link km1-main-navigation__link km1-main-navigation__link--current">ITSM & Controlling</a>
+          </strong>
+          <ul class="km1-main-navigation__links">
+            <li><a class="km1-link" href="ueber.html">Über mich</a></li>
+            <li><a class="km1-link" href="taetigkeiten.html">Tätigkeiten</a></li>
+            <li><a class="km1-link" href="projekte.html">Projekte</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Deko-Bow optional -->
+    <div class="km1-header__bow" aria-hidden="true"></div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main class="km1-main km1-page__main">
+    <!-- Breadcrumbs -->
+    <nav class="km1-breadcrumbs" aria-label="Brotkrumen">
+      <a class="km1-link km1-breadcrumbs__link km1-breadcrumbs__link--home" href="index.html">
+        <svg class="km1-icon" width="12" height="12" aria-hidden="true"><use xlink:href="#icon-home"/></svg>
+        <span class="sr-only">Start</span>
+      </a>
+      <span class="km1-breadcrumbs__separator">/</span>
+      <span class="km1-breadcrumbs__current">Wir über uns</span>
+    </nav>
+
+    <!-- Stage/Hero -->
+    <section class="km1-stage">
+      <figure class="km1-stage__figure">
+        <picture class="km1-picture">
+          <img class="km1-img" src="assets/hero.jpg" alt="Hero Bild">
+        </picture>
+      </figure>
+      <div class="km1-container km1-stage__content-container">
+        <div class="km1-stage__topline">ITSM</div>
+        <h1 class="km1-heading km1-heading--stage km1-stage__heading">Wir über uns</h1>
+        <p class="km1-paragraph km1-stage__text">
+          Kurztext zur Behörde/Einheit: Ziele, Verantwortung, Nutzen.
+        </p>
+      </div>
+    </section>
+
+    <!-- Teaser-Reihe -->
+    <section class="km1-teaser-row">
+      <article class="km1-teaser km1-teaser-row__teaser">
+        <div class="km1-teaser__container">
+          <div class="km1-teaser__media-container">
+            <figure class="km1-figure km1-figure--popup km1-teaser__figure">
+              <a class="km1-figure__link" href="detail-a.html">
+                <div class="km1-figure__picture-wrapper">
+                  <img class="km1-img" src="assets/teaser-a.jpg" alt="">
+                </div>
+              </a>
+            </figure>
+          </div>
+          <div class="km1-teaser__content">
+            <span class="km1-topline km1-teaser__topline">Administration und Recht</span>
+            <a class="km1-teaser__heading-link" href="detail-a.html">
+              <h3 class="km1-heading km1-heading--3 km1-teaser__heading">Das Amt A</h3>
+            </a>
+            <p class="km1-paragraph km1-teaser__paragraph">Kurzbeschreibung des Themas.</p>
+          </div>
+        </div>
+      </article>
+      <!-- weitere Teaser ... -->
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="km1-footer">
+    <div class="km1-footer__subfooter">
+      <div class="km1-container km1-footer__inner">
+        <div class="km1-footer__subfooter-upper">
+          <p>© 2025 ITSM – Doniman F. Peña Parra</p>
+          <div class="km1-footer__subfooter-wrap">
+            <ul class="km1-footer__list">
+              <li class="km1-footer__list-item"><a class="km1-link km1-footer__link" href="impressum.html">Impressum</a></li>
+              <li class="km1-footer__list-item"><a class="km1-link km1-footer__link" href="datenschutz.html">Datenschutz</a></li>
+              <li class="km1-footer__list-item"><a class="km1-link km1-footer__link" href="barrierefreiheit.html">Barrierefreiheit</a></li>
+            </ul>
+          </div>
+        </div>
+        <span class="km1-footer__line"></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- (optional) Such-Dialog-Struktur -->
+  <div id="km1-search-dialog" hidden>
+    <!-- Form, Linklisten usw. analog Struktur -->
+  </div>
+
+  <!-- dein schlankes JS -->
+  <script>
+    // hier ggf. Mobile-Menü / Suche öffnen
+  </script>
+</body>
+</html>
+
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
