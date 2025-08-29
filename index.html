@@ -1,1 +1,128 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITSM für Steuerung & Controlling Strategie</title>
+  <link rel="stylesheet" href="css/hamburg.css" />
+  <style>
+    body {
+      font-family: Calibri, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      margin: 0;
+    }
+    header {
+      background: #cc0033;
+      color: white;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header img {
+      height: 60px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    section {
+      margin-bottom: 48px;
+    }
+    h2 {
+      color: #cc0033;
+      border-bottom: 2px solid #cc0033;
+      padding-bottom: 5px;
+    }
+    .agents {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .agent {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform .2s;
+      cursor: pointer;
+      text-align: center;
+    }
+    .agent:hover {
+      transform: scale(1.03);
+    }
+    .agent img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .agent h3 {
+      margin: 10px;
+      color: #cc0033;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="assets/logo.png" alt="Logo" />
+    <nav>
+      <a href="#ueber">Über mich</a>
+      <a href="#taetigkeiten">Tätigkeiten</a>
+      <a href="#ziele">Ziele</a>
+      <a href="#projekte">Projekte</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section id="ueber">
+      <h2>Über mich</h2>
+      <p>Willkommen! Mein Name ist Doniman F. Peña Parra. Ich leite den Bereich ITSM mit Fokus auf IT-Steuerung und IT-Controlling. Auf dieser Seite erfahren Sie mehr über meine Tätigkeiten, strategische Ziele und unterstützende KI-Agenten.</p>
+    </section>
+
+    <section id="taetigkeiten">
+      <h2>Tätigkeiten</h2>
+      <p>Zu meinen Aufgaben gehören die Koordination von IT-Serviceprozessen, Optimierung von KPIs, Beratung zu IT-Strategien sowie die Steuerung von IT-Controlling-Maßnahmen.</p>
+    </section>
+
+    <section id="ziele">
+      <h2>Ziele</h2>
+      <ul>
+        <li>Optimierung der Ticketkonvertierung und Servicequalität</li>
+        <li>Transparente Steuerung durch aussagekräftige Dashboards</li>
+        <li>Einsatz von KI zur Entscheidungsunterstützung</li>
+        <li>Digitalisierung von Prozessen für mehr Effizienz</li>
+      </ul>
+    </section>
+
+    <section id="projekte">
+      <h2>Projekte & KI-Agenten</h2>
+      <div class="agents">
+        <a href="https://chat.openai.com/g/g-abc123/itsm-agent" class="agent">
+          <img src="assets/agent-itsm.png" alt="ITSM Agent" />
+          <h3>ITSM Agent</h3>
+        </a>
+        <a href="https://chat.openai.com/g/g-def456/controlling-assist" class="agent">
+          <img src="assets/agent-controlling.png" alt="Controlling Agent" />
+          <h3>Controlling Assist</h3>
+        </a>
+        <a href="https://chat.openai.com/g/g-ghi789/strategie-coach" class="agent">
+          <img src="assets/agent-strategie.png" alt="Strategie Coach" />
+          <h3>Strategie Coach</h3>
+        </a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
 
