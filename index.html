@@ -3,71 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wir über uns – ITSM</title>
+  <title>ITSM für Steuerung & Controlling Strategie</title>
 
-  <!-- deine Styles -->
+  <!-- Styles -->
   <link rel="stylesheet" href="css/hamburg.css">
   <link rel="stylesheet" href="css/base.css">
 
-  <!-- SVG-Sprite: nur die Symbole, die du wirklich nutzt -->
+  <!-- SVG-Icons -->
   <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
     <defs>
       <symbol id="icon-home" viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-6v-6H11v6H5v-9H2z"/></symbol>
-      <symbol id="icon-search" viewBox="0 0 24 24"><path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1 0 9 15.5l.3.3v.8l5 5 1.5-1.5-5-5zM4 9a5 5 0 1 1 10 0A5 5 0 0 1 4 9z"/></symbol>
-      <!-- weitere icons nach Bedarf -->
     </defs>
   </svg>
 </head>
 <body class="km1-page km1-page--one-col">
 
-  <!-- A11y-Opener (optional) -->
-  <aside aria-label="Assistenz öffnen">
-    <a class="sr-only" href="#search">Assistenz öffnen (ALT+1)</a>
-  </aside>
-
   <!-- ===== HEADER ===== -->
   <header class="km1-header">
     <div class="km1-container km1-meta-navigation">
-      <ul class="km1-meta-navigation__list">
-        <li class="km1-meta-navigation__item">
-          <a class="km1-link" href="hilfe.html">
-            <span class="km1-label">Hilfe</span>
-          </a>
-        </li>
-        <li class="km1-meta-navigation__item km1-meta-navigation__item--search">
-          <a class="km1-button" href="#km1-search-dialog" data-a11y-dialog-show="km1-search-dialog" role="button">
-            <svg class="km1-icon" width="24" height="24" aria-hidden="true"><use xlink:href="#icon-search"/></svg>
-            <span class="km1-label">Suche</span>
-          </a>
-        </li>
-      </ul>
       <a class="km1-logo km1-header__logo" href="index.html" title="Startseite">
-        <img src="assets/logo.png" alt="Logo" class="km1-img">
+        <img src="assets/DoniLogo_1.0.0.png" alt="Logo" class="km1-img">
       </a>
     </div>
-
     <div class="km1-container">
-      <!-- Hauptnavigation Level 1 -->
       <nav class="km1-main-navigation__link-container" aria-label="Hauptnavigation">
-        <div id="km1-main-navigation__level-1" class="km1-main-navigation__level km1-main-navigation__level--1" data-js-level="1" aria-hidden="false" tabindex="-1">
-          <strong class="km1-heading km1-heading--3 km1-main-navigation__link-group-heading">
-            <a class="km1-link km1-main-navigation__link km1-main-navigation__link--current">ITSM & Controlling</a>
-          </strong>
-          <ul class="km1-main-navigation__links">
-            <li><a class="km1-link" href="ueber.html">Über mich</a></li>
-            <li><a class="km1-link" href="taetigkeiten.html">Tätigkeiten</a></li>
-            <li><a class="km1-link" href="projekte.html">Projekte</a></li>
-          </ul>
-        </div>
+        <ul class="km1-main-navigation__links">
+          <li><a class="km1-link" href="index.html" aria-current="page">Start</a></li>
+          <li><a class="km1-link" href="ueber.html">Über mich</a></li>
+          <li><a class="km1-link" href="taetigkeiten.html">Tätigkeiten</a></li>
+          <li><a class="km1-link" href="projekte.html">Projekte</a></li>
+        </ul>
       </nav>
     </div>
-
-    <!-- Deko-Bow optional -->
-    <div class="km1-header__bow" aria-hidden="true"></div>
   </header>
 
   <!-- ===== MAIN ===== -->
   <main class="km1-main km1-page__main">
+
     <!-- Breadcrumbs -->
     <nav class="km1-breadcrumbs" aria-label="Brotkrumen">
       <a class="km1-link km1-breadcrumbs__link km1-breadcrumbs__link--home" href="index.html">
@@ -75,231 +47,88 @@
         <span class="sr-only">Start</span>
       </a>
       <span class="km1-breadcrumbs__separator">/</span>
-      <span class="km1-breadcrumbs__current">Wir über uns</span>
+      <span class="km1-breadcrumbs__current">ITSM für Steuerung & Controlling Strategie</span>
     </nav>
 
     <!-- Stage/Hero -->
     <section class="km1-stage">
       <figure class="km1-stage__figure">
-        <picture class="km1-picture">
-          <img class="km1-img" src="assets/hero.jpg" alt="Hero Bild">
-        </picture>
+        <img class="km1-img" src="assets/hero.jpg" alt="Hero Bild">
       </figure>
       <div class="km1-container km1-stage__content-container">
         <div class="km1-stage__topline">ITSM</div>
-        <h1 class="km1-heading km1-heading--stage km1-stage__heading">Wir über uns</h1>
+        <h1 class="km1-heading km1-heading--stage km1-stage__heading">ITSM für Steuerung & Controlling Strategie</h1>
         <p class="km1-paragraph km1-stage__text">
-          Kurztext zur Behörde/Einheit: Ziele, Verantwortung, Nutzen.
+          Transparente Prozesse, klare Ziele, moderne KI-Unterstützung.
         </p>
       </div>
     </section>
 
-    <!-- Teaser-Reihe -->
+    <!-- Eigene Inhalte -->
     <section class="km1-teaser-row">
-      <article class="km1-teaser km1-teaser-row__teaser">
-        <div class="km1-teaser__container">
-          <div class="km1-teaser__media-container">
-            <figure class="km1-figure km1-figure--popup km1-teaser__figure">
-              <a class="km1-figure__link" href="detail-a.html">
-                <div class="km1-figure__picture-wrapper">
-                  <img class="km1-img" src="assets/teaser-a.jpg" alt="">
-                </div>
-              </a>
-            </figure>
-          </div>
-          <div class="km1-teaser__content">
-            <span class="km1-topline km1-teaser__topline">Administration und Recht</span>
-            <a class="km1-teaser__heading-link" href="detail-a.html">
-              <h3 class="km1-heading km1-heading--3 km1-teaser__heading">Das Amt A</h3>
-            </a>
-            <p class="km1-paragraph km1-teaser__paragraph">Kurzbeschreibung des Themas.</p>
-          </div>
+      <article class="km1-teaser">
+        <div class="km1-teaser__content">
+          <h2 class="km1-heading">Über mich</h2>
+          <p>Willkommen! Mein Name ist Doniman F. Peña Parra. Ich leite den Bereich ITSM mit Fokus auf IT-Steuerung und IT-Controlling.</p>
         </div>
       </article>
-      <!-- weitere Teaser ... -->
+      <article class="km1-teaser">
+        <div class="km1-teaser__content">
+          <h2 class="km1-heading">Tätigkeiten</h2>
+          <p>Koordination von IT-Serviceprozessen, Optimierung von KPIs, Beratung zu IT-Strategien und IT-Controlling-Maßnahmen.</p>
+        </div>
+      </article>
+      <article class="km1-teaser">
+        <div class="km1-teaser__content">
+          <h2 class="km1-heading">Ziele</h2>
+          <ul>
+            <li>Optimierung der Ticketkonvertierung</li>
+            <li>Transparente Dashboards</li>
+            <li>Einsatz von KI zur Entscheidungsunterstützung</li>
+            <li>Digitalisierung für Effizienz</li>
+          </ul>
+        </div>
+      </article>
     </section>
+
+    <!-- Agenten-Kacheln -->
+    <section class="km1-teaser-row">
+      <article class="km1-teaser">
+        <img src="assets/agent-itsm.png" alt="ITSM Agent">
+        <div class="km1-teaser__content">
+          <h3>ITSM Agent</h3>
+          <a href="https://chat.openai.com/g/g-abc123/itsm-agent" target="_blank" rel="noopener noreferrer">Zum Agenten</a>
+        </div>
+      </article>
+      <article class="km1-teaser">
+        <img src="assets/agent-controlling.png" alt="Controlling Agent">
+        <div class="km1-teaser__content">
+          <h3>Controlling Assist</h3>
+          <a href="https://chat.openai.com/g/g-def456/controlling-assist" target="_blank" rel="noopener noreferrer">Zum Agenten</a>
+        </div>
+      </article>
+      <article class="km1-teaser">
+        <img src="assets/agent-strategie.png" alt="Strategie Coach">
+        <div class="km1-teaser__content">
+          <h3>Strategie Coach</h3>
+          <a href="https://chat.openai.com/g/g-ghi789/strategie-coach" target="_blank" rel="noopener noreferrer">Zum Agenten</a>
+        </div>
+      </article>
+    </section>
+
   </main>
 
   <!-- ===== FOOTER ===== -->
   <footer class="km1-footer">
-    <div class="km1-footer__subfooter">
-      <div class="km1-container km1-footer__inner">
-        <div class="km1-footer__subfooter-upper">
-          <p>© 2025 ITSM – Doniman F. Peña Parra</p>
-          <div class="km1-footer__subfooter-wrap">
-            <ul class="km1-footer__list">
-              <li class="km1-footer__list-item"><a class="km1-link km1-footer__link" href="impressum.html">Impressum</a></li>
-              <li class="km1-footer__list-item"><a class="km1-link km1-footer__link" href="datenschutz.html">Datenschutz</a></li>
-              <li class="km1-footer__list-item"><a class="km1-link km1-footer__link" href="barrierefreiheit.html">Barrierefreiheit</a></li>
-            </ul>
-          </div>
-        </div>
-        <span class="km1-footer__line"></span>
-      </div>
+    <div class="km1-container km1-footer__inner">
+      <p>© 2025 ITSM – Doniman F. Peña Parra</p>
+      <ul class="km1-footer__list">
+        <li><a class="km1-link km1-footer__link" href="impressum.html">Impressum</a></li>
+        <li><a class="km1-link km1-footer__link" href="datenschutz.html">Datenschutz</a></li>
+        <li><a class="km1-link km1-footer__link" href="barrierefreiheit.html">Barrierefreiheit</a></li>
+      </ul>
     </div>
   </footer>
 
-  <!-- (optional) Such-Dialog-Struktur -->
-  <div id="km1-search-dialog" hidden>
-    <!-- Form, Linklisten usw. analog Struktur -->
-  </div>
-
-  <!-- dein schlankes JS -->
-  <script>
-    // hier ggf. Mobile-Menü / Suche öffnen
-  </script>
-</body>
-</html>
-
-<html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ITSM für Steuerung & Controlling Strategie</title>
-  <link rel="stylesheet" href="css/hamburg.css" />
-  <style>
-    body {
-      font-family: Calibri, sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
-      margin: 0;
-    }
-    header {
-      background: #cc0033;
-      color: white;
-      padding: 20px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    header img {
-      height: 60px;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 20px;
-      font-weight: bold;
-    }
-    nav a:hover, nav a.is-active {
-      text-decoration: underline;
-    }
-    .hero {
-      background: #7d212b;
-      color: white;
-      padding: 60px 20px;
-      text-align: center;
-    }
-    .hero h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
-    .container {
-      max-width: 1100px;
-      margin: 20px auto;
-      padding: 0 20px;
-    }
-    section {
-      margin-bottom: 48px;
-    }
-    h2 {
-      color: #cc0033;
-      border-bottom: 2px solid #cc0033;
-      padding-bottom: 5px;
-    }
-    .agents {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-    }
-    .agent {
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform .2s;
-      cursor: pointer;
-      text-align: center;
-    }
-    .agent:hover {
-      transform: scale(1.03);
-    }
-    .agent img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-    .agent h3 {
-      margin: 10px;
-      color: #cc0033;
-    }
-    footer {
-      background: #cc0033;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <img src="assets/DoniLogo_1.0.0.png" alt="Logo" />
-    <nav>
-      <a href="index.html" class="is-active">Start</a>
-      <a href="ueber.html">Über mich</a>
-      <a href="taetigkeiten.html">Tätigkeiten</a>
-      <a href="projekte.html">Projekte</a>
-    </nav>
-  </header>
-
-  <section class="hero">
-    <h1>ITSM für Steuerung & Controlling Strategie</h1>
-    <p>Transparente Prozesse, klare Ziele, moderne KI-Unterstützung</p>
-  </section>
-
-  <main class="container">
-    <section id="ueber">
-      <h2>Über mich</h2>
-      <p>Willkommen! Mein Name ist Doniman F. Peña Parra. Ich leite den Bereich ITSM mit Fokus auf IT-Steuerung und IT-Controlling. Auf dieser Seite erfahren Sie mehr über meine Tätigkeiten, strategische Ziele und unterstützende KI-Agenten.</p>
-    </section>
-
-    <section id="taetigkeiten">
-      <h2>Tätigkeiten</h2>
-      <p>Zu meinen Aufgaben gehören die Koordination von IT-Serviceprozessen, Optimierung von KPIs, Beratung zu IT-Strategien sowie die Steuerung von IT-Controlling-Maßnahmen.</p>
-    </section>
-
-    <section id="ziele">
-      <h2>Ziele</h2>
-      <ul>
-        <li>Optimierung der Ticketkonvertierung und Servicequalität</li>
-        <li>Transparente Steuerung durch aussagekräftige Dashboards</li>
-        <li>Einsatz von KI zur Entscheidungsunterstützung</li>
-        <li>Digitalisierung von Prozessen für mehr Effizienz</li>
-      </ul>
-    </section>
-
-    <section id="projekte">
-      <h2>Projekte & KI-Agenten</h2>
-      <div class="agents">
-        <a href="https://chat.openai.com/g/g-abc123/itsm-agent" class="agent" target="_blank" rel="noopener noreferrer">
-          <img src="assets/agent-itsm.png" alt="ITSM Agent" />
-          <h3>ITSM Agent</h3>
-        </a>
-        <a href="https://chat.openai.com/g/g-def456/controlling-assist" class="agent" target="_blank" rel="noopener noreferrer">
-          <img src="assets/agent-controlling.png" alt="Controlling Agent" />
-          <h3>Controlling Assist</h3>
-        </a>
-        <a href="https://chat.openai.com/g/g-ghi789/strategie-coach" class="agent" target="_blank" rel="noopener noreferrer">
-          <img src="assets/agent-strategie.png" alt="Strategie Coach" />
-          <h3>Strategie Coach</h3>
-        </a>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 ITSM Steuerung & Controlling – Doniman F. Peña Parra</p>
-  </footer>
 </body>
 </html>
