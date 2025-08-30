@@ -108,6 +108,29 @@ a:hover,a:focus{text-decoration:underline}
 @media(max-width:900px){.cards{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.cards{grid-template-columns:1fr}}
 
+/* Kontaktblock */
+.contact-block {
+  background: var(--bg-alt);
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.contact-inner { max-width: 800px; margin: 0 auto; text-align: center; }
+.contact-title {
+  font-family: var(--font-cond);
+  font-size: 1.6rem;
+  margin-bottom: .5rem;
+  color: var(--brand-red-ink);
+}
+.contact-name { font-weight: 600; margin-bottom: .5rem; }
+.contact-email a {
+  font-weight: 700;
+  color: var(--brand-red);
+  text-decoration: none;
+}
+.contact-email a:hover { text-decoration: underline; 
+}
+
 /* Footer */
 .site-footer{background:#0b0f13;color:#cbd3d8;margin-top:2rem}
 .subfooter__inner{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:1rem 0}
