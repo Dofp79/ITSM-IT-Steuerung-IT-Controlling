@@ -1,49 +1,41 @@
-/* ==========================================================================
-   Globales Skript – Navigation, Accordion & kleine Helfer
-   Ordnerstruktur: /js/site.js (global)
-   ========================================================================== */
+/* ===========================================================
+   Globales Skript – Burger/Drawer, Accordion, Jahr im Footer
+   =========================================================== */
 (() => {
-  const $ = (s, ctx = document) => ctx.querySelector(s);
-  const $$ = (s, ctx = document) => Array.from(ctx.querySelectorAll(s));
+  const $ = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
 
-  // 1) Mobile Navigation
-  const toggle = $('.nav-toggle');
-  const menu = $('#hauptmenue');
+  // Burger-Menü / Drawer
+  const burger = $('.burger');
+  const drawer = $('#navdrawer');
 
-  if (toggle && menu) {
-    const setOpen = (open) => {
-      toggle.setAttribute('aria-expanded', String(open));
-      // Für Mobile: block anzeigen; auf Desktop greift CSS
-      menu.style.display = open ? 'block' : '';
-    };
-    setOpen(false);
+  const setDrawer = (open) => {
+    burger?.setAttribute('aria-expanded', String(open));
+    drawer?.classList.toggle('is-open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
 
-    toggle.addEventListener('click', () => {
-      const open = toggle.getAttribute('aria-expanded') === 'true';
-      setOpen(!open);
+  if (burger && drawer) {
+    setDrawer(false);
+    burger.addEventListener('click', () => {
+      const open = burger.getAttribute('aria-expanded') === 'true';
+      setDrawer(!open);
     });
-
-    // Klick außerhalb schließt das Menü
+    // Schließen bei ESC oder Klick außen
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setDrawer(false); });
     document.addEventListener('click', (e) => {
-      if (!menu.contains(e.target) && !toggle.contains(e.target)) setOpen(false);
+      if (!drawer.contains(e.target) && !burger.contains(e.target)) setDrawer(false);
     });
-
-    // Escape schließt
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
   }
 
-  // 2) Accordion
+  // Accordion (Sektion ITSM Konzept)
   $$('.accordion__trigger').forEach((btn) => {
     const panel = document.getElementById(btn.getAttribute('aria-controls'));
-    const set = (open) => {
-      btn.setAttribute('aria-expanded', String(open));
-      if (panel) panel.hidden = !open;
-    };
+    const set = (open) => { btn.setAttribute('aria-expanded', String(open)); if (panel) panel.hidden = !open; };
     set(false);
     btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
   });
 
-  // 3) Jahr im Footer
-  const yearTarget = document.querySelector('[data-year]');
-  if (yearTarget) yearTarget.textContent = new Date().getFullYear();
+  // Jahr im Footer
+  const y = $('[data-year]'); if (y) y.textContent = new Date().getFullYear();
 })();
