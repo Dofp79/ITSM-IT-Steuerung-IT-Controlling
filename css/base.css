@@ -10,7 +10,7 @@
 
 /* Innenbreite & Innenabstand (gleiche Max-Breite wie Seite) */
 .km1-footer__inner{
-  /* Tipp: wenn du bereits --maxw nutzt, ersetze 1100px durch var(--maxw) */
+  /* Tipp: wenn du bereits --maxw nutzt, gerne var(--maxw) verwenden */
   max-width: 1100px;
   margin: 0 auto;
   padding: 14px 20px;    /* kompakt */
@@ -35,19 +35,6 @@
 /* Rechtsausrichtung der Link-Badge auf großen Screens */
 .km1-footer__nav{
   justify-self: end;  /* steht sauber rechts in Spalte 2 */
-}
-
-/* Screenreader-only Utility (nur einmal im Projekt definieren!) */
-.sr-only{
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  border: 0;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%); /* moderneres Pendant; stört alte Browser nicht */
-  overflow: hidden;
 }
 
 /* Linkliste (rechts): horizontal mit Abstand, bricht bei wenig Platz um */
@@ -85,4 +72,149 @@
   .km1-footer__list{
     gap: 16px;                   /* etwas enger mobil */
   }
+} /* ← WICHTIG: Media-Query hier schließen! */
+
+/* ========================
+   GLOBAL: Screenreader-only
+   (einmal zentral definieren)
+   ======================== */
+.sr-only{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%); /* moderneres Pendant; stört alte Browser nicht */
+  overflow: hidden;
 }
+
+/* =========================================
+   LAYOUT-BASIS & CONTAINER
+   ========================================= */
+
+.km1-container{
+  max-width: 1100px; /* ggf. var(--maxw) */
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Links neutral, Erbe der Textfarbe (Hamburg-Style) */
+.km1-link{ color: inherit; text-decoration: none; }
+.km1-link:hover{ text-decoration: underline; }
+
+/* =========================================
+   HEADER / NAVIGATION (kompakt & responsiv)
+   ========================================= */
+
+.km1-header{
+  background: transparent;
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+
+.km1-meta-navigation{
+  max-width: 1100px; margin: 0 auto; padding: 8px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+
+.km1-header__logo img{
+  height: clamp(36px, 6vw, 64px);
+  width: auto; max-width: 100%;
+}
+
+.km1-main-navigation__link-container{ max-width: 1100px; margin: 0 auto; }
+.km1-main-navigation__links{
+  display: flex; gap: clamp(10px,2vw,24px);
+  flex-wrap: wrap; list-style: none; margin: 0; padding: 10px 20px;
+}
+.km1-main-navigation__links a{ font-size: clamp(.9rem, 1.2vw, 1rem); }
+
+/* Burger-Button: auf Mobil sichtbar */
+.nav-toggle{
+  display:none; align-items:center; gap:.5rem;
+  background:#0b3a69; color:#fff;
+  border:0; border-radius:8px; padding:.5rem .75rem; margin:8px 20px;
+  box-shadow:0 1px 4px rgba(0,0,0,.12); cursor:pointer
+}
+.nav-toggle .icon rect{ fill:#fff; }
+
+@media (max-width:768px){
+  .km1-main-navigation__links{ display:none; flex-direction:column; padding:8px 20px }
+  .km1-main-navigation__links.is-open{ display:flex }
+  .nav-toggle{ display:flex }
+  .km1-meta-navigation{ justify-content:space-between }
+}
+
+.km1-header.is-sticky{
+  backdrop-filter: blur(4px);
+  background: rgba(255,255,255,.7);
+}
+
+/* =========================================
+   BREADCRUMBS (dezent)
+   ========================================= */
+.km1-breadcrumbs{
+  max-width:1100px; margin:10px auto; padding:0 20px;
+  color:#6b7280; font-size:.92rem;
+}
+.km1-breadcrumbs__separator{ margin:0 8px; }
+
+/* =========================================
+   STAGE / HERO (blau überlagert wie Zielbild)
+   ========================================= */
+.stage--blue{ position:relative; isolation:isolate; }
+.stage--blue .km1-stage__figure{ max-height:440px; overflow:hidden; }
+
+/* Fallback-Hintergrund, falls das Bild fehlt */
+.stage--blue .km1-stage__figure{
+  background: #083461;
+  background-image: linear-gradient(180deg, rgba(8,52,97,.95), rgba(8,52,97,.8));
+}
+
+/* Bild selbst skaliert/flächig */
+.stage--blue .km1-stage__figure img{
+  width:100%; height:440px; object-fit:cover; display:block;
+}
+
+/* Blauer Overlay-Layer */
+.stage--blue::after{
+  content:""; position:absolute; inset:0; background:rgba(8,52,97,.85); z-index:0;
+}
+
+/* Textinhalt vor dem Overlay */
+.stage--blue .km1-stage__content-container{
+  position:relative; z-index:1; padding:64px 20px; text-align:center;
+}
+.stage--blue .km1-stage__topline{
+  color:#9bd0ff; letter-spacing:.02em; font-weight:700;
+}
+.stage--blue .km1-stage__heading{
+  color:#fff; font-size:clamp(1.8rem,4vw,2.8rem); margin:.5rem 0 1rem;
+}
+.stage--blue .km1-stage__text{
+  color:#e6f2ff; max-width:72ch; margin:0 auto;
+}
+
+/* =========================================
+   INTRO-ABSCHNITT (unter der Stage)
+   ========================================= */
+.intro{ max-width:1100px; margin:36px auto 8px; padding:0 20px; }
+.intro .km1-heading{ font-size:2rem; margin:0 0 10px; }
+
+/* =========================================
+   KACHELN / TEASER-ROW (4 „Fenster“)
+   ========================================= */
+.km1-teaser-row{
+  max-width:1100px; margin:12px auto 40px; padding:0 20px;
+  display:grid; gap:18px; grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+}
+.km1-teaser{
+  background:#fff; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,.08); overflow:hidden;
+  display:flex; flex-direction:column;
+}
+.km1-teaser__figure img{ width:100%; height:160px; object-fit:cover; display:block; }
+.km1-teaser__content{ padding:14px 16px; }
+.km1-teaser__heading{ margin:6px 0 8px; color:#cc0033; }
+.km1-teaser__paragraph{ margin:0; color:#4b5563; font-size:.95rem; }
