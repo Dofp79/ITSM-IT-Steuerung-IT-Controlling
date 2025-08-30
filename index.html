@@ -3,11 +3,44 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ITSM für Steuerung & Controlling Strategie</title>
+  <title>ITSM – Wir über uns</title>
+
+  <!-- Hamburg-Styles + deine Basis -->
   <link rel="stylesheet" href="css/hamburg.css">
   <link rel="stylesheet" href="css/base.css">
 
-  <!-- SVG-Icons -->
+  <!-- Seiten-spezifische Blue-Stage-Anpassung (Optik wie Zielbild) -->
+  <style>
+    .stage--blue { position: relative; isolation: isolate; }
+    .stage--blue .km1-stage__figure { max-height: 440px; overflow: hidden; }
+    .stage--blue .km1-stage__figure img { width:100%; height:440px; object-fit: cover; display:block; }
+    .stage--blue::after { /* blauer Overlay wie im Ziel */
+      content:""; position:absolute; inset:0; background:rgba(8,52,97,.85); z-index:0;
+    }
+    .stage--blue .km1-stage__content-container { position:relative; z-index:1; padding:64px 20px; }
+    .stage--blue .km1-stage__topline { color:#9bd0ff; letter-spacing:.02em; font-weight:700; }
+    .stage--blue .km1-stage__heading { color:#fff; font-size:2.8rem; margin:.5rem 0 1rem; }
+    .stage--blue .km1-stage__text { color:#e6f2ff; max-width:72ch; }
+
+    /* Intro-Block unter der Stage */
+    .intro { max-width:1100px; margin:36px auto 8px; padding:0 20px; }
+    .intro h2 { font-size:2rem; margin:0 0 10px; }
+
+    /* Kartenraster (3 Spalten wie im Zielbereich) */
+    .cards { max-width:1100px; margin:12px auto 40px; padding:0 20px; display:grid; gap:18px; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); }
+    .card { background:#fff; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,.08); padding:18px; }
+    .card h3 { color:#cc0033; margin:6px 0 8px; }
+    .card p { margin:0 0 8px; color:#4b5563; }
+
+    /* Breadcrumbs optisch wie im Ziel (klein, dezent) */
+    .km1-breadcrumbs { max-width:1100px; margin:10px auto; padding:0 20px; color:#6b7280; font-size:.92rem; }
+    .km1-breadcrumbs__separator { margin:0 8px; }
+
+    /* Footer-Linie wie Ziel */
+    .km1-footer__line { display:block; height:2px; background:rgba(255,255,255,.25); margin-top:12px; }
+  </style>
+
+  <!-- SVG-Icon nur fürs Home in Breadcrumb -->
   <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
     <defs>
       <symbol id="icon-home" viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-6v-6H11v6H5v-9H2z"/></symbol>
@@ -16,11 +49,11 @@
 </head>
 <body class="km1-page km1-page--one-col">
 
-  <!-- ===== HEADER ===== -->
+  <!-- ===== HEADER (schlank) ===== -->
   <header class="km1-header">
     <div class="km1-container km1-meta-navigation">
       <a class="km1-logo km1-header__logo" href="index.html" title="Startseite">
-        <img src="assets/DoniLogo_1.0.0.png" alt="Logo" class="km1-img">
+        <img src="assets/DoniLogo_1.0.0.png" alt="Logo" class="km1-img" style="height:60px">
       </a>
     </div>
     <div class="km1-container">
@@ -35,95 +68,56 @@
     </div>
   </header>
 
-  <!-- ===== MAIN ===== -->
-  <main class="km1-main km1-page__main">
+  <!-- ===== BREADCRUMBS ===== -->
+  <nav class="km1-breadcrumbs" aria-label="Brotkrumen">
+    <a class="km1-link km1-breadcrumbs__link km1-breadcrumbs__link--home" href="index.html">
+      <svg class="km1-icon" width="12" height="12" aria-hidden="true"><use xlink:href="#icon-home"/></svg>
+      <span class="sr-only">Start</span>
+    </a>
+    <span class="km1-breadcrumbs__separator">/</span>
+    <span class="km1-breadcrumbs__current">Wir über uns</span>
+  </nav>
 
-    <!-- Breadcrumbs -->
-    <nav class="km1-breadcrumbs" aria-label="Brotkrumen">
-      <a class="km1-link km1-breadcrumbs__link km1-breadcrumbs__link--home" href="index.html">
-        <svg class="km1-icon" width="12" height="12" aria-hidden="true"><use xlink:href="#icon-home"/></svg>
-        <span class="sr-only">Start</span>
-      </a>
-      <span class="km1-breadcrumbs__separator">/</span>
-      <span class="km1-breadcrumbs__current">ITSM für Steuerung & Controlling Strategie</span>
-    </nav>
+  <!-- ===== BLUE STAGE / HERO ===== -->
+  <section class="km1-stage stage--blue">
+    <figure class="km1-stage__figure">
+      <img class="km1-img" src="assets/hero.jpg" alt="Gebäudefassade (blau gefiltert)">
+    </figure>
+    <div class="km1-container km1-stage__content-container">
+      <div class="km1-stage__topline">ITSM</div>
+      <h1 class="km1-heading km1-stage__heading">Wir über uns</h1>
+      <p class="km1-paragraph km1-stage__text">
+        Die Einheit für IT‑Service‑Management (ITSM) gestaltet die digitale Steuerung und das Controlling
+        zukunftsorientiert. Wir optimieren Prozesse, erhöhen die Transparenz durch KPIs und investieren in
+        verlässliche Strukturen – für effiziente, menschengerechte IT‑Services.
+      </p>
+    </div>
+  </section>
 
-    <!-- Stage/Hero -->
-    <section class="km1-stage">
-      <figure class="km1-stage__figure">
-        <img class="km1-img" src="assets/hero.jpg" alt="Hero Bild: ITSM & Controlling">
-      </figure>
-      <div class="km1-container km1-stage__content-container">
-        <div class="km1-stage__topline">ITSM</div>
-        <h1 class="km1-heading km1-heading--stage km1-stage__heading">ITSM für Steuerung & Controlling Strategie</h1>
-        <p class="km1-paragraph km1-stage__text">Transparente Prozesse, klare Ziele, moderne KI‑Unterstützung.</p>
-      </div>
-    </section>
+  <!-- ===== INTRO (Überschrift wie im Ziel) ===== -->
+  <section class="intro">
+    <h2 class="km1-heading">Wir über uns</h2>
+    <p>
+      Aufgabenbeschreibung: <strong>Gemeinsam für eine moderne, transparente IT</strong> – mit klaren Rollen,
+      verlässlichen SLAs und kontinuierlicher Verbesserung.
+    </p>
+  </section>
 
-    <!-- Intro-Teaser (Über/Tätigkeiten/Ziele) -->
-    <section class="km1-teaser-row" aria-label="Einführung">
-      <article class="km1-teaser">
-        <div class="km1-teaser__content">
-          <h2 class="km1-heading">Über mich</h2>
-          <p class="km1-paragraph">Ich bin Doniman F. Peña Parra und verantworte die Konzeption, Implementierung und Verbesserung von ITSM‑Prozessen mit Fokus auf Steuerung & Controlling.</p>
-          <p><a class="km1-link" href="ueber.html">Mehr erfahren</a></p>
-        </div>
-      </article>
-      <article class="km1-teaser">
-        <div class="km1-teaser__content">
-          <h2 class="km1-heading">Tätigkeiten</h2>
-          <p class="km1-paragraph">Service Operations, Change/Release, KPIs & Governance – praxisnah und messbar.</p>
-          <p><a class="km1-link" href="taetigkeiten.html">Alle Tätigkeiten</a></p>
-        </div>
-      </article>
-      <article class="km1-teaser">
-        <div class="km1-teaser__content">
-          <h2 class="km1-heading">Ziele</h2>
-          <ul class="km1-paragraph" style="padding-left:18px; list-style:disc">
-            <li>Ticket‑Konvertierung & Servicequalität steigern</li>
-            <li>Transparente Dashboards & Frühwarnindikatoren</li>
-            <li>KI zur Entscheidungsunterstützung</li>
-            <li>Digitale Effizienzgewinne</li>
-          </ul>
-        </div>
-      </article>
-    </section>
-
-    <!-- Projekte & KI‑Agenten -->
-    <section class="km1-teaser-row" aria-label="Projekte & KI‑Agenten">
-      <article class="km1-teaser">
-        <figure class="km1-teaser__figure">
-          <img class="km1-img" src="assets/agent-itsm.png" alt="ITSM Agent">
-        </figure>
-        <div class="km1-teaser__content">
-          <h3 class="km1-heading km1-teaser__heading">ITSM Agent</h3>
-          <p class="km1-paragraph km1-teaser__paragraph">SLA‑Checks, Ticket‑Analyse, Prozess‑Hinweise.</p>
-          <p><a class="km1-link" href="https://chat.openai.com/g/g-abc123/itsm-agent" target="_blank" rel="noopener noreferrer">Zum Agenten</a></p>
-        </div>
-      </article>
-      <article class="km1-teaser">
-        <figure class="km1-teaser__figure">
-          <img class="km1-img" src="assets/agent-controlling.png" alt="Controlling Assist">
-        </figure>
-        <div class="km1-teaser__content">
-          <h3 class="km1-heading km1-teaser__heading">Controlling Assist</h3>
-          <p class="km1-paragraph km1-teaser__paragraph">Monatsreports, KPI‑Insights, Forecasts.</p>
-          <p><a class="km1-link" href="https://chat.openai.com/g/g-def456/controlling-assist" target="_blank" rel="noopener noreferrer">Zum Agenten</a></p>
-        </div>
-      </article>
-      <article class="km1-teaser">
-        <figure class="km1-teaser__figure">
-          <img class="km1-img" src="assets/agent-strategie.png" alt="Strategie Coach">
-        </figure>
-        <div class="km1-teaser__content">
-          <h3 class="km1-heading km1-teaser__heading">Strategie Coach</h3>
-          <p class="km1-paragraph km1-teaser__paragraph">Zielbilder, Roadmaps, Priorisierung.</p>
-          <p><a class="km1-link" href="https://chat.openai.com/g/g-ghi789/strategie-coach" target="_blank" rel="noopener noreferrer">Zum Agenten</a></p>
-        </div>
-      </article>
-    </section>
-
-  </main>
+  <!-- ===== DREI KARTEN (ähnlich Ziel-Layout) ===== -->
+  <section class="cards" aria-label="Kernbereiche">
+    <article class="card">
+      <h3>Service Operations</h3>
+      <p>Incident, Request & Problem – Priorisierung, SLA‑Steuerung, Qualitätssicherung.</p>
+    </article>
+    <article class="card">
+      <h3>Change & Release</h3>
+      <p>Risiko‑/Auswirkungsbewertung, CAB, standardisierte Deployments, Reviews.</p>
+    </article>
+    <article class="card">
+      <h3>Controlling & KPIs</h3>
+      <p>Dashboards, Frühwarnindikatoren und Berichte – Kosten, Qualität, Zeit.</p>
+    </article>
+  </section>
 
   <!-- ===== FOOTER ===== -->
   <footer class="km1-footer">
