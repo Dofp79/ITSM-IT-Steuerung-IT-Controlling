@@ -1,9 +1,11 @@
 :root{
-  --brand-red:#e30613;         /* Akzent */
-  --brand-red-ink:#7d212b;     /* Headlines/Hover */
+  --brand-red:#e30613;
+  --brand-red-ink:#7d212b;
   --header-bg:#ffffff;
-  --drawer-bg:#0c2a45;         /* dunkles Blau wie im Screenshot */
+  --drawer-bg:#0c2a45;     /* Dunkelblau */
   --drawer-fg:#ffffff;
+  --hero-bg:#0e3659;       /* Dunkelblau wie im Screenshot */
+  --tile-bg:#0b2f4d;
   --bg:#ffffff;
   --bg-alt:#f5f7f8;
   --text:#222;
@@ -15,13 +17,10 @@
   --font-cond:"Roboto Condensed","Roboto",system-ui,Segoe UI,Arial,sans-serif;
 }
 
+/* Base */
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{
-  margin:0; color:var(--text); background:var(--bg);
-  font-family:var(--font-sans); line-height:1.6;
-  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-}
+body{margin:0;color:var(--text);background:var(--bg);font-family:var(--font-sans);line-height:1.6}
 img{max-width:100%;height:auto}
 a{color:#0b3a66;text-decoration:none}
 a:hover,a:focus{text-decoration:underline}
@@ -39,12 +38,12 @@ a:hover,a:focus{text-decoration:underline}
 .skip-link{position:absolute;left:-9999px;top:auto;z-index:1000;background:var(--brand-red);color:#fff;padding:.5rem .75rem;border-radius:.5rem}
 .skip-link:focus{left:.5rem;top:.5rem}
 
-/* ===== Header ===== */
+/* Header */
 .brand-bar{height:6px;background:var(--brand-red)}
 .site-header{background:var(--header-bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:60}
 .header-bar{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0}
 
-/* Burger (links) */
+/* Burger */
 .burger{
   display:inline-flex;align-items:center;gap:.6rem;
   background:#fff;border:1px solid var(--border);border-radius:.7rem;
@@ -55,13 +54,13 @@ a:hover,a:focus{text-decoration:underline}
 .burger__icon::before{top:-6px}.burger__icon::after{top:6px}
 .burger__label{font-weight:700;font-family:var(--font-cond)}
 
-/* Logo (rechts) */
+/* Logo rechts */
 .brand-right{display:inline-flex;align-items:center}
 .brand-right__logo{width:150px;height:auto;object-fit:contain}
 
-/* Drawer-Navigation */
+/* Drawer-Navi */
 .nav-drawer{
-  position:fixed;inset:56px auto 0 0; /* unter Header */
+  position:fixed;inset:56px auto 0 0;
   width:min(340px,86vw);transform:translateX(-100%);
   background:var(--drawer-bg);color:var(--drawer-fg);
   padding:1rem .75rem;border-right:1px solid rgba(255,255,255,.12);
@@ -76,18 +75,17 @@ a:hover,a:focus{text-decoration:underline}
 }
 .nav-drawer a:hover,.nav-drawer a:focus{background:rgba(255,255,255,.12);text-decoration:none}
 
-/* ===== Hero ===== */
-.hero{background:#0e3659;color:#fff;border-bottom:1px solid #08243e}
+/* Hero (dunkel) */
+.hero{background:var(--hero-bg);color:#fff;border-bottom:1px solid #08243e}
 .hero-inner{padding:2.2rem 0 2.6rem}
-.hero__title{margin:0 0 .35rem;font-family:var(--font-cond);font-weight:700;
-  font-size:clamp(1.6rem,2.2vw + 1.1rem,2.4rem)}
+.hero__title{margin:0 0 .35rem;font-family:var(--font-cond);font-weight:700;font-size:clamp(1.6rem,2.2vw + 1.1rem,2.4rem)}
 .hero__lead{margin:0;color:#d7e3ef;max-width:80ch}
 
-/* ===== Tiles (4 Bilder verlinkt) ===== */
-.section--tiles{background:#0e3659}           /* wie Screenshot dunkle Fläche */
+/* Tiles (vier verlinkte Bilder) */
+.section--tiles{background:var(--hero-bg)}
 .tiles{display:grid;gap:1.2rem;grid-template-columns:repeat(2,1fr)}
 .tile{
-  background:#0b2f4d;border:1px solid rgba(255,255,255,.15);
+  background:var(--tile-bg);border:1px solid rgba(255,255,255,.15);
   border-radius:14px;overflow:hidden;display:block;text-decoration:none;
   box-shadow:0 6px 18px rgba(0,0,0,.25);
 }
@@ -100,17 +98,17 @@ a:hover,a:focus{text-decoration:underline}
 .tile:hover img{transform:scale(1.02);transition:transform .25s ease}
 @media(max-width:680px){.tiles{grid-template-columns:1fr}}
 
-/* ===== Section-Titel (roter Punkt) ===== */
+/* Abschnittstitel mit rotem Punkt */
 .sec-head{display:flex;align-items:center;gap:10px;margin:0 0 12px}
 .sec-dot{width:12px;height:12px;border-radius:999px;background:var(--brand-red-ink)}
 .sec-title{margin:0;color:var(--brand-red-ink);font-family:var(--font-cond);font-size:clamp(1.2rem,1.2vw + 1rem,1.6rem);font-weight:700}
 
-/* ===== Buttons/Cards (aus früherem Setup) ===== */
+/* Kartenraster unten */
 .cards{display:grid;gap:1.2rem;grid-template-columns:repeat(3,1fr)}
 @media(max-width:900px){.cards{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.cards{grid-template-columns:1fr}}
 
-/* ===== Footer ===== */
+/* Footer */
 .site-footer{background:#0b0f13;color:#cbd3d8;margin-top:2rem}
 .subfooter__inner{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:1rem 0}
 .to-top{color:#9ab}.to-top:hover{color:#fff}
@@ -118,7 +116,7 @@ a:hover,a:focus{text-decoration:underline}
 /* Fokus sichtbar */
 :focus-visible{outline:3px solid #0a7cff;outline-offset:2px}
 
-/* Druck (reduziert) */
+/* Druck */
 @media print{
   .nav-drawer,.burger,.tiles,.brand-bar{display:none!important}
 }
