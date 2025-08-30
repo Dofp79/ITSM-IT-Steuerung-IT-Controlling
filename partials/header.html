@@ -1,38 +1,43 @@
-<!-- Skip-Link für Tastaturnutzer -->
-<a class="sr-only" href="#main">Zum Inhalt springen</a>
-
+<!-- =============================
+     HEADER-BEREICH (partials/header.html)
+     ============================= -->
 <header class="km1-header">
+  
+  <!-- Container: enthält Logo + Burger-Button -->
   <div class="km1-container km1-meta-navigation">
-    <!-- Logo -->
-    <a class="km1-logo km1-header__logo" href="./index.html" title="Startseite">
-      <img src="./assets/DoniLogo_1.0.0.png" alt="Logo ITSM" class="km1-img">
+    
+    <!-- Logo (linkt immer zur Startseite) -->
+    <a class="km1-logo km1-header__logo" href="index.html" title="Startseite">
+      <img src="assets/DoniLogo_1.0.0.png" alt="Logo" class="km1-img">
     </a>
 
-    <!-- Burger (mobil) -->
-    <button
-      class="nav-toggle"
-      id="navToggle"
-      aria-controls="mainnav"
-      aria-expanded="false"
-      aria-label="Hauptmenü ein-/ausklappen"
-      type="button">
+    <!-- Burger-Menü (wird nur auf Mobile sichtbar) -->
+    <button class="nav-toggle" id="navToggle" aria-controls="mainnav" aria-expanded="false">
       <span>Menü</span>
-      <svg class="icon" width="28" height="18" viewBox="0 0 28 18" aria-hidden="true" focusable="false">
-        <rect width="28" height="2" rx="1"></rect>
-        <rect y="8" width="28" height="2" rx="1"></rect>
-        <rect y="16" width="28" height="2" rx="1"></rect>
+      <!-- 3 Linien als SVG (Hamburger-Icon) -->
+      <svg class="icon" width="28" height="18" viewBox="0 0 28 18" aria-hidden="true">
+        <rect x="0" y="0" width="28" height="2" rx="1"></rect>
+        <rect x="0" y="8" width="28" height="2" rx="1"></rect>
+        <rect x="0" y="16" width="28" height="2" rx="1"></rect>
       </svg>
     </button>
   </div>
-
+  
+  <!-- Hauptnavigation -->
   <div class="km1-container">
     <nav id="mainnav" class="km1-main-navigation__link-container" aria-label="Hauptnavigation">
-      <ul class="km1-main-navigation__links" id="mainnavList" role="menubar">
-        <li role="none"><a class="km1-link" href="./index.html" role="menuitem">Start</a></li>
-        <li role="none"><a class="km1-link" href="./ueber.html" role="menuitem">Über mich</a></li>
-        <li role="none"><a class="km1-link" href="./taetigkeiten.html" role="menuitem">Tätigkeiten</a></li>
-        <li role="none"><a class="km1-link" href="./projekte.html" role="menuitem">Projekte</a></li>
+      <ul class="km1-main-navigation__links" id="mainnavList">
+        
+        <!-- Navigation Links -->
+        <li><a class="km1-link" href="index.html" aria-current="page">Start</a></li>
+        <li><a class="km1-link" href="ueber.html">Über mich</a></li>
+        <li><a class="km1-link" href="taetigkeiten.html">Tätigkeiten</a></li>
+        <li><a class="km1-link" href="projekte.html">Projekte</a></li>
+      
       </ul>
     </nav>
   </div>
 </header>
+<!-- =============================
+     ENDE HEADER
+     ============================= -->
