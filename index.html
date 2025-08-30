@@ -5,56 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ITSM – Wir über uns</title>
 
-  <!-- Hamburg-Styles + deine Basis -->
+  <!-- Hamburg-Styles + Basis -->
   <link rel="stylesheet" href="css/hamburg.css">
   <link rel="stylesheet" href="css/base.css">
 
-  <!-- Seiten-spezifische Blue-Stage-Anpassung (Optik wie Zielbild) -->
   <style>
-    .stage--blue { position: relative; isolation: isolate; }
-    .stage--blue .km1-stage__figure { max-height: 440px; overflow: hidden; }
-    .stage--blue .km1-stage__figure img { width:100%; height:440px; object-fit: cover; display:block; }
-    .stage--blue::after { /* blauer Overlay wie im Ziel */
-      content:""; position:absolute; inset:0; background:rgba(8,52,97,.85); z-index:0;
-    }
-    .stage--blue .km1-stage__content-container { position:relative; z-index:1; padding:64px 20px; }
-    .stage--blue .km1-stage__topline { color:#9bd0ff; letter-spacing:.02em; font-weight:700; }
-    .stage--blue .km1-stage__heading { color:#fff; font-size:2.8rem; margin:.5rem 0 1rem; }
-    .stage--blue .km1-stage__text { color:#e6f2ff; max-width:72ch; }
+    /* ===== Hilfsklassen ===== */
+    .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;clip:rect(0 0 0 0);overflow:hidden}
 
-    /* Intro-Block unter der Stage */
-    .intro { max-width:1100px; margin:36px auto 8px; padding:0 20px; }
-    .intro h2 { font-size:2rem; margin:0 0 10px; }
-
-    /* Kartenraster (3 Spalten wie im Zielbereich) */
-    .cards { max-width:1100px; margin:12px auto 40px; padding:0 20px; display:grid; gap:18px; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); }
-    .card { background:#fff; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,.08); padding:18px; }
-    .card h3 { color:#cc0033; margin:6px 0 8px; }
-    .card p { margin:0 0 8px; color:#4b5563; }
-
-    /* Breadcrumbs optisch wie im Ziel (klein, dezent) */
-    .km1-breadcrumbs { max-width:1100px; margin:10px auto; padding:0 20px; color:#6b7280; font-size:.92rem; }
-    .km1-breadcrumbs__separator { margin:0 8px; }
-
-    /* Footer-Linie wie Ziel */
-    .km1-footer__line { display:block; height:2px; background:rgba(255,255,255,.25); margin-top:12px; }
-      /* ======== Responsive Header: Logo & Menü ======== */
+    /* ===== Header: transparent, responsive Logo & Menü ===== */
     .km1-header{background:transparent;border-bottom:1px solid rgba(0,0,0,.06)}
     .km1-meta-navigation{max-width:1100px;margin:0 auto;padding:8px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
     .km1-header__logo img{height:clamp(36px,6vw,64px);width:auto;max-width:100%}
     .km1-main-navigation__link-container{max-width:1100px;margin:0 auto}
     .km1-main-navigation__links{display:flex;gap:clamp(10px,2vw,24px);flex-wrap:wrap;list-style:none;margin:0;padding:10px 20px}
-    .km1-link{font-size:clamp(.9rem,1.2vw,1rem);}
+    .km1-link{font-size:clamp(.9rem,1.2vw,1rem)}
+
+    /* Burger-Button */
+    .nav-toggle{display:none;align-items:center;gap:.5rem;background:#0b3a69;color:#fff;border:0;border-radius:8px;padding:.5rem .75rem;margin:8px 20px;box-shadow:0 1px 4px rgba(0,0,0,.12);cursor:pointer}
+    .nav-toggle .icon rect{fill:#fff}
+
     @media (max-width:768px){
-      .km1-main-navigation__links{padding:8px 0}
-      .km1-meta-navigation{justify-content:flex-start}
+      .km1-main-navigation__links{display:none;flex-direction:column;padding:8px 20px}
+      .km1-main-navigation__links.is-open{display:flex}
+      .nav-toggle{display:flex}
+      .km1-meta-navigation{justify-content:space-between}
     }
 
-    /* ======== Footer kompakter & schmaler ======== */
+    /* ===== BLUE STAGE / HERO ===== */
+    .stage--blue{position:relative;isolation:isolate}
+    .stage--blue .km1-stage__figure{max-height:440px;overflow:hidden}
+    .stage--blue .km1-stage__figure img{width:100%;height:440px;object-fit:cover;display:block}
+    .stage--blue::after{content:"";position:absolute;inset:0;background:rgba(8,52,97,.85);z-index:0}
+    .stage--blue .km1-stage__content-container{position:relative;z-index:1;padding:64px 20px;text-align:center}
+    .stage--blue .km1-stage__topline{color:#9bd0ff;letter-spacing:.02em;font-weight:700}
+    .stage--blue .km1-stage__heading{color:#fff;font-size:clamp(1.8rem,4vw,2.8rem);margin:.5rem 0 1rem}
+    .stage--blue .km1-stage__text{color:#e6f2ff;max-width:72ch;margin:0 auto}
+
+    /* ===== Breadcrumbs (dezent) ===== */
+    .km1-breadcrumbs{max-width:1100px;margin:10px auto;padding:0 20px;color:#6b7280;font-size:.92rem}
+    .km1-breadcrumbs__separator{margin:0 8px}
+
+    /* ===== Intro & Kartenraster ===== */
+    .intro{max-width:1100px;margin:36px auto 8px;padding:0 20px}
+    .intro h2{font-size:2rem;margin:0 0 10px}
+    .cards{max-width:1100px;margin:12px auto 40px;padding:0 20px;display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+    .card{background:#fff;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.08);padding:18px}
+    .card h3{color:#cc0033;margin:6px 0 8px}
+    .card p{margin:0 0 8px;color:#4b5563}
+
+    /* ===== Kontaktblock ===== */
+    .contact-block{background:#f3f6fb}
+    .contact-inner{max-width:1100px;margin:0 auto;padding:24px 20px}
+    .contact-title{margin:0 0 6px;font-size:1.4rem;color:#0b3a69}
+    .contact-name{margin:0 0 8px}
+
+    /* ===== Footer kompakt & schmal ===== */
     .km1-footer{background:#f7f7f8;color:#222}
     .km1-footer__inner{max-width:1100px;margin:0 auto;padding:14px 20px}
-    .km1-footer__list{color:inherit}
-    .km1-footer__line{background:rgba(0,0,0,.08)}
+    .km1-footer__list{color:inherit;list-style:none;display:flex;gap:18px;margin:8px 0 0;padding:0;flex-wrap:wrap}
+    .km1-footer__link{text-decoration:none}
+    .km1-footer__link:hover{text-decoration:underline}
+    .km1-footer__line{display:block;height:2px;background:rgba(0,0,0,.08);margin-top:12px}
   </style>
 
   <!-- SVG-Icon nur fürs Home in Breadcrumb -->
@@ -66,16 +78,25 @@
 </head>
 <body class="km1-page km1-page--one-col">
 
-  <!-- ===== HEADER (schlank) ===== -->
+  <!-- ===== HEADER ===== -->
   <header class="km1-header">
     <div class="km1-container km1-meta-navigation">
       <a class="km1-logo km1-header__logo" href="index.html" title="Startseite">
-        <img src="assets/DoniLogo_1.0.0.png" alt="Logo" class="km1-img" style="height:60px">
+        <img src="assets/DoniLogo_1.0.0.png" alt="Logo" class="km1-img">
       </a>
+      <!-- Burger (mobil) -->
+      <button class="nav-toggle" id="navToggle" aria-controls="mainnav" aria-expanded="false">
+        <span>Menü</span>
+        <svg class="icon" width="28" height="18" viewBox="0 0 28 18" aria-hidden="true">
+          <rect x="0" y="0" width="28" height="2" rx="1"></rect>
+          <rect x="0" y="8" width="28" height="2" rx="1"></rect>
+          <rect x="0" y="16" width="28" height="2" rx="1"></rect>
+        </svg>
+      </button>
     </div>
     <div class="km1-container">
-      <nav class="km1-main-navigation__link-container" aria-label="Hauptnavigation">
-        <ul class="km1-main-navigation__links">
+      <nav id="mainnav" class="km1-main-navigation__link-container" aria-label="Hauptnavigation">
+        <ul class="km1-main-navigation__links" id="mainnavList">
           <li><a class="km1-link" href="index.html" aria-current="page">Start</a></li>
           <li><a class="km1-link" href="ueber.html">Über mich</a></li>
           <li><a class="km1-link" href="taetigkeiten.html">Tätigkeiten</a></li>
@@ -104,14 +125,14 @@
       <div class="km1-stage__topline">ITSM</div>
       <h1 class="km1-heading km1-stage__heading">Wir über uns</h1>
       <p class="km1-paragraph km1-stage__text">
-        Die Einheit für IT‑Service‑Management (ITSM) gestaltet die digitale Steuerung und das Controlling
-        zukunftsorientiert. Wir optimieren Prozesse, erhöhen die Transparenz durch KPIs und investieren in
-        verlässliche Strukturen – für effiziente, menschengerechte IT‑Services.
+        Die Einheit für IT‑Service‑Management (ITSM) gestaltet die digitale Steuerung und das Controlling zukunftsorientiert.
+        Wir optimieren Prozesse, erhöhen die Transparenz durch KPIs und investieren in verlässliche Strukturen – für effiziente,
+        menschengerechte IT‑Services.
       </p>
     </div>
   </section>
 
-  <!-- ===== INTRO (Überschrift wie im Ziel) ===== -->
+  <!-- ===== INTRO ===== -->
   <section class="intro">
     <h2 class="km1-heading">Wir über uns</h2>
     <p>
@@ -120,7 +141,7 @@
     </p>
   </section>
 
-  <!-- ===== DREI KARTEN (ähnlich Ziel-Layout) ===== -->
+  <!-- ===== DREI KARTEN ===== -->
   <section class="cards" aria-label="Kernbereiche">
     <article class="card">
       <h3>Service Operations</h3>
@@ -136,6 +157,18 @@
     </article>
   </section>
 
+  <!-- ===== KONTAKT (vor Footer) ===== -->
+  <section class="contact-block" aria-labelledby="kontaktTitle">
+    <div class="contact-inner">
+      <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
+      <p class="contact-name">Doniman F. Peña Parra</p>
+      <p class="contact-email">
+        <a id="contactEmail" data-email-user="dofp79" data-email-domain="hotmail.com" href="#" rel="nofollow">E‑Mail anzeigen</a>
+        <noscript>(dofp79&nbsp;[at]&nbsp;hotmail&nbsp;[dot]&nbsp;com)</noscript>
+      </p>
+    </div>
+  </section>
+
   <!-- ===== FOOTER ===== -->
   <footer class="km1-footer">
     <div class="km1-container km1-footer__inner">
@@ -149,5 +182,30 @@
     </div>
   </footer>
 
+  <!-- ===== Minimal JS: Burger & Mail-Reveal ===== -->
+  <script>
+    (function(){
+      const btn = document.getElementById('navToggle');
+      const list = document.getElementById('mainnavList');
+      if(btn && list){
+        btn.addEventListener('click', ()=>{
+          const open = list.classList.toggle('is-open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      }
+      const mail = document.getElementById('contactEmail');
+      if(mail){
+        mail.addEventListener('click', (e)=>{
+          const u = mail.getAttribute('data-email-user');
+          const d = mail.getAttribute('data-email-domain');
+          if(u && d){
+            mail.setAttribute('href', 'mailto:' + u + '@' + d);
+            mail.textContent = u + '@' + d;
+          }
+          e.preventDefault();
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
