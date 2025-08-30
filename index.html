@@ -3,9 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tätigkeiten – ITSM Steuerung & Controlling</title>
+  <title>ITSM für Steuerung & Controlling Strategie</title>
   <link rel="stylesheet" href="css/hamburg.css">
   <link rel="stylesheet" href="css/base.css">
+
+  <!-- SVG-Icons -->
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+    <defs>
+      <symbol id="icon-home" viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-6v-6H11v6H5v-9H2z"/></symbol>
+    </defs>
+  </svg>
 </head>
 <body class="km1-page km1-page--one-col">
 
@@ -19,81 +26,115 @@
     <div class="km1-container">
       <nav class="km1-main-navigation__link-container" aria-label="Hauptnavigation">
         <ul class="km1-main-navigation__links">
-          <li><a class="km1-link" href="index.html">Start</a></li>
+          <li><a class="km1-link" href="index.html" aria-current="page">Start</a></li>
           <li><a class="km1-link" href="ueber.html">Über mich</a></li>
-          <li><a class="km1-link" href="taetigkeiten.html" aria-current="page">Tätigkeiten</a></li>
+          <li><a class="km1-link" href="taetigkeiten.html">Tätigkeiten</a></li>
           <li><a class="km1-link" href="projekte.html">Projekte</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <!-- ===== HERO ===== -->
-  <section class="km1-stage">
-    <figure class="km1-stage__figure">
-      <img class="km1-img" src="assets/hero.jpg" alt="Hero Bild">
-    </figure>
-    <div class="km1-container km1-stage__content-container">
-      <div class="km1-stage__topline">ITSM</div>
-      <h1 class="km1-heading km1-heading--stage km1-stage__heading">Tätigkeiten</h1>
-      <p class="km1-paragraph km1-stage__text">Operatives IT‑Service-Management, Steuerung & Controlling – klar strukturiert und messbar.</p>
-    </div>
-  </section>
-
-  <!-- ===== CONTENT ===== -->
+  <!-- ===== MAIN ===== -->
   <main class="km1-main km1-page__main">
-    <section class="km1-teaser-row">
+
+    <!-- Breadcrumbs -->
+    <nav class="km1-breadcrumbs" aria-label="Brotkrumen">
+      <a class="km1-link km1-breadcrumbs__link km1-breadcrumbs__link--home" href="index.html">
+        <svg class="km1-icon" width="12" height="12" aria-hidden="true"><use xlink:href="#icon-home"/></svg>
+        <span class="sr-only">Start</span>
+      </a>
+      <span class="km1-breadcrumbs__separator">/</span>
+      <span class="km1-breadcrumbs__current">ITSM für Steuerung & Controlling Strategie</span>
+    </nav>
+
+    <!-- Stage/Hero -->
+    <section class="km1-stage">
+      <figure class="km1-stage__figure">
+        <img class="km1-img" src="assets/hero.jpg" alt="Hero Bild: ITSM & Controlling">
+      </figure>
+      <div class="km1-container km1-stage__content-container">
+        <div class="km1-stage__topline">ITSM</div>
+        <h1 class="km1-heading km1-heading--stage km1-stage__heading">ITSM für Steuerung & Controlling Strategie</h1>
+        <p class="km1-paragraph km1-stage__text">Transparente Prozesse, klare Ziele, moderne KI‑Unterstützung.</p>
+      </div>
+    </section>
+
+    <!-- Intro-Teaser (Über/Tätigkeiten/Ziele) -->
+    <section class="km1-teaser-row" aria-label="Einführung">
       <article class="km1-teaser">
         <div class="km1-teaser__content">
-          <h2 class="km1-heading">Service Operations</h2>
-          <p>Incident-, Request- und Problem-Management nach ITIL – Priorisierung, SLA-Steuerung und Qualitätskontrollen.</p>
+          <h2 class="km1-heading">Über mich</h2>
+          <p class="km1-paragraph">Ich bin Doniman F. Peña Parra und verantworte die Konzeption, Implementierung und Verbesserung von ITSM‑Prozessen mit Fokus auf Steuerung & Controlling.</p>
+          <p><a class="km1-link" href="ueber.html">Mehr erfahren</a></p>
         </div>
       </article>
       <article class="km1-teaser">
         <div class="km1-teaser__content">
-          <h2 class="km1-heading">Change & Release</h2>
-          <p>Risiko- und Auswirkungsbewertung, CAB-Moderation, standardisierte Deployments und Post-Implementation Reviews.</p>
+          <h2 class="km1-heading">Tätigkeiten</h2>
+          <p class="km1-paragraph">Service Operations, Change/Release, KPIs & Governance – praxisnah und messbar.</p>
+          <p><a class="km1-link" href="taetigkeiten.html">Alle Tätigkeiten</a></p>
         </div>
       </article>
       <article class="km1-teaser">
         <div class="km1-teaser__content">
-          <h2 class="km1-heading">Controlling & KPIs</h2>
-          <p>Dashboards, Frühwarnindikatoren und Monatsberichte – Kosten, Qualität und Durchlaufzeiten transparent machen.</p>
+          <h2 class="km1-heading">Ziele</h2>
+          <ul class="km1-paragraph" style="padding-left:18px; list-style:disc">
+            <li>Ticket‑Konvertierung & Servicequalität steigern</li>
+            <li>Transparente Dashboards & Frühwarnindikatoren</li>
+            <li>KI zur Entscheidungsunterstützung</li>
+            <li>Digitale Effizienzgewinne</li>
+          </ul>
         </div>
       </article>
     </section>
 
-    <section class="km1-teaser-row">
+    <!-- Projekte & KI‑Agenten -->
+    <section class="km1-teaser-row" aria-label="Projekte & KI‑Agenten">
       <article class="km1-teaser">
+        <figure class="km1-teaser__figure">
+          <img class="km1-img" src="assets/agent-itsm.png" alt="ITSM Agent">
+        </figure>
         <div class="km1-teaser__content">
-          <h2 class="km1-heading">Prozessarchitektur</h2>
-          <p>Governance, Rollen, Schnittstellen und RACI – saubere Prozesslandkarten und kontinuierliche Verbesserungen.</p>
+          <h3 class="km1-heading km1-teaser__heading">ITSM Agent</h3>
+          <p class="km1-paragraph km1-teaser__paragraph">SLA‑Checks, Ticket‑Analyse, Prozess‑Hinweise.</p>
+          <p><a class="km1-link" href="https://chat.openai.com/g/g-abc123/itsm-agent" target="_blank" rel="noopener noreferrer">Zum Agenten</a></p>
         </div>
       </article>
       <article class="km1-teaser">
+        <figure class="km1-teaser__figure">
+          <img class="km1-img" src="assets/agent-controlling.png" alt="Controlling Assist">
+        </figure>
         <div class="km1-teaser__content">
-          <h2 class="km1-heading">Automatisierung & KI</h2>
-          <p>Ticket-Klassifikation, Wissensvorschläge und Chatbots – gezielt dort, wo sie Nutzen stiften.</p>
+          <h3 class="km1-heading km1-teaser__heading">Controlling Assist</h3>
+          <p class="km1-paragraph km1-teaser__paragraph">Monatsreports, KPI‑Insights, Forecasts.</p>
+          <p><a class="km1-link" href="https://chat.openai.com/g/g-def456/controlling-assist" target="_blank" rel="noopener noreferrer">Zum Agenten</a></p>
         </div>
       </article>
       <article class="km1-teaser">
+        <figure class="km1-teaser__figure">
+          <img class="km1-img" src="assets/agent-strategie.png" alt="Strategie Coach">
+        </figure>
         <div class="km1-teaser__content">
-          <h2 class="km1-heading">Stakeholder-Management</h2>
-          <p>Transparente Kommunikation mit Fachbereichen, Lieferantensteuerung und Compliance.</p>
+          <h3 class="km1-heading km1-teaser__heading">Strategie Coach</h3>
+          <p class="km1-paragraph km1-teaser__paragraph">Zielbilder, Roadmaps, Priorisierung.</p>
+          <p><a class="km1-link" href="https://chat.openai.com/g/g-ghi789/strategie-coach" target="_blank" rel="noopener noreferrer">Zum Agenten</a></p>
         </div>
       </article>
     </section>
+
   </main>
 
   <!-- ===== FOOTER ===== -->
   <footer class="km1-footer">
     <div class="km1-container km1-footer__inner">
-      <p>© 2025 ITSM Steuerung & Controlling – Doniman F. Peña Parra</p>
+      <p>© 2025 ITSM – Doniman F. Peña Parra</p>
       <ul class="km1-footer__list">
         <li><a class="km1-link km1-footer__link" href="impressum.html">Impressum</a></li>
         <li><a class="km1-link km1-footer__link" href="datenschutz.html">Datenschutz</a></li>
         <li><a class="km1-link km1-footer__link" href="barrierefreiheit.html">Barrierefreiheit</a></li>
       </ul>
+      <span class="km1-footer__line"></span>
     </div>
   </footer>
 
