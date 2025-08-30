@@ -5,33 +5,33 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>IT-Steuerung & IT-Controlling mit Hilfe von ITSM</title>
 
-  <!-- Progressive Enhancement & Branding -->
-  <meta name="theme-color" content="#ffffff" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Systemfont-Stack für hohe Performance; bei Bedarf später z. B. Inter/Source Sans ergänzen -->
+  <!-- Optionale Webfonts (ähnlich hamburg.de) -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
+
   <!-- Globales CSS -->
   <link rel="stylesheet" href="css/global.css" />
-
-  <!-- Beschreibung für SEO -->
-  <meta name="description" content="IT-Steuerung & IT-Controlling mit Hilfe von ITSM – Projekte, Konzept und Ansprechpartner." />
+  <meta name="description" content="IT-Steuerung & IT-Controlling mit Hilfe von ITSM – Über mich, Projekte und ITSM Konzept." />
 </head>
-<body>
-  <!-- Skip-Link für Tastatur- und Screenreader-Nutzende -->
+<body id="top">
+  <!-- Skip-Link für Tastaturnutzer -->
   <a class="skip-link" href="#hauptinhalt">Zum Inhalt springen</a>
 
-  <!-- ===== Header / Masthead ===== -->
+  <!-- ================= Header ================= -->
   <header class="site-header" role="banner">
-    <!-- rote Top-Leiste als Markenelement -->
     <div class="brand-bar" aria-hidden="true"></div>
 
     <div class="container header-inner">
-      <a class="brand" href="/" aria-label="Startseite IT-Steuerung & IT-Controlling mit Hilfe von ITSM">
-        <!-- Platzhalter-Logo (durch eigenes ersetzen) -->
-        <img src="assets/logo.png" alt="" class="brand-logo" />
-        <span class="brand-title">IT-Steuerung &amp; IT-Controlling<br><small>mit Hilfe von ITSM</small></span>
+      <!-- Branding (Logo + Titel) -->
+      <a class="brand" href="#top" aria-label="Startseite IT-Steuerung & IT-Controlling mit Hilfe von ITSM">
+        <!-- Dein Logo liegt laut Struktur im Projekt-Root -->
+        <img src="./DoniLogo_1.0.0.png" alt="" class="brand-logo" />
+        <span class="brand-title">
+          IT-Steuerung &amp; IT-Controlling<br>
+          <small>mit Hilfe von ITSM</small>
+        </span>
       </a>
 
-      <!-- Primärnavigation -->
+      <!-- Primäre Navigation -->
       <nav class="main-nav" aria-label="Hauptnavigation">
         <button class="nav-toggle" aria-expanded="false" aria-controls="hauptmenue">
           <span class="nav-toggle__label">Menü</span>
@@ -39,7 +39,6 @@
         </button>
 
         <ul id="hauptmenue" class="nav-list">
-          <!-- Aktive Seite mit aria-current kennzeichnen -->
           <li><a href="#ueber-mich" aria-current="page">Über mich</a></li>
           <li><a href="#projekte">Projekte</a></li>
           <li><a href="#itsm-konzept">ITSM Konzept</a></li>
@@ -48,12 +47,12 @@
     </div>
   </header>
 
-  <!-- ===== Hero / Intro ===== -->
+  <!-- ================= Hero ================= -->
   <section class="hero">
-    <div class="container">
+    <div class="container hero-inner">
       <h1 class="hero__title">IT-Steuerung &amp; IT-Controlling mit Hilfe von ITSM</h1>
       <p class="hero__lead">
-        Transparente Prozesse, klare Verantwortlichkeiten und messbare Services – so bringen wir IT-Strategie und Betrieb zusammen.
+        Wir verbinden Strategie, Prozesse und Kennzahlen – für transparente Services, klare Verantwortlichkeiten und messbare Ergebnisse.
       </p>
       <div class="hero__cta">
         <a class="button button--primary" href="#itsm-konzept">Zum ITSM-Konzept</a>
@@ -62,31 +61,35 @@
     </div>
   </section>
 
-  <!-- ===== Hauptinhalt ===== -->
+  <!-- ================= Hauptinhalt ================= -->
   <main id="hauptinhalt" class="main" role="main">
-    <!-- Breadcrumb als einfache, barrierearme Variante (optional) -->
+    <!-- Brotkrumen (optional, hier statisch als Platzhalter) -->
     <nav class="breadcrumb" aria-label="Brotkrümelnavigation">
       <ol>
-        <li><a href="/">Start</a></li>
+        <li><a href="#top">Start</a></li>
         <li aria-current="page">Wir über uns</li>
       </ol>
     </nav>
 
     <!-- Über mich -->
-    <section id="ueber-mich" class="section section--split">
+    <section id="ueber-mich" class="section">
       <div class="container grid-2">
         <div>
-          <h2>Über mich</h2>
-          <p>
-            Ich begleite Organisationen bei der Einführung, Optimierung und Steuerung von IT-Service-Management-Prozessen.
+          <div class="sec-head">
+            <span class="sec-dot" aria-hidden="true"></span>
+            <h2 class="sec-title">Über mich</h2>
+          </div>
+          <p class="lead">
+            Ich unterstütze Organisationen bei der **IT-Steuerung** und dem **IT-Controlling** auf Basis von ITSM. 
             Schwerpunkte: Portfolio- &amp; Demand-Management, Servicekatalog, Kosten-/Leistungsrechnung, KPI-Design und Governance.
           </p>
           <ul class="checklist">
             <li>10+ Jahre Erfahrung in IT-Steuerung &amp; Controlling</li>
-            <li>Fokus auf <abbr title="Information Technology Service Management">ITSM</abbr> nach ITIL®</li>
-            <li>Praxisnah, messbar, nachhaltig</li>
+            <li>ITSM nach ITIL® – pragmatisch &amp; messbar</li>
+            <li>Fokus: Transparenz, Verantwortlichkeit, Wirkung</li>
           </ul>
         </div>
+
         <aside class="card">
           <h3>Kontakt</h3>
           <p><strong>E-Mail:</strong> kontakt@example.org<br>
@@ -99,13 +102,15 @@
     <!-- Projekte -->
     <section id="projekte" class="section section--alt">
       <div class="container">
-        <h2>Projekte</h2>
+        <div class="sec-head">
+          <span class="sec-dot" aria-hidden="true"></span>
+          <h2 class="sec-title">Projekte</h2>
+        </div>
 
-        <!-- Kartenraster -->
         <div class="cards">
           <article class="card">
             <h3>Servicekatalog &amp; Verrechnung</h3>
-            <p>Aufbau eines servicebasierten Kostenmodells inkl. Showback/Chargeback und SLA-Monitoring.</p>
+            <p>Servicebasiertes Kostenmodell inkl. Showback/Chargeback und SLA-Monitoring.</p>
             <details>
               <summary>Mehr Details</summary>
               <ul>
@@ -118,7 +123,7 @@
 
           <article class="card">
             <h3>Demand- &amp; Portfoliosteuerung</h3>
-            <p>Transparente Pipeline, Priorisierung und Kapazitätsplanung über Bereiche hinweg.</p>
+            <p>Transparente Pipeline, Priorisierung und Kapazitätsplanung.</p>
             <details>
               <summary>Mehr Details</summary>
               <ul>
@@ -131,7 +136,7 @@
 
           <article class="card">
             <h3>Prozess-Reifegrad &amp; Governance</h3>
-            <p>Reifegradanalyse, Controls, Rollenmodell und kontinuierliche Verbesserung (KVP).</p>
+            <p>Reifegradanalyse, Rollenmodell und kontinuierliche Verbesserung (KVP).</p>
             <details>
               <summary>Mehr Details</summary>
               <ul>
@@ -149,12 +154,16 @@
     <section id="itsm-konzept" class="section">
       <div class="container grid-2">
         <div>
-          <h2>ITSM Konzept</h2>
-          <p>
-            Unser ITSM-Zielbild verbindet klare Prozesse mit aussagekräftigen Metriken. 
-            Die Kernbausteine sind unten skizziert – inkl. Rollen, Artefakte, Schnittstellen und KPIs.
+          <div class="sec-head">
+            <span class="sec-dot" aria-hidden="true"></span>
+            <h2 class="sec-title">ITSM Konzept</h2>
+          </div>
+          <p class="lead">
+            Unser Zielbild verbindet klare Prozesse mit aussagekräftigen Metriken. 
+            Die Kernbausteine sind unten aufgeführt – inkl. Rollen, Artefakte, Schnittstellen und KPIs.
           </p>
 
+          <!-- leichtgewichtige Accordion-Komponente -->
           <div class="accordion" data-accordion>
             <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-1">Prozesslandschaft</button>
             <div id="acc-1" class="accordion__panel" hidden>
@@ -179,7 +188,7 @@
               <ul>
                 <li>Service Owner, Process Owner</li>
                 <li>Change Advisory Board</li>
-                <li>Controlling- und Steuerungsgremien</li>
+                <li>Steuerungs- und Controllinggremien</li>
               </ul>
             </div>
           </div>
@@ -196,7 +205,7 @@
     </section>
   </main>
 
-  <!-- ===== Footer ===== -->
+  <!-- ================= Footer ================= -->
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
       <div class="footer-col">
@@ -212,23 +221,4 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h3>Rechtliches</h3>
-        <ul class="link-list">
-          <li><a href="#" aria-disabled="true">Impressum</a></li>
-          <li><a href="#" aria-disabled="true">Datenschutz</a></li>
-          <li><a href="#" aria-disabled="true">Barrierefreiheit</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="subfooter">
-      <div class="container subfooter__inner">
-        <p>© <span data-year></span> IT-Steuerung &amp; IT-Controlling</p>
-        <a class="to-top" href="#top">Nach oben ↑</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Globale Skripte -->
-  <script src="js/seite.js" defer></script>
-</body>
-</html>
+        <
