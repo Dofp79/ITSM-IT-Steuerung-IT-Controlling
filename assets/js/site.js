@@ -1,11 +1,10 @@
 /* ==========================================================================
    Globales Skript – Navigation, Accordion & kleine Helfer
+   Ordnerstruktur: /js/site.js (global)
    ========================================================================== */
-
-(function () {
-  // Utility: Helper für Selektor
-  const $ = (sel, ctx = document) => ctx.querySelector(sel);
-  const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+(() => {
+  const $ = (s, ctx = document) => ctx.querySelector(s);
+  const $$ = (s, ctx = document) => Array.from(ctx.querySelectorAll(s));
 
   // 1) Mobile Navigation
   const toggle = $('.nav-toggle');
@@ -14,6 +13,7 @@
   if (toggle && menu) {
     const setOpen = (open) => {
       toggle.setAttribute('aria-expanded', String(open));
+      // Für Mobile: block anzeigen; auf Desktop greift CSS
       menu.style.display = open ? 'block' : '';
     };
     setOpen(false);
@@ -23,36 +23,27 @@
       setOpen(!open);
     });
 
-    // Schließen, wenn Fokus rausgeht (einfach gehalten)
+    // Klick außerhalb schließt das Menü
     document.addEventListener('click', (e) => {
-      if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-        setOpen(false);
-      }
+      if (!menu.contains(e.target) && !toggle.contains(e.target)) setOpen(false);
     });
 
-    // Escape schließt Menü
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') setOpen(false);
-    });
+    // Escape schließt
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
   }
 
-  // 2) Accordion (WAI-ARIA light)
-  const triggers = $$('.accordion__trigger');
-  triggers.forEach((btn) => {
+  // 2) Accordion
+  $$('.accordion__trigger').forEach((btn) => {
     const panel = document.getElementById(btn.getAttribute('aria-controls'));
-    btn.addEventListener('click', () => {
-      const expanded = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!expanded));
-      if (panel) {
-        panel.hidden = expanded; // wenn offen -> schließen, sonst öffnen
-      }
-    });
-
-    // Initialzustand: Panels versteckt
-    if (panel) panel.hidden = true;
+    const set = (open) => {
+      btn.setAttribute('aria-expanded', String(open));
+      if (panel) panel.hidden = !open;
+    };
+    set(false);
+    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
   });
 
-  // 3) Dynamisches Jahr im Footer
+  // 3) Jahr im Footer
   const yearTarget = document.querySelector('[data-year]');
   if (yearTarget) yearTarget.textContent = new Date().getFullYear();
 })();
