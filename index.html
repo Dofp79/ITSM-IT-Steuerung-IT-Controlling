@@ -1,32 +1,99 @@
 <!doctype html>
 <html lang="de" class="js">
 <head>
-  <!--
-    Basis-Meta:
-    - UTF-8 Zeichensatz
-    - Responsives Verhalten auf mobilen Geräten
-    - Seitentitel (erscheint im Browsertab)
-  -->
+  <!-- ==========================
+       Meta & Seitentitel
+       ========================== -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ITSM – Wir über uns</title>
 
-  <!--
-    Styles:
-    1) hamburg.css  -> genereller Stil (Framework/Theme)
-    2) base.css     -> DEINE Anpassungen/Überschreibungen (muss NACH hamburg.css kommen)
-  -->
+  <!-- ==========================
+       Globale Styles
+       1) hamburg.css  -> Framework/Grundstil
+       2) base.css     -> deine Überschreibungen
+       ========================== -->
   <link rel="stylesheet" href="./css/hamburg.css">
   <link rel="stylesheet" href="./css/base.css">
 
-  <!-- Performance: Hero-Bild vorab anstoßen (Largest Contentful Paint) -->
-  <link rel="preload" as="image" href="./assets/hero.jpg" imagesrcset="./assets/hero.jpg">
+  <!-- ==========================
+       Seiten-spezifisches CSS
+       (nur Layout für die Stage wie im Screenshot)
+       ========================== -->
+  <style>
+    /* ---- Bühne/Stage als 2-Spalten-Raster: links Kacheln, rechts Text ---- */
+    .stage--blue .stage-grid{
+      /* begrenzt und zentriert wie der Rest */
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* links Kacheln, rechts Text */
+      gap: 28px;
+      align-items: start;
+    }
 
-  <!--
-    Inline-SVG Sprite:
-    - enthält nur das Home-Icon für die Breadcrumbs
-    - wird nicht sichtbar gerendert (0x0), dient als Symbol-Quelle (<use xlink:href="#icon-home">)
-  -->
+    /* Rechts: Hero-Text mittig ausgerichtet */
+    .stage--blue .stage-text{
+      color: #e6f2ff;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      min-height: 420px; /* optisch mittig in der blauen Fläche */
+    }
+    .stage--blue .stage-text .topline{
+      color:#ff7c87;        /* leicht rötlicher Ton wie im Screenshot */
+      font-weight: 800;
+      letter-spacing:.02em;
+      text-transform:none;
+    }
+    .stage--blue .stage-text h1{
+      color:#fff;
+      margin: 0 .5rem .5rem;
+      font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+      line-height: 1.2;
+    }
+    .stage--blue .stage-text p{
+      margin: 0 auto;
+      max-width: 62ch;
+      color:#e6f2ff;
+    }
+
+    /* Links: 2×2-Kachelraster in der blauen Fläche */
+    .stage--blue .tile-grid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    /* Karten vererben Stil aus base.css (.km1-teaser …),
+       hier nur minimale Anpassungen für die höhere Kartenvorschau */
+    .stage--blue .km1-teaser__figure img{
+      height: 120px;        /* im Screenshot etwas kompakter */
+    }
+
+    /* Breadcrumbs in dieser Seite ausblenden (Screenshot zeigt keine) */
+    .km1-breadcrumbs{ display:none; }
+
+    /* --- Responsive: unter 980px untereinander stapeln --- */
+    @media (max-width: 980px){
+      .stage--blue .stage-grid{
+        grid-template-columns: 1fr;   /* eine Spalte */
+        gap: 20px;
+        padding: 28px 20px;
+      }
+      .stage--blue .stage-text{ min-height: 0; }
+      .stage--blue .tile-grid{
+        grid-template-columns: 1fr;   /* Kacheln untereinander */
+      }
+    }
+  </style>
+
+  <!-- ==========================
+       Kleines SVG-Sprite (Home-Icon),
+       falls du Breadcrumbs später aktivierst
+       ========================== -->
   <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
     <defs>
       <symbol id="icon-home" viewBox="0 0 24 24">
@@ -36,208 +103,148 @@
   </svg>
 </head>
 
-<!--
-  Body-Klassen:
-  - km1-page / km1-page--one-col: Grundlayout (einspaltig), kommt aus hamburg.css
--->
 <body class="km1-page km1-page--one-col">
+  <!-- ===========================================================
+       HEADER (Logo + Navigation)
+       - Wird per Partial geladen, damit auf allen Seiten identisch
+       - Datei: /partials/header.html
+       =========================================================== -->
+  <div data-include="./partials/header.html"></div>
 
-  <!--
-    HEADER (als Partial geladen):
-    - Der komplette Kopfbereich steckt in /partials/header.html
-    - Wird per site.js via fetch() ersetzt/eingefügt.
-    - <noscript> zeigt einen Hinweis, falls JS deaktiviert ist.
-  -->
-  <div data-include="./partials/header.html">
-    <noscript><!-- Fallback: -->
-      <p style="padding:8px 20px;background:#fff3cd;color:#664d03;margin:0">
-        Hinweis: Navigation wird durch JavaScript geladen. Bitte JS aktivieren.
-      </p>
-    </noscript>
-  </div>
+  <!-- ===========================================================
+       HAUPTBEREICH
+       =========================================================== -->
+  <main id="main" class="km1-main km1-page__main">
 
-  <!--
-    HAUPTBEREICH DER SEITE
-    - role="main" für Barrierefreiheit (Landmark)
-    - id="main" erlaubt "Skip to content"
-  -->
-  <main id="main" role="main" class="km1-main km1-page__main">
-
-    <!--
-      BREADCRUMBS (Brotkrumen-Navigation):
-      - Link zurück zur Startseite (Home-Icon)
-      - aktuelles Segment als Text (nicht verlinkt)
-    -->
-    <nav class="km1-breadcrumbs" aria-label="Brotkrumen">
-      <a class="km1-link km1-breadcrumbs__link km1-breadcrumbs__link--home" href="./index.html">
-        <!-- Icon wird aus dem <symbol id="icon-home"> oben referenziert -->
-        <svg class="km1-icon" width="12" height="12" aria-hidden="true"><use xlink:href="#icon-home"/></svg>
-        <span class="sr-only">Start</span> <!-- nur für Screenreader -->
-      </a>
-      <span class="km1-breadcrumbs__separator">/</span>
-      <span class="km1-breadcrumbs__current">Wir über uns</span>
-    </nav>
-
-    <!--
-      HERO-BEREICH („Stage“):
-      - .km1-stage           : Grundstruktur des Hero
-      - .stage--blue         : blauer Overlay-Look (definiert in base.css)
-      - Abbildung + Textblock (Topline, H1, Intro-Text)
-    -->
-    <section class="km1-stage stage--blue">
-      <figure class="km1-stage__figure">
-        <!--
-          Hero-Bild:
-          - width/height helfen beim Layout (verhindern CLS)
-          - loading/decoding/fetchpriority für Performance
-        -->
-        <img
-          class="km1-img"
-          src="./assets/hero.jpg"
-          alt="Gebäudefassade (blau gefiltert)"
-          width="1920" height="600"
-          loading="eager" decoding="async" fetchpriority="high">
+    <!-- =======================================================
+         BLAUE STAGE (wie im Screenshot):
+         - LINKS: 2×2 Kacheln (Service-Bereiche)
+         - RECHTS: ITSM-Topline + Introtext
+         ======================================================= -->
+    <section class="km1-stage stage--blue" aria-labelledby="stageHeading">
+      <!-- Hintergrundbild: wenn vorhanden, wird es blau überlagert -->
+      <figure class="km1-stage__figure" aria-hidden="true">
+        <img class="km1-img"
+             src="./assets/hero.jpg"
+             alt=""
+             width="1920" height="600"
+             loading="eager" decoding="async" fetchpriority="high">
       </figure>
 
-      <!--
-        Textcontainer im Hero:
-        - .km1-stage__topline   : kleine Überschrift über H1
-        - .km1-stage__heading   : große H1
-        - .km1-stage__text      : erklärender Einleitungstext
-      -->
-      <div class="km1-container km1-stage__content-container">
-        <div class="km1-stage__topline">ITSM</div>
-        <h1 class="km1-heading km1-stage__heading">Wir über uns</h1>
-        <p class="km1-paragraph km1-stage__text">
-          Die Einheit für IT-Service-Management (ITSM) gestaltet die digitale Steuerung und das Controlling zukunftsorientiert.
-          Wir optimieren Prozesse, erhöhen die Transparenz durch KPIs und investieren in verlässliche Strukturen – für effiziente,
-          menschengerechte IT-Services.
-        </p>
-      </div>
-    </section>
+      <!-- 2-Spalten-Content in der Stage -->
+      <div class="stage-grid">
 
-    <!--
-      INTRO-ABSCHNITT unter dem Hero:
-      - h2 als Abschnittstitel
-      - kurzer Teasertext zur Seite/Organisation
-    -->
-    <section class="intro">
-      <h2 class="km1-heading">Wir über uns</h2>
-      <p>
-        Aufgabenbeschreibung: <strong>Gemeinsam für eine moderne, transparente IT</strong> – mit klaren Rollen,
-        verlässlichen SLAs und kontinuierlicher Verbesserung.
-      </p>
-    </section>
+        <!-- ========== LINKE SPALTE: 2×2 Kachel-Grid ========== -->
+        <div class="tile-grid" aria-label="Kernbereiche">
 
-    <!--
-      KACHEL-REIHE (4 TEASER „Fenster“):
-      - .km1-teaser-row  : Grid-Container (definiert in base.css)
-      - .km1-teaser      : einzelne Box (Karte) mit Bild, Überschrift (Link) und Kurztext
-      - Jede Kachel verlinkt auf die passende Unterseite/Anker
-    -->
-    <section class="km1-teaser-row" aria-label="Kernbereiche">
-      <!-- Kachel 1: Service Operations -->
-      <article class="km1-teaser">
-        <figure class="km1-teaser__figure">
-          <!-- Kachelgrafik (16:9), lazy für Performance -->
-          <img class="km1-img" src="./assets/tile-ops.jpg" alt="Service Operations"
-               width="800" height="450" loading="lazy" decoding="async">
-        </figure>
-        <div class="km1-teaser__content">
-          <!-- Überschrift klickbar -> führt zur Tätigkeiten-Seite -->
-          <a class="km1-teaser__heading-link" href="./taetigkeiten.html">
-            <h3 class="km1-heading km1-teaser__heading">Service Operations</h3>
-          </a>
-          <!-- Kurzbeschreibung -->
-          <p class="km1-paragraph km1-teaser__paragraph">
-            Incident, Request &amp; Problem – Priorisierung, SLA-Steuerung, Qualitätssicherung.
+          <!-- Kachel 1 -->
+          <article class="km1-teaser" aria-labelledby="t-ops">
+            <figure class="km1-teaser__figure">
+              <img class="km1-img"
+                   src="./assets/tile-ops.jpg"
+                   alt="Service Operations"
+                   width="800" height="450" loading="lazy" decoding="async">
+            </figure>
+            <div class="km1-teaser__content">
+              <a class="km1-teaser__heading-link" href="./taetigkeiten.html">
+                <h3 id="t-ops" class="km1-heading km1-teaser__heading">Service Operations</h3>
+              </a>
+              <p class="km1-paragraph km1-teaser__paragraph">
+                Incident, Request &amp; Problem – Priorisierung, SLA-Steuerung, Qualitätssicherung.
+              </p>
+              <p><a class="km1-link" href="./taetigkeiten.html">Mehr dazu</a></p>
+            </div>
+          </article>
+
+          <!-- Kachel 2 -->
+          <article class="km1-teaser" aria-labelledby="t-change">
+            <figure class="km1-teaser__figure">
+              <img class="km1-img"
+                   src="./assets/tile-change.jpg"
+                   alt="Change &amp; Release"
+                   width="800" height="450" loading="lazy" decoding="async">
+            </figure>
+            <div class="km1-teaser__content">
+              <a class="km1-teaser__heading-link" href="./taetigkeiten.html#change">
+                <h3 id="t-change" class="km1-heading km1-teaser__heading">Change &amp; Release</h3>
+              </a>
+              <p class="km1-paragraph km1-teaser__paragraph">
+                Risiko-/Auswirkungsbewertung, CAB, standardisierte Deployments, Reviews.
+              </p>
+              <p><a class="km1-link" href="./taetigkeiten.html#change">Mehr dazu</a></p>
+            </div>
+          </article>
+
+          <!-- Kachel 3 -->
+          <article class="km1-teaser" aria-labelledby="t-kpi">
+            <figure class="km1-teaser__figure">
+              <img class="km1-img"
+                   src="./assets/tile-kpi.jpg"
+                   alt="Controlling &amp; KPIs"
+                   width="800" height="450" loading="lazy" decoding="async">
+            </figure>
+            <div class="km1-teaser__content">
+              <a class="km1-teaser__heading-link" href="./ueber.html#kpis">
+                <h3 id="t-kpi" class="km1-heading km1-teaser__heading">Controlling &amp; KPIs</h3>
+              </a>
+              <p class="km1-paragraph km1-teaser__paragraph">
+                Dashboards, Frühwarnindikatoren und Berichte – Kosten, Qualität, Zeit.
+              </p>
+              <p><a class="km1-link" href="./ueber.html#kpis">Mehr dazu</a></p>
+            </div>
+          </article>
+
+          <!-- Kachel 4 -->
+          <article class="km1-teaser" aria-labelledby="t-agents">
+            <figure class="km1-teaser__figure">
+              <img class="km1-img"
+                   src="./assets/agent-itsm.png"
+                   alt="Projekte &amp; KI-Agenten"
+                   width="800" height="450" loading="lazy" decoding="async">
+            </figure>
+            <div class="km1-teaser__content">
+              <a class="km1-teaser__heading-link" href="./projekte.html">
+                <h3 id="t-agents" class="km1-heading km1-teaser__heading">Projekte &amp; KI-Agenten</h3>
+              </a>
+              <p class="km1-paragraph km1-teaser__paragraph">
+                Assistenten &amp; Initiativen, die Prozesse beschleunigen und Entscheidungen stützen.
+              </p>
+              <p><a class="km1-link" href="./projekte.html">Zu den Projekten</a></p>
+            </div>
+          </article>
+
+        </div><!-- /tile-grid -->
+
+        <!-- ========== RECHTE SPALTE: ITSM-Topline + Text ========== -->
+        <div class="stage-text">
+          <div class="topline">ITSM</div>
+          <h1 id="stageHeading">Wir über uns</h1>
+          <p>
+            Die Einheit für IT-Service-Management (ITSM) gestaltet die digitale Steuerung und das
+            Controlling zukunftsorientiert. Wir optimieren Prozesse, erhöhen die Transparenz durch KPIs
+            und investieren in verlässliche Strukturen – für effiziente, menschengerechte IT-Services.
           </p>
-          <!-- sekundärer Textlink -->
-          <p><a class="km1-link" href="./taetigkeiten.html">Mehr dazu</a></p>
         </div>
-      </article>
 
-      <!-- Kachel 2: Change & Release -->
-      <article class="km1-teaser">
-        <figure class="km1-teaser__figure">
-          <img class="km1-img" src="./assets/tile-change.jpg" alt="Change &amp; Release"
-               width="800" height="450" loading="lazy" decoding="async">
-        </figure>
-        <div class="km1-teaser__content">
-          <a class="km1-teaser__heading-link" href="./taetigkeiten.html#change">
-            <h3 class="km1-heading km1-teaser__heading">Change &amp; Release</h3>
-          </a>
-          <p class="km1-paragraph km1-teaser__paragraph">
-            Risiko-/Auswirkungsbewertung, CAB, standardisierte Deployments, Reviews.
-          </p>
-          <p><a class="km1-link" href="./taetigkeiten.html#change">Mehr dazu</a></p>
-        </div>
-      </article>
+      </div><!-- /stage-grid -->
+    </section><!-- /stage--blue -->
 
-      <!-- Kachel 3: Controlling & KPIs -->
-      <article class="km1-teaser">
-        <figure class="km1-teaser__figure">
-          <img class="km1-img" src="./assets/tile-kpi.jpg" alt="Controlling &amp; KPIs"
-               width="800" height="450" loading="lazy" decoding="async">
-        </figure>
-        <div class="km1-teaser__content">
-          <a class="km1-teaser__heading-link" href="./ueber.html#kpis">
-            <h3 class="km1-heading km1-teaser__heading">Controlling &amp; KPIs</h3>
-          </a>
-          <p class="km1-paragraph km1-teaser__paragraph">
-            Dashboards, Frühwarnindikatoren und Berichte – Kosten, Qualität, Zeit.
-          </p>
-          <p><a class="km1-link" href="./ueber.html#kpis">Mehr dazu</a></p>
-        </div>
-      </article>
-
-      <!-- Kachel 4: Projekte & KI-Agenten -->
-      <article class="km1-teaser">
-        <figure class="km1-teaser__figure">
-          <img class="km1-img" src="./assets/agent-itsm.png" alt="Projekte &amp; KI-Agenten"
-               width="800" height="450" loading="lazy" decoding="async">
-        </figure>
-        <div class="km1-teaser__content">
-          <a class="km1-teaser__heading-link" href="./projekte.html">
-            <h3 class="km1-heading km1-teaser__heading">Projekte &amp; KI-Agenten</h3>
-          </a>
-          <p class="km1-paragraph km1-teaser__paragraph">
-            Assistenten &amp; Initiativen, die Prozesse beschleunigen und Entscheidungen stützen.
-          </p>
-          <p><a class="km1-link" href="./projekte.html">Zu den Projekten</a></p>
-        </div>
-      </article>
-    </section>
+    <!-- Hinweis: Im Screenshot folgt direkt der Kontakt/Footer-Bereich.
+         Eine separate „Intro“-Sektion lassen wir deshalb weg. -->
 
   </main>
 
-  <!--
-    PARTIALS UNTERER SEITENBEREICH:
-    - Kontaktblock und Footer werden (wie der Header) per site.js dynamisch geladen
-  -->
-  <div data-include="./partials/contact.html">
-    <noscript><!-- Fallback: -->
-      <p style="padding:8px 20px;background:#fff3cd;color:#664d03;margin:0">
-        Hinweis: Kontaktbereich wird durch JavaScript geladen. Bitte JS aktivieren.
-      </p>
-    </noscript>
-  </div>
-  <div data-include="./partials/footer.html">
-    <noscript><!-- Fallback: -->
-      <p style="padding:8px 20px;background:#fff3cd;color:#664d03;margin:0">
-        Hinweis: Footer wird durch JavaScript geladen. Bitte JS aktivieren.
-      </p>
-    </noscript>
-  </div>
+  <!-- ===========================================================
+       KONTAKT & FOOTER (Partials, damit überall gleich)
+       =========================================================== -->
+  <div data-include="./partials/contact.html"></div>
+  <div data-include="./partials/footer.html"></div>
 
-  <!--
-    Globales JS:
-    - lädt die Partials (Header/Kontakt/Footer)
-    - aktiviert Burger-Menü
-    - markiert aktiven Menüpunkt
-    - setzt E-Mail-Link erst bei Klick (Spam-Schutz)
-    Hinweis: funktioniert nur über HTTP/HTTPS (nicht file://)
-  -->
+  <!-- ===========================================================
+       Globales JS
+       - lädt Partials (Header/Kontakt/Footer)
+       - Burger-Menü, aktiver Menüpunkt, Mail-Schutz, Jahr im Footer
+       =========================================================== -->
   <script src="./assets/js/site.js" defer></script>
 </body>
 </html>
