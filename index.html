@@ -19,6 +19,9 @@
   <link rel="stylesheet" href="./css/hamburg.css">
   <link rel="stylesheet" href="./css/base.css">
 
+  <!-- Performance: Hero-Bild vorab anstoßen (Largest Contentful Paint) -->
+  <link rel="preload" as="image" href="./assets/hero.jpg" imagesrcset="./assets/hero.jpg">
+
   <!--
     Inline-SVG Sprite:
     - enthält nur das Home-Icon für die Breadcrumbs
@@ -41,16 +44,24 @@
 
   <!--
     HEADER (als Partial geladen):
-    - Der komplette Kopfbereich (Logo, Navigation, Burger-Menü) steckt in /partials/header.html
+    - Der komplette Kopfbereich steckt in /partials/header.html
     - Wird per site.js via fetch() ersetzt/eingefügt.
+    - <noscript> zeigt einen Hinweis, falls JS deaktiviert ist.
   -->
-  <div data-include="./partials/header.html"></div>
+  <div data-include="./partials/header.html">
+    <noscript><!-- Fallback: -->
+      <p style="padding:8px 20px;background:#fff3cd;color:#664d03;margin:0">
+        Hinweis: Navigation wird durch JavaScript geladen. Bitte JS aktivieren.
+      </p>
+    </noscript>
+  </div>
 
   <!--
     HAUPTBEREICH DER SEITE
-    - id="main" erlaubt "Skip to content" (Barrierefreiheit)
+    - role="main" für Barrierefreiheit (Landmark)
+    - id="main" erlaubt "Skip to content"
   -->
-  <main id="main" class="km1-main km1-page__main">
+  <main id="main" role="main" class="km1-main km1-page__main">
 
     <!--
       BREADCRUMBS (Brotkrumen-Navigation):
@@ -204,8 +215,20 @@
     PARTIALS UNTERER SEITENBEREICH:
     - Kontaktblock und Footer werden (wie der Header) per site.js dynamisch geladen
   -->
-  <div data-include="./partials/contact.html"></div>
-  <div data-include="./partials/footer.html"></div>
+  <div data-include="./partials/contact.html">
+    <noscript><!-- Fallback: -->
+      <p style="padding:8px 20px;background:#fff3cd;color:#664d03;margin:0">
+        Hinweis: Kontaktbereich wird durch JavaScript geladen. Bitte JS aktivieren.
+      </p>
+    </noscript>
+  </div>
+  <div data-include="./partials/footer.html">
+    <noscript><!-- Fallback: -->
+      <p style="padding:8px 20px;background:#fff3cd;color:#664d03;margin:0">
+        Hinweis: Footer wird durch JavaScript geladen. Bitte JS aktivieren.
+      </p>
+    </noscript>
+  </div>
 
   <!--
     Globales JS:
