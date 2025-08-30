@@ -2,76 +2,87 @@
    FOOTER (kompakt & responsiv)
    ========================= */
 
-/* Gesamter Footer-Hintergrund (sehr hell) */
+/* Gesamter Footer-Hintergrund (sehr hell, wie Screenshot) */
 .km1-footer{
-  background: #f3f6fb; /* bluish light wie Screenshot */
-  color: #111;
+  background: #f3f6fb;   /* zartes Blau-Grau */
+  color: #111;           /* neutraler Textkontrast */
 }
 
-/* Innenbreite & Innenabstand */
+/* Innenbreite & Innenabstand (gleiche Max-Breite wie Seite) */
 .km1-footer__inner{
-  max-width: 1100px;  /* gleiche Max-Breite wie die Seite */
+  /* Tipp: wenn du bereits --maxw nutzt, ersetze 1100px durch var(--maxw) */
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 14px 20px; /* kompakter Innenabstand */
+  padding: 14px 20px;    /* kompakt */
 }
 
-/* Zwei-Spalten-Layout (Desktop) / Eine Spalte (mobil) */
+/* Zweispaltiges Raster (Desktop) / eine Spalte (mobil) */
 .km1-footer__bar{
   display: grid;
-  grid-template-columns: 1fr auto; /* links Copy, rechts Links */
+  grid-template-columns: 1fr auto; /* links Copy, rechts Linkliste */
   align-items: center;
   gap: 16px;
 }
 
-/* Die „Badge“-Kacheln: dezentes Panel hinter Copy & Links */
+/* Dezente „Badge“-Flächen hinter Copy und Links */
 .km1-footer__copy,
 .km1-footer__nav{
-  background: rgba(0,0,0,.04); /* ganz leichtes Grau wie im Screenshot */
+  background: rgba(0,0,0,.04); /* sehr leichtes Grau */
   padding: 10px 16px;
   border-radius: 8px;
 }
 
-.sr-only{
-  position:absolute;
-  width:1px;
-  height:1px;
-  margin:-1px;
-  padding:0;
-  border:0;
-  clip:rect(0 0 0 0);
-  overflow:hidden
- }
+/* Rechtsausrichtung der Link-Badge auf großen Screens */
+.km1-footer__nav{
+  justify-self: end;  /* steht sauber rechts in Spalte 2 */
+}
 
-/* Linkliste (rechts) – horizontal, mit Abstand */
+/* Screenreader-only Utility (nur einmal im Projekt definieren!) */
+.sr-only{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%); /* moderneres Pendant; stört alte Browser nicht */
+  overflow: hidden;
+}
+
+/* Linkliste (rechts): horizontal mit Abstand, bricht bei wenig Platz um */
 .km1-footer__list{
   list-style: none;
   display: flex;
-  gap: 22px;           /* Abstand zwischen den Links */
+  gap: 22px;          /* Abstand zwischen den Links */
   margin: 0;
   padding: 0;
-  flex-wrap: wrap;     /* bei wenig Breite umbrechen */
+  flex-wrap: wrap;    /* bei wenig Breite umbrechen */
 }
 
-/* Footer-Links bewusst neutral (schwarz), mit Hover-Unterstreichung */
+/* Footer-Links: neutral, gut lesbar; deutliche Hover-/Fokus-States */
 .km1-footer__link{
-  color: inherit;          /* nimmt #111 */
+  color: inherit;          /* übernimmt #111 */
   text-decoration: none;
   font-weight: 700;        /* kräftig wie im Screenshot */
 }
-.km1-footer__link:hover{
-  text-decoration: underline;
+.km1-footer__link:hover,
+.km1-footer__link:focus-visible{
+  text-decoration: underline;  /* sichtbarer Zustand für Maus & Tastatur */
+  outline: none;
 }
 
-/* Mobile-Ansicht: untereinander anordnen, volle Breite */
+/* Mobile: untereinander anordnen, volle Breite, etwas engere Abstände */
 @media (max-width: 768px){
   .km1-footer__bar{
-    grid-template-columns: 1fr; /* nur eine Spalte */
+    grid-template-columns: 1fr;  /* nur eine Spalte */
   }
   .km1-footer__copy,
   .km1-footer__nav{
     padding: 12px 14px;
+    justify-self: stretch;       /* Badge nutzt volle Breite */
   }
   .km1-footer__list{
-    gap: 16px; /* etwas enger mobil */
+    gap: 16px;                   /* etwas enger mobil */
   }
 }
