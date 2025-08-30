@@ -1,13 +1,22 @@
+<!-- Skip-Link für Tastatur- und Screenreader-Nutzer -->
+<a class="sr-only" href="#main">Zum Inhalt springen</a>
+
 <header class="km1-header">
   <div class="km1-container km1-meta-navigation">
-    <a class="km1-logo km1-header__logo" href="/index.html" title="Startseite">
-      <img src="/assets/DoniLogo_1.0.0.png" alt="Logo" class="km1-img">
+    <a class="km1-logo km1-header__logo" href="./index.html" title="Startseite">
+      <img src="./assets/DoniLogo_1.0.0.png" alt="Logo ITSM" class="km1-img">
     </a>
 
     <!-- Burger (mobil) -->
-    <button class="nav-toggle" id="navToggle" aria-controls="mainnav" aria-expanded="false">
+    <button
+      class="nav-toggle"
+      id="navToggle"
+      aria-controls="mainnav"
+      aria-expanded="false"
+      aria-label="Hauptmenü ein-/ausklappen"
+      type="button">
       <span>Menü</span>
-      <svg class="icon" width="28" height="18" aria-hidden="true">
+      <svg class="icon" width="28" height="18" aria-hidden="true" focusable="false" viewBox="0 0 28 18">
         <rect width="28" height="2" rx="1"></rect>
         <rect y="8" width="28" height="2" rx="1"></rect>
         <rect y="16" width="28" height="2" rx="1"></rect>
@@ -18,10 +27,10 @@
   <div class="km1-container">
     <nav id="mainnav" class="km1-main-navigation__link-container" aria-label="Hauptnavigation">
       <ul class="km1-main-navigation__links" id="mainnavList">
-        <li><a class="km1-link" href="/index.html">Start</a></li>
-        <li><a class="km1-link" href="/ueber.html">Über mich</a></li>
-        <li><a class="km1-link" href="/taetigkeiten.html">Tätigkeiten</a></li>
-        <li><a class="km1-link" href="/projekte.html">Projekte</a></li>
+        <li><a class="km1-link" href="./index.html">Start</a></li>
+        <li><a class="km1-link" href="./ueber.html">Über mich</a></li>
+        <li><a class="km1-link" href="./taetigkeiten.html">Tätigkeiten</a></li>
+        <li><a class="km1-link" href="./projekte.html">Projekte</a></li>
       </ul>
     </nav>
   </div>
