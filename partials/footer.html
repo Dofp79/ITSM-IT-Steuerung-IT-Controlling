@@ -1,11 +1,49 @@
-<footer class="km1-footer">
+<!-- ======================================
+     PARTIAL: Footer / Seitenende
+     - Wird per site.js automatisch eingefügt
+     - Kompakter, responsiver Footer mit zwei Zonen:
+       (1) Copyright (links auf Desktop)
+       (2) Rechtliche Links (rechts auf Desktop)
+     ====================================== -->
+<footer class="km1-footer" role="contentinfo" aria-labelledby="footerTitle">
+  <!-- Unsichtbare Überschrift nur für Screenreader -->
+  <h2 id="footerTitle" class="sr-only">Seitenende / Footer</h2>
+
+  <!--
+    Innerer, zentrierter Container (Breite via CSS begrenzt)
+    - Enthält die „Bar“ mit Copy & Linkliste
+  -->
   <div class="km1-container km1-footer__inner">
-    <p>© <span data-year></span> ITSM – Doniman F. Peña Parra</p>
-    <ul class="km1-footer__list">
-      <li><a class="km1-link km1-footer__link" href="/impressum.html">Impressum</a></li>
-      <li><a class="km1-link km1-footer__link" href="/datenschutz.html">Datenschutz</a></li>
-      <li><a class="km1-link km1-footer__link" href="/barrierefreiheit.html">Barrierefreiheit</a></li>
-    </ul>
-    <span class="km1-footer__line"></span>
-  </div>
+
+    <!--
+      Bar = Layout-Raster (2 Spalten auf Desktop, 1 Spalte mobil)
+      - Linke Kachel: Copyright
+      - Rechte Kachel: Impressum/Datenschutz/Barrierefreiheit
+    -->
+    <div class="km1-footer__bar">
+
+      <!-- (1) COPYRIGHT-Block -->
+      <!-- data-year wird von site.js automatisch mit dem aktuellen Jahr befüllt -->
+      <p class="km1-footer__copy">
+        © <span data-year>2025</span> ITSM – Doniman F. Peña Parra
+      </p>
+
+      <!-- (2) NAV mit rechtlichen Links -->
+      <nav class="km1-footer__nav" aria-label="Rechtliche Informationen">
+        <ul class="km1-footer__list">
+          <li class="km1-footer__item">
+            <a class="km1-footer__link" href="./impressum.html">Impressum</a>
+          </li>
+          <li class="km1-footer__item">
+            <a class="km1-footer__link" href="./datenschutz.html">Datenschutz</a>
+          </li>
+          <li class="km1-footer__item">
+            <a class="km1-footer__link" href="./barrierefreiheit.html">Barrierefreiheit</a>
+          </li>
+        </ul>
+      </nav>
+
+    </div> <!-- /km1-footer__bar -->
+
+  </div> <!-- /km1-footer__inner -->
 </footer>
