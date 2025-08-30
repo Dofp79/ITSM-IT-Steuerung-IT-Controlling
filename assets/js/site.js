@@ -1,73 +1,118 @@
 (() => {
-  // ---- HTML-Partials laden ----
+  // ================================
+  // FUNKTION: HTML-Partials laden
+  // ================================
   async function includePartials() {
+    // Alle Container finden, die data-include="..." tragen
     const slots = document.querySelectorAll('[data-include]');
     for (const slot of slots) {
-      const url = slot.getAttribute('data-include');
+      const url = slot.getAttribute('data-include'); // Pfad zum Partial (z.B. header.html)
       try {
+        // Partial laden (immer ohne Cache, damit Änderungen sofort sichtbar sind)
         const res = await fetch(url, { cache: 'no-cache' });
+        // Inhalt in den Platzhalter einsetzen
         slot.innerHTML = await res.text();
       } catch {
+        // Falls das Laden fehlschlägt → Kommentar einfügen
         slot.innerHTML = `<!-- include failed: ${url} -->`;
       }
     }
   }
 
-  // ---- Navigation: Burger, Active-State, ESC schließt ----
+  // ================================
+  // FUNKTION: Navigation verbessern
+  // ================================
   function enhanceNav() {
-    const btn  = document.getElementById('navToggle');
-    const list = document.getElementById('mainnavList');
+    const btn  = document.getElementById('navToggle');   // Burger-Button
+    const list = document.getElementById('mainnavList'); // UL mit Links
+
     if (btn && list) {
+      // Klick auf Burger → Menü ein-/ausblenden
       btn.addEventListener('click', () => {
-        const open = list.classList.toggle('is-open');
+        const open = list.classList.toggle('is-open'); // Klasse toggeln
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
+
+      // Klick auf einen Link → Menü wieder schließen (mobile UX)
       list.querySelectorAll('a').forEach(a =>
-        a.addEventListener('click', () => { list.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); })
+        a.addEventListener('click', () => {
+          list.classList.remove('is-open');
+          btn.setAttribute('aria-expanded','false');
+        })
       );
+
+      // ESC-Taste → Menü schließen
       window.addEventListener('keydown', e => {
-        if (e.key === 'Escape') { list.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); }
+        if (e.key === 'Escape') {
+          list.classList.remove('is-open');
+          btn.setAttribute('aria-expanded','false');
+        }
       });
     }
 
-    // aktiven Menüpunkt markieren
+    // -------------------------------
+    // Aktiven Menüpunkt markieren
+    // -------------------------------
+    // Aktuelle URL-Pfad (ohne index.html am Ende)
     const current = location.pathname.replace(/index\.html?$/,'') || '/';
+    
+    // Alle Links im Hauptmenü durchgehen
     document.querySelectorAll('#mainnav a[href]').forEach(a => {
       const href = a.getAttribute('href').replace(/index\.html?$/,'') || '/';
-      if (href === current) a.setAttribute('aria-current','page');
+      if (href === current) {
+        a.setAttribute('aria-current','page'); // aktiven Link hervorheben
+      }
     });
 
-    // optional: Sticky Header
+    // -------------------------------
+    // Sticky Header beim Scrollen
+    // -------------------------------
     const header = document.querySelector('.km1-header');
     if (header) {
-      const onScroll = () => header.classList.toggle('is-sticky', window.scrollY > 10);
-      onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+      const onScroll = () => {
+        // Ab 10px Scroll → Header bekommt "is-sticky"-Klasse
+        header.classList.toggle('is-sticky', window.scrollY > 10);
+      };
+      onScroll(); // direkt beim Laden prüfen
+      window.addEventListener('scroll', onScroll, { passive: true });
     }
   }
 
-  // ---- Kontakt: E-Mail erst auf Klick zusammensetzen ----
+  // ================================
+  // FUNKTION: Kontakt-Mail schützen
+  // ================================
   function protectMail() {
+    // Alle Links mit data-email-user & data-email-domain finden
     document.querySelectorAll('[data-email-user][data-email-domain]').forEach(link => {
       link.addEventListener('click', e => {
+        // Daten zusammensetzen → echtes mailto:
         const u = link.getAttribute('data-email-user');
         const d = link.getAttribute('data-email-domain');
-        link.href = `mailto:${u}@${d}`; link.textContent = `${u}@${d}`;
-        e.preventDefault();
-      }, { once: true });
+        link.href = `mailto:${u}@${d}`;
+        link.textContent = `${u}@${d}`;
+        e.preventDefault(); // Klick nicht sofort ausführen
+      }, { once: true });   // nur beim ersten Klick ausführen
     });
   }
 
-  // ---- Footer: Jahr einfügen ----
+  // ================================
+  // FUNKTION: Jahr im Footer setzen
+  // ================================
   function setYear() {
     const y = document.querySelector('[data-year]');
-    if (y) y.textContent = new Date().getFullYear();
+    if (y) {
+      y.textContent = new Date().getFullYear(); // aktuelles Jahr einfügen
+    }
   }
 
-  // Bootstrapping
+  // ================================
+  // INITIALISIERUNG (Bootstrapping)
+  // ================================
   document.addEventListener('DOMContentLoaded', async () => {
-    await includePartials();   // Header/Contact/Footer in Seite einsetzen
-    enhanceNav();              // erst danach Navigation aktivieren
-    protectMail();
-    setYear();
+    await includePartials();   // Header/Contact/Footer einsetzen
+    enhanceNav();              // Navigation (Burger, aktiv, sticky)
+    protectMail();             // Mail-Links schützen
+    setYear();                 // Copyright-Jahr aktualisieren
   });
-})();
+
+})(); // IIFE → alles in sich geschlossen
