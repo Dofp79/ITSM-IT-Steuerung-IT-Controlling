@@ -1,4 +1,6 @@
 :root{
+  --font-sans: "Lato", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-cond: "Lato", "Roboto Condensed", "Roboto", system-ui, "Segoe UI", Arial, sans-serif; /* oder auch "Lato" */
   --brand-red:#e30613;
   --brand-red-ink:#7d212b;
   --header-bg:#ffffff;
