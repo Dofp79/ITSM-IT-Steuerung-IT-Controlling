@@ -17,6 +17,73 @@
   --font-cond:"Roboto Condensed","Roboto",system-ui,Segoe UI,Arial,sans-serif;
 }
 
+/* ==============================
+   Lato Fonts (self-hosted)
+   ============================== */
+
+/* Regular */
+@font-face {
+  font-family: "Lato";
+  src: url("../fonts/lato-regular-woff-data.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Italic */
+@font-face {
+  font-family: "Lato";
+  src: url("../fonts/lato-italic-woff-data.woff") format("woff");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Bold */
+@font-face {
+  font-family: "Lato";
+  src: url("../fonts/lato-bold-woff-data.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Bold Italic */
+@font-face {
+  font-family: "Lato";
+  src: url("../fonts/lato-bolditalic-woff-data.woff") format("woff");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Medium (500) */
+@font-face {
+  font-family: "Lato";
+  src: url("../fonts/lato-medium-woff-data.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* SemiBold (600) */
+@font-face {
+  font-family: "Lato";
+  src: url("../fonts/lato-semibold-woff-data.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Thin (100) */
+@font-face {
+  font-family: "Lato";
+  src: url("../fonts/lato-thin-woff-data.woff") format("woff");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Base */
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
