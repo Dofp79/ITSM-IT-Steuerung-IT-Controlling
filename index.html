@@ -1,38 +1,187 @@
-/* ===========================================================
-   Globales Skript – Burger/Drawer, Accordion, Jahr im Footer
-   =========================================================== */
-(() => {
-  const $ = (s, c = document) => c.querySelector(s);
-  const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IT-Steuerung & IT-Controlling mit Hilfe von ITSM</title>
 
-  // Burger/Drawer
-  const burger = $('.burger');
-  const drawer = $('#navdrawer');
-  const setDrawer = (open) => {
-    burger?.setAttribute('aria-expanded', String(open));
-    drawer?.classList.toggle('is-open', open);
-    document.body.style.overflow = open ? 'hidden' : '';
-  };
-  if (burger && drawer) {
-    setDrawer(false);
-    burger.addEventListener('click', () => {
-      const open = burger.getAttribute('aria-expanded') === 'true';
-      setDrawer(!open);
-    });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setDrawer(false); });
-    document.addEventListener('click', (e) => {
-      if (!drawer.contains(e.target) && !burger.contains(e.target)) setDrawer(false);
-    });
-  }
+  <!-- Webfonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
 
-  // Accordion
-  $$('.accordion__trigger').forEach((btn) => {
-    const panel = document.getElementById(btn.getAttribute('aria-controls'));
-    const set = (open) => { btn.setAttribute('aria-expanded', String(open)); if (panel) panel.hidden = !open; };
-    set(false);
-    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
-  });
+  <!-- Globales CSS -->
+  <link rel="stylesheet" href="assets/css/global.css" />
 
-  // Jahr im Footer
-  const y = $('[data-year]'); if (y) y.textContent = new Date().getFullYear();
-})();
+  <meta name="description" content="IT-Steuerung & IT-Controlling mit Hilfe von ITSM – Über mich, Projekte und ITSM Konzept." />
+</head>
+<body id="top">
+  <!-- Skip-Link -->
+  <a class="skip-link" href="#hauptinhalt">Zum Inhalt springen</a>
+
+  <!-- ================ Header ================ -->
+  <header class="site-header" role="banner">
+    <div class="container header-bar">
+      <!-- Burger links -->
+      <button class="burger" aria-expanded="false" aria-controls="navdrawer">
+        <span class="burger__icon" aria-hidden="true"></span>
+        <span class="burger__label">Themen</span>
+      </button>
+
+      <!-- Logo rechts -->
+      <a class="brand-right" href="#top" aria-label="Startseite">
+        <img src="assets/DoniLogo_1.0.0.png" alt="Logo" class="brand-right__logo">
+      </a>
+    </div>
+
+    <!-- ausfahrende Navigation -->
+    <nav id="navdrawer" class="nav-drawer" aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="#ueber-mich">Über mich</a></li>
+        <li><a href="#projekte">Projekte</a></li>
+        <li><a href="#itsm-konzept">ITSM Konzept</a></li>
+      </ul>
+    </nav>
+
+    <div class="brand-bar" aria-hidden="true"></div>
+  </header>
+
+  <!-- ================ Hero ================ -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <h1 class="hero__title">IT-Steuerung &amp; IT-Controlling mit Hilfe von ITSM</h1>
+      <p class="hero__lead">
+        Die Einheit für IT-Service-Management (ITSM) gestaltet digitale Steuerung und Controlling zukunftsorientiert – mit KPIs, Transparenz und verlässlichen Strukturen.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================ 2×2 Kachel-Grid (vier Links) ================ -->
+  <section class="section section--tiles">
+    <div class="container tiles">
+      <!-- Kachel 1: intern → Über mich -->
+      <a class="tile" href="#ueber-mich">
+        <figure>
+          <img src="assets/placeholder-ueber-mich.jpg" alt="Über mich" loading="lazy">
+          <figcaption>Über mich</figcaption>
+        </figure>
+      </a>
+
+      <!-- Kachel 2: intern → Projekte -->
+      <a class="tile" href="#projekte">
+        <figure>
+          <img src="assets/placeholder-projekte.jpg" alt="Projekte" loading="lazy">
+          <figcaption>Projekte</figcaption>
+        </figure>
+      </a>
+
+      <!-- Kachel 3: extern → KI-Agent -->
+      <a class="tile" href="https://example.com/ki-agent" target="_blank" rel="noopener noreferrer">
+        <figure>
+          <img src="assets/placeholder-ki.jpg" alt="KI-Agent (extern)" loading="lazy">
+          <figcaption>KI-Agent (extern)</figcaption>
+        </figure>
+      </a>
+
+      <!-- Kachel 4: intern → ITSM Konzept -->
+      <a class="tile" href="#itsm-konzept">
+        <figure>
+          <img src="assets/placeholder-itsm.jpg" alt="ITSM Konzept" loading="lazy">
+          <figcaption>ITSM Konzept</figcaption>
+        </figure>
+      </a>
+    </div>
+  </section>
+
+  <!-- ================ Hauptinhalt ================ -->
+  <main id="hauptinhalt" class="main" role="main">
+    <!-- Über mich -->
+    <section id="ueber-mich" class="section">
+      <div class="container grid-2">
+        <div>
+          <div class="sec-head"><span class="sec-dot" aria-hidden="true"></span><h2 class="sec-title">Über mich</h2></div>
+          <p class="lead">
+            Kurzvorstellung, Kompetenzen und Fokus: IT-Steuerung, IT-Controlling, KPI-Design, Servicekatalog und Governance.
+          </p>
+          <ul class="checklist">
+            <li>10+ Jahre Erfahrung in IT-Steuerung &amp; Controlling</li>
+            <li>ITSM nach ITIL® – pragmatisch &amp; messbar</li>
+            <li>Transparenz, Verantwortlichkeiten, Wirkung</li>
+          </ul>
+        </div>
+        <aside class="card">
+          <h3>Kontakt</h3>
+          <p><strong>E-Mail:</strong> kontakt@example.org<br><strong>Standort:</strong> Hamburg</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Projekte -->
+    <section id="projekte" class="section section--alt">
+      <div class="container">
+        <div class="sec-head"><span class="sec-dot" aria-hidden="true"></span><h2 class="sec-title">Projekte</h2></div>
+        <div class="cards">
+          <article class="card"><h3>KPIs Dashboarding</h3><p>SLA/OLA, MTTR, FCR – verlässliche Kennzahlen & Visualisierungen.</p></article>
+          <article class="card"><h3>Prozessmodellierung</h3><p>Ist-/Soll-Prozesse, RACI, Schnittstellen, Automatisierung.</p></article>
+          <article class="card"><h3>ITIL® 4 / Governance</h3><p>Guiding Principles, Rollenmodell, Gremien, KVP.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ITSM Konzept -->
+    <section id="itsm-konzept" class="section">
+      <div class="container grid-2">
+        <div>
+          <div class="sec-head"><span class="sec-dot" aria-hidden="true"></span><h2 class="sec-title">ITSM Konzept</h2></div>
+
+          <div class="accordion" data-accordion>
+            <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-1">Prozesslandschaft</button>
+            <div id="acc-1" class="accordion__panel" hidden>
+              <ul>
+                <li>Incident / Request / Problem / Change</li>
+                <li>Servicekatalog &amp; CMDB</li>
+                <li>Capacity / Availability / Continuity</li>
+              </ul>
+            </div>
+
+            <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-2">KPIs &amp; Reporting</button>
+            <div id="acc-2" class="accordion__panel" hidden>
+              <ul>
+                <li>SLAs/OLAs, First Contact Resolution</li>
+                <li>Mean Time to Restore/Resolve</li>
+                <li>Service-Kosten pro Einheit</li>
+              </ul>
+            </div>
+
+            <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-3">Governance &amp; Rollen</button>
+            <div id="acc-3" class="accordion__panel" hidden>
+              <ul>
+                <li>Service Owner, Process Owner</li>
+                <li>Change Advisory Board</li>
+                <li>Steuerungs- und Controllinggremien</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <aside class="card">
+          <h3>Downloads</h3>
+          <ul class="link-list">
+            <li><a href="#" aria-disabled="true">Zielarchitektur (bald)</a></li>
+            <li><a href="#" aria-disabled="true">KPI-Katalog (bald)</a></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================ Footer ================ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container subfooter__inner">
+      <p>© <span data-year></span> IT-Steuerung &amp; IT-Controlling</p>
+      <a class="to-top" href="#top">Nach oben ↑</a>
+    </div>
+  </footer>
+
+  <!-- Globales JS -->
+  <script src="assets/js/site.js" defer></script>
+</body>
+</html>
