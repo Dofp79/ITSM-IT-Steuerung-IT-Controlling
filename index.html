@@ -38,6 +38,23 @@
 
     /* Footer-Linie wie Ziel */
     .km1-footer__line { display:block; height:2px; background:rgba(255,255,255,.25); margin-top:12px; }
+      /* ======== Responsive Header: Logo & Menü ======== */
+    .km1-header{background:transparent;border-bottom:1px solid rgba(0,0,0,.06)}
+    .km1-meta-navigation{max-width:1100px;margin:0 auto;padding:8px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .km1-header__logo img{height:clamp(36px,6vw,64px);width:auto;max-width:100%}
+    .km1-main-navigation__link-container{max-width:1100px;margin:0 auto}
+    .km1-main-navigation__links{display:flex;gap:clamp(10px,2vw,24px);flex-wrap:wrap;list-style:none;margin:0;padding:10px 20px}
+    .km1-link{font-size:clamp(.9rem,1.2vw,1rem);}
+    @media (max-width:768px){
+      .km1-main-navigation__links{padding:8px 0}
+      .km1-meta-navigation{justify-content:flex-start}
+    }
+
+    /* ======== Footer kompakter & schmaler ======== */
+    .km1-footer{background:#f7f7f8;color:#222}
+    .km1-footer__inner{max-width:1100px;margin:0 auto;padding:14px 20px}
+    .km1-footer__list{color:inherit}
+    .km1-footer__line{background:rgba(0,0,0,.08)}
   </style>
 
   <!-- SVG-Icon nur fürs Home in Breadcrumb -->
