@@ -80,6 +80,12 @@ a:hover { text-decoration: underline; }
   background: rgba(255,255,255,.86);
 }
 
+/* Teaser-Feinschliff */
+.km1-teaser__heading-link { text-decoration: none; }
+.km1-teaser__heading-link:hover { text-decoration: underline; }
+.km1-teaser__figure { aspect-ratio: 16/9; overflow: hidden; }
+.km1-teaser__figure .km1-img { width:100%; height:100%; object-fit: cover; }
+
 /* =========================
    BREADCRUMBS
    ========================= */
