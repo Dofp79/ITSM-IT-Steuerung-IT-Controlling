@@ -1,9 +1,10 @@
 /* =========================
    Basis-Reset & Variablen
    ========================= */
-:root {
-  --brand: #cc0033;        /* Haupt-Rot */
-  --brand-dark: #7d212b;   /* Dunkler Rotton */
+:root{
+  --brand: #cc0033;         /* Haupt-Rot (Akzent, Links, Headlines) */
+  --brand-dark: #7d212b;    /* Dunkler Rotton */
+  --brand-blue: #083461;    /* Blau für Stage/Overlay */
   --gray: #f4f4f4;
   --text: #1a1a1a;
   --muted: #6b7280;
@@ -14,6 +15,7 @@
   --font: 'Roboto', Calibri, Arial, sans-serif;
 }
 
+* { box-sizing: border-box; }
 html, body {
   margin: 0;
   padding: 0;
@@ -22,183 +24,125 @@ html, body {
   color: var(--text);
   line-height: 1.6;
 }
+img { max-width: 100%; display: block; }
+a { color: var(--brand); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* A11y helper */
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;clip:rect(0 0 0 0);overflow:hidden}
+
+/* Generic container (optional) */
+.km1-container{max-width:var(--maxw);margin:0 auto;padding:0 20px}
 
 /* =========================
    HEADER & NAVIGATION
    ========================= */
-.km1-header {
-  background: var(--brand);
-  color: #fff;
-  padding: 14px 0 0;
+/* Kein roter Balken – transparenter Header mit feiner Linie */
+.km1-header{
+  background: transparent;
+  color:#222;
+  border-bottom: 1px solid rgba(0,0,0,.06);
 }
-.km1-header__logo img {
-  height: 60px;
+.km1-meta-navigation{
+  display:flex;justify-content:space-between;align-items:center;
+  max-width:var(--maxw);margin:0 auto;padding:8px 20px;gap:16px;flex-wrap:wrap;
 }
-.km1-meta-navigation {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0 20px;
+.km1-header__logo img{ height: clamp(36px, 6vw, 64px); width:auto; }
+
+/* Hauptnavigation */
+.km1-main-navigation__link-container{ max-width:var(--maxw); margin:0 auto; }
+.km1-main-navigation__links{
+  display:flex; gap: clamp(10px,2vw,24px); list-style:none;
+  margin:0; padding:10px 20px; flex-wrap:wrap;
 }
-.km1-meta-navigation__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 16px;
+.km1-link{ color:inherit; font-weight:600; font-size: clamp(.9rem,1.2vw,1rem); }
+.km1-link[aria-current="page"]{ text-decoration:underline; }
+
+/* Burger-Button (mobil) */
+.nav-toggle{
+  display:none; align-items:center; gap:.5rem;
+  background: var(--brand-blue); color:#fff; border:0; border-radius:8px;
+  padding:.5rem .75rem; margin:8px 0; box-shadow:0 1px 4px rgba(0,0,0,.12); cursor:pointer;
 }
-.km1-link {
-  color: inherit;
-  text-decoration: none;
-  font-weight: 600;
+.nav-toggle .icon rect{ fill:#fff; }
+
+/* Mobile Verhalten */
+@media (max-width:768px){
+  .km1-main-navigation__links{ display:none; flex-direction:column; padding:8px 20px; }
+  .km1-main-navigation__links.is-open{ display:flex; }
+  .nav-toggle{ display:flex; }
+  .km1-meta-navigation{ justify-content:space-between; }
 }
-.km1-link:hover {
-  text-decoration: underline;
-}
-.km1-main-navigation__links {
-  display: flex;
-  gap: 20px;
-  list-style: none;
-  padding: 12px 20px;
-  margin: 0;
-}
-.km1-main-navigation__link--current {
-  font-weight: bold;
+
+/* Optional: Sticky Header */
+.km1-header.is-sticky{
+  backdrop-filter: saturate(180%) blur(6px);
+  background: rgba(255,255,255,.86);
 }
 
 /* =========================
    BREADCRUMBS
    ========================= */
-.km1-breadcrumbs {
-  max-width: var(--maxw);
-  margin: 12px auto;
-  padding: 0 20px;
-  font-size: 0.9rem;
-  color: var(--muted);
+.km1-breadcrumbs{
+  max-width:var(--maxw); margin:10px auto; padding:0 20px;
+  font-size:.92rem; color:var(--muted);
 }
-.km1-breadcrumbs__separator {
-  margin: 0 8px;
-}
+.km1-breadcrumbs__separator{ margin:0 8px; }
 
 /* =========================
-   STAGE / HERO
+   STAGE / HERO (Basis + blauer Modifier)
    ========================= */
-.km1-stage {
-  background: var(--brand-dark);
-  color: #fff;
-  position: relative;
+.km1-stage{ position:relative; color:#fff; background: var(--brand-dark); }
+.km1-stage__figure img{
+  width:100%; max-height:320px; object-fit:cover; display:block;
 }
-.km1-stage__figure img {
-  width: 100%;
-  max-height: 320px;
-  object-fit: cover;
-  display: block;
-}
-.km1-stage__content-container {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 30px 20px;
-}
-.km1-stage__heading {
-  font-size: 2rem;
-  margin: 8px 0;
-}
-.km1-stage__text {
-  font-size: 1.1rem;
-  max-width: 70ch;
-}
+.km1-stage__content-container{ max-width:var(--maxw); margin:0 auto; padding:30px 20px; }
+.km1-stage__heading{ font-size: clamp(1.8rem, 4vw, 2.8rem); margin:.5rem 0 1rem; }
+.km1-stage__text{ font-size:1.1rem; max-width:72ch; }
+
+/* Blauer Ziel-Look via Modifier */
+.stage--blue{ isolation:isolate; }
+.stage--blue .km1-stage__figure{ max-height:440px; overflow:hidden; }
+.stage--blue .km1-stage__figure img{ height:440px; }
+.stage--blue::after{ content:""; position:absolute; inset:0; background:rgba(8,52,97,.85); z-index:0; }
+.stage--blue .km1-stage__content-container{ position:relative; z-index:1; text-align:center; padding:64px 20px; }
+.stage--blue .km1-stage__topline{ color:#9bd0ff; letter-spacing:.02em; font-weight:700; }
+.stage--blue .km1-stage__heading{ color:#fff; }
+.stage--blue .km1-stage__text{ color:#e6f2ff; margin:0 auto; }
 
 /* =========================
    TEASER / CARDS
    ========================= */
-.km1-teaser-row {
-  max-width: var(--maxw);
-  margin: 28px auto;
-  padding: 0 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
-  gap: var(--gap);
+.km1-teaser-row{
+  max-width:var(--maxw); margin:28px auto; padding:0 20px;
+  display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
+  gap:var(--gap);
 }
-.km1-teaser {
-  background: #fff;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+.km1-teaser{
+  background:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
+  overflow:hidden; display:flex; flex-direction:column;
 }
-.km1-teaser__figure img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-}
-.km1-teaser__content {
-  padding: 14px 16px;
-}
-.km1-teaser__heading {
-  margin: 6px 0;
-  color: var(--brand);
-}
-.km1-teaser__paragraph {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.95rem;
-}
+.km1-teaser__figure img{ width:100%; height:160px; object-fit:cover; }
+.km1-teaser__content{ padding:14px 16px; }
+.km1-teaser__heading{ margin:6px 0; color:var(--brand); }
+.km1-teaser__paragraph{ margin:0; color:var(--muted); font-size:.95rem; }
 
 /* =========================
-   FOOTER
+   KONTAKTBLOCK
    ========================= */
-.km1-footer {
-  background: var(--brand);
-  color: #fff;
-  margin-top: 40px;
-}
-.km1-footer__inner {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 20px;
-}
-.km1-footer__list {
-  list-style: none;
-  display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-  margin: 8px 0 0;
-  padding: 0;
-}
-.km1-footer__link {
-  color: #fff;
-  text-decoration: none;
-}
-.km1-footer__link:hover {
-  text
-<header class="km1-header">
-  <div class="km1-container km1-meta-navigation">
-    <a class="km1-logo km1-header__logo" href="/index.html" title="Startseite">
-      <img src="/assets/DoniLogo_1.0.0.png" alt="Logo" class="km1-img">
-    </a>
+.contact-block{ background:#f3f6fb; }
+.contact-inner{ max-width:var(--maxw); margin:0 auto; padding:24px 20px; }
+.contact-title{ margin:0 0 6px; font-size:1.4rem; color: var(--brand-blue); }
+.contact-name{ margin:0 0 8px; }
 
-    <!-- Burger (mobil) -->
-    <button class="nav-toggle" id="navToggle" aria-controls="mainnav" aria-expanded="false">
-      <span>Menü</span>
-      <svg class="icon" width="28" height="18" aria-hidden="true">
-        <rect width="28" height="2" rx="1"></rect>
-        <rect y="8" width="28" height="2" rx="1"></rect>
-        <rect y="16" width="28" height="2" rx="1"></rect>
-      </svg>
-    </button>
-  </div>
-
-  <div class="km1-container">
-    <nav id="mainnav" class="km1-main-navigation__link-container" aria-label="Hauptnavigation">
-      <ul class="km1-main-navigation__links" id="mainnavList">
-        <li><a class="km1-link" href="/index.html">Start</a></li>
-        <li><a class="km1-link" href="/ueber.html">Über mich</a></li>
-        <li><a class="km1-link" href="/taetigkeiten.html">Tätigkeiten</a></li>
-        <li><a class="km1-link" href="/projekte.html">Projekte</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+/* =========================
+   FOOTER (kompakt & schmal)
+   ========================= */
+.km1-footer{ background:#f7f7f8; color:#222; margin-top:40px; }
+.km1-footer__inner{ max-width:var(--maxw); margin:0 auto; padding:14px 20px; }
+.km1-footer__list{
+  list-style:none; display:flex; gap:18px; flex-wrap:wrap; margin:8px 0 0; padding:0;
+}
+.km1-footer__link{ color:inherit; text-decoration:none; }
+.km1-footer__link:hover{ text-decoration:underline; }
+.km1-footer__line{ display:block; height:2px; background:rgba(0,0,0,.08); margin-top:12px; }
