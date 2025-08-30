@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>IT-Steuerung & IT-Controlling mit Hilfe von ITSM</title>
 
-  <!-- Webfonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
+  <!-- Self-hosted Fonts (Lato) -->
+  <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
 
   <!-- Globales CSS -->
   <link rel="stylesheet" href="assets/css/global.css" />
@@ -32,7 +33,7 @@
       </a>
     </div>
 
-    <!-- ausfahrende Navigation -->
+    <!-- Ausfahrende Navigation -->
     <nav id="navdrawer" class="nav-drawer" aria-label="Hauptnavigation">
       <ul>
         <li><a href="#ueber-mich">Über mich</a></li>
@@ -119,7 +120,7 @@
       <div class="container">
         <div class="sec-head"><span class="sec-dot" aria-hidden="true"></span><h2 class="sec-title">Projekte</h2></div>
         <div class="cards">
-          <article class="card"><h3>KPIs Dashboarding</h3><p>SLA/OLA, MTTR, FCR – verlässliche Kennzahlen & Visualisierungen.</p></article>
+          <article class="card"><h3>KPIs Dashboarding</h3><p>SLA/OLA, MTTR, FCR – verlässliche Kennzahlen &amp; Visualisierungen.</p></article>
           <article class="card"><h3>Prozessmodellierung</h3><p>Ist-/Soll-Prozesse, RACI, Schnittstellen, Automatisierung.</p></article>
           <article class="card"><h3>ITIL® 4 / Governance</h3><p>Guiding Principles, Rollenmodell, Gremien, KVP.</p></article>
         </div>
@@ -194,16 +195,10 @@
   <!-- ================ Footer ================ -->
   <footer class="site-footer" role="contentinfo">
     <div class="container subfooter__inner">
-      <p>&copy; 2025 Doniman F. Peña Parra – IT-Steuerung &amp; IT-Controlling</p>
+      <p>&copy; <span data-year></span> IT-Steuerung &amp; IT-Controlling</p>
       <a class="to-top" href="#top">Nach oben ↑</a>
     </div>
   </footer>
-
-  <!-- Globales JS -->
-  <script src="assets/js/site.js" defer></script>
-</body>
-</html>
-
 
   <!-- Globales JS -->
   <script src="assets/js/site.js" defer></script>
