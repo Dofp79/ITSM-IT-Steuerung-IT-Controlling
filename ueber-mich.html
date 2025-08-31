@@ -4,33 +4,40 @@
      ========================================================= -->
 <section id="ueber-mich" class="section">
   <div class="container">
-    <!-- Abschnittsüberschrift (einheitlicher Stil via .sec-head) -->
+
+    <!-- Abschnittsüberschrift im einheitlichen Stil (.sec-head) -->
     <div class="sec-head">
       <span class="sec-dot" aria-hidden="true"></span>
       <h2 class="sec-title">Über mich</h2>
     </div>
 
-    <!-- Kurz-Intro (optionaler Lead-Text) -->
+    <!-- Kurz-Intro (Lead-Text): Blocksatz/Lesbarkeit über .lead in CSS -->
     <p class="lead">
       ITSM-Prozessadministrator mit Schwerpunkt auf
       <strong>ITIL® 4</strong>, <strong>KPI-Design</strong>, <strong>Reporting</strong>
       und <strong>Prozessautomatisierung</strong>. Ich verbinde Struktur und
-      Pragmatismus – mit Power BI/DAX, BPMN/UML und agilen Methoden (Scrum).
+      Pragmatismus – mit Power&nbsp;BI/DAX, BPMN/UML und agilen Methoden (Scrum).
     </p>
 
     <!-- =====================================================
          BERUFSERFAHRUNG – Timeline mit Karten
+         Markup nutzt .timeline + .cv-card (siehe global.css §CV)
          ===================================================== -->
     <h3 class="cv-block-title">Berufserfahrung</h3>
+
+    <!-- Grid-Stack für Karten; Linie/Optik via .timeline/.cv-card -->
     <div class="timeline" aria-label="Berufserfahrung">
-      <!-- Karte 1 -->
+
+      <!-- Karte 1: aktuelle Rolle -->
       <article class="cv-card">
         <h4 class="cv-title">ITSM – Prozessadministrator</h4>
         <div class="cv-meta">Polizei Hamburg · 01/2024 – heute</div>
+
+        <!-- Einheitliche Liste (Spacing/Farbe über .cv-list) -->
         <ul class="cv-list">
           <li>ITSM-Prozesse nach ITIL® 4 steuern und optimieren.</li>
           <li>Koordination mit Fachbereichen, Anforderungen aufnehmen und Lösungen ausarbeiten.</li>
-          <li>KPI-Systeme mit Power BI/DAX entwickeln; Reporting-Richtlinien definieren.</li>
+          <li>KPI-Systeme mit Power&nbsp;BI/DAX entwickeln; Reporting-Richtlinien definieren.</li>
           <li>Cross-Team „Daten“ koordinieren; Kanban-Boards steuern und anpassen.</li>
           <li>Messung &amp; Reporting: ITSM-Prozesse optimieren und steuern.</li>
           <li>Konzeption: ETL-Prozesse für Automatisierungen im Measuring &amp; Reporting aufbauen.</li>
@@ -40,9 +47,9 @@
         </ul>
       </article>
 
-      <!-- Karte 2 -->
+      <!-- Karte 2: Praktikum/Station -->
       <article class="cv-card">
-        <h4 class="cv-title">Praktikum IT 322 – ITIL Management</h4>
+        <h4 class="cv-title">Praktikum IT&nbsp;322 – ITIL Management</h4>
         <div class="cv-meta">Polizei Hamburg · 11/2022 – 01/2024</div>
         <ul class="cv-list">
           <li>Bearbeitung von Incidents im Lizenzmanagement.</li>
@@ -51,13 +58,15 @@
           <li>Schulungen/Meetings zu „ITIL® 4 Management und Scrum“.</li>
           <li>BPMN-Prozessskizzen und Modellierung.</li>
           <li>Praxisprojekt: .NET Framework/C#, T-SQL, HTML/CSS/JS, PowerShell (Entwurf bis Doku).</li>
-          <li>Koordination &amp; Teilnahme an einer ITIL® 4-Simulation (Apollo 13).</li>
+          <li>Koordination &amp; Teilnahme an einer ITIL® 4-Simulation (Apollo&nbsp;13).</li>
         </ul>
       </article>
 
-      <!-- Karte 3 -->
+      <!-- Karte 3: Ausbildung – als Tag-Wolke -->
       <article class="cv-card">
         <h4 class="cv-title">Fachinformatiker Anwendungsentwicklung</h4>
+
+        <!-- Tags/Badges (flex-wrap in CSS) -->
         <div class="tags" aria-label="Ausbildungsinhalte">
           <span class="tag">Projektmanagement</span>
           <span class="tag">OOP</span>
@@ -70,7 +79,7 @@
         </div>
       </article>
 
-      <!-- Karte 4 -->
+      <!-- Karte 4: Querschnittserfahrung – Gastronomie -->
       <article class="cv-card">
         <h4 class="cv-title">Mehr als 20 Jahre Erfahrung im Gastronomiebereich</h4>
         <div class="tags" aria-label="Schwerpunkte Gastronomie">
@@ -78,7 +87,7 @@
           <span class="tag">Wareneinsatz/Budget</span>
           <span class="tag">Qualitätsmanagement</span>
           <span class="tag">Kundenservice</span>
-          <span class="tag">Leitung bis 25 MA</span>
+          <span class="tag">Leitung bis 25&nbsp;MA</span>
           <span class="tag">Prozessverbesserung</span>
           <span class="tag">Eventmanagement</span>
           <span class="tag">Eigenverantwortliche Betriebsführung</span>
@@ -88,20 +97,31 @@
 
     <!-- =====================================================
          SKILLS • ZERTIFIKATE • SPRACHEN – 3-Spalten-Grid
+         (auf Mobil 1 Spalte; CSS: .cv-grid/.cv-box)
          ===================================================== -->
     <div class="cv-grid">
-      <!-- Skills -->
+
+      <!-- Spalte 1: Skills -->
       <section class="cv-box" aria-labelledby="skills">
         <h5 id="skills" class="cv-subtitle">Skills</h5>
+
+        <!-- Kompakte Tag-Liste -->
         <div class="tags">
-          <span class="tag">BPMN 2.0</span><span class="tag">UML</span><span class="tag">ITIL® 4</span>
-          <span class="tag">SCRUM</span><span class="tag">Power BI</span><span class="tag">DAX</span>
-          <span class="tag">Python</span><span class="tag">C#</span><span class="tag">JavaScript</span>
-          <span class="tag">T-SQL</span><span class="tag">Java</span>
+          <span class="tag">BPMN 2.0</span>
+          <span class="tag">UML</span>
+          <span class="tag">ITIL® 4</span>
+          <span class="tag">SCRUM</span>
+          <span class="tag">Power BI</span>
+          <span class="tag">DAX</span>
+          <span class="tag">Python</span>
+          <span class="tag">C#</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">T-SQL</span>
+          <span class="tag">Java</span>
         </div>
       </section>
 
-      <!-- Zertifikate -->
+      <!-- Spalte 2: Zertifikate -->
       <section class="cv-box" aria-labelledby="certs">
         <h5 id="certs" class="cv-subtitle">Einige meiner Zertifizierungen</h5>
         <ul class="cv-list">
@@ -112,7 +132,7 @@
         </ul>
       </section>
 
-      <!-- Sprachen -->
+      <!-- Spalte 3: Sprachen -->
       <section class="cv-box" aria-labelledby="lang">
         <h5 id="lang" class="cv-subtitle">Sprachen</h5>
         <ul class="cv-list">
@@ -125,10 +145,24 @@
 
     <!-- =====================================================
          AKTIONEN – Buttons (PDF, LinkedIn)
+         Nutzen .btn / .btn--ghost aus global.css
          ===================================================== -->
     <div class="cv-actions">
-      <a class="btn" href="assets/docs/LebenslaufDonimanPeña_052025_1.0.0.pdf" target="_blank" rel="noopener">Lebenslauf als PDF</a>
-      <a class="btn btn--ghost" href="https://www.linkedin.com/in/doniman-francisco-pe%C3%B1a-parra-609263232/" target="_blank" rel="noopener">LinkedIn</a>
+      <!-- Pfad bitte auf dein echtes PDF prüfen; rel="noopener" für Sicherheit -->
+      <a class="btn"
+         href="assets/docs/LebenslaufDonimanPeña_052025_1.0.0.pdf"
+         target="_blank"
+         rel="noopener">
+        Lebenslauf als PDF
+      </a>
+
+      <a class="btn btn--ghost"
+         href="https://www.linkedin.com/in/doniman-francisco-pe%C3%B1a-parra-609263232/"
+         target="_blank"
+         rel="noopener">
+        LinkedIn
+      </a>
     </div>
+
   </div>
 </section>
