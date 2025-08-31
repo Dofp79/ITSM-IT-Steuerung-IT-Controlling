@@ -52,11 +52,10 @@
     </div>
 
     <!-- Hauptnavigation (ausfahrender Drawer) -->
-    <nav id="navdrawer" class="nav-drawer" aria-label="Hauptnavigation" role="navigation">
+    <nav id="navdrawer" class="nav-drawer" aria-label="Hauptnavigation">
       <ul>
-        <!-- Unterseite (eigene HTML-Datei) -->
-        <li><a href="ueber-mich.html">Über mich</a></li>
-        <!-- In-Page Anker (scrollt im Dokument) -->
+        <!-- 3 interne Ziele + 1 externes: Vorgabe umgesetzt -->
+        <li><a href="#ueber-mich">Über mich</a></li>
         <li><a href="#projekte">Projekte</a></li>
         <li><a href="#itsm-konzept">ITSM Konzept</a></li>
       </ul>
@@ -118,7 +117,7 @@
           <img src="assets/images/tiles/KI-Agent.png"
                alt="Externer Link: KI-Agent"
                width="600" height="338" loading="lazy">
-          <figcaption>KI-Agent</figcaption>
+          <figcaption>KI-Agent (extern)</figcaption>
         </figure>
       </a>
 
@@ -159,7 +158,7 @@
           </ul>
         </div>
 
-        <!-- Kontaktkarte -->
+        <!-- Kontaktkarte (rechte Spalte) -->
         <aside class="card">
           <h3>Kontakt</h3>
           <p>
@@ -281,7 +280,7 @@
   </section>
 
   <!-- =========================================================
-       10) FOOTER – kompakt + „Nach oben“
+       9) FOOTER – kompakt + „Nach oben“
        site.js setzt das aktuelle Jahr in [data-year].
        ========================================================= -->
   <footer class="site-footer" role="contentinfo">
@@ -292,10 +291,8 @@
   </footer>
 
   <!-- =========================================================
-       11) GLOBAL SCRIPT
+       10) GLOBAL SCRIPT
        Pfad MUSS existieren: /assets/js/site.js
-       Falls noch eine site.js im Projekt-Root liegt → entfernen,
-       um Verwechslungen zu vermeiden.
        ========================================================= -->
   <script src="assets/js/site.js" defer></script>
 </body>
