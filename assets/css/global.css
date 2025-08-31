@@ -5,10 +5,10 @@
    - Base/Helpers & Skip-Link
    - Header (Brand-Bar, Burger), Drawer-Navigation
    - Drawer-States: aktiv/Focus/Active (Rot)
-   - Hero, Tiles, Sections, Cards
+   - Hero (Variante A), Tiles, Sections, Cards
    - Accordion
    - Kontaktblock (kompakt) & Footer (kompakt)
-   - A11y (Focus sichtbar) & Print
+   - A11y (Focus sichtbar, Reduced Motion) & Print
    =========================================================== */
 
 
@@ -21,44 +21,56 @@
 @font-face { /* Regular 400 */
   font-family: "Lato";
   src: url("../fonts/lato-regular-woff-data.woff") format("woff");
-  font-weight: 400; font-style: normal; font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face { /* Italic 400 */
   font-family: "Lato";
   src: url("../fonts/lato-italic-woff-data.woff") format("woff");
-  font-weight: 400; font-style: italic; font-display: swap;
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
 }
 @font-face { /* Medium 500 */
   font-family: "Lato";
   src: url("../fonts/lato-medium-woff-data.woff") format("woff");
-  font-weight: 500; font-style: normal; font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face { /* SemiBold 600 */
   font-family: "Lato";
   src: url("../fonts/lato-semibold-woff-data.woff") format("woff");
-  font-weight: 600; font-style: normal; font-display: swap;
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face { /* Bold 700 */
   font-family: "Lato";
   src: url("../fonts/lato-bold-woff-data.woff") format("woff");
-  font-weight: 700; font-style: normal; font-display: swap;
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face { /* Bold Italic 700i */
   font-family: "Lato";
   src: url("../fonts/lato-bolditalic-woff-data.woff") format("woff");
-  font-weight: 700; font-style: italic; font-display: swap;
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
 }
 @font-face { /* Thin 100 */
   font-family: "Lato";
   src: url("../fonts/lato-thin-woff-data.woff") format("woff");
-  font-weight: 100; font-style: normal; font-display: swap;
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
 }
 
 
 /* ===========================================================
    2) DESIGN TOKENS – zentrale Variablen
-   -----------------------------------------------------------
-   Einmal pflegen → global konsistent.
    =========================================================== */
 :root{
   /* Typografie-Stacks */
@@ -71,9 +83,9 @@
 
   /* Flächen/Hintergründe */
   --header-bg: #ffffff;
-  --drawer-bg: #0c2a45;   /* dunkelblauer Drawer-Hintergrund */
-  --drawer-fg: #ffffff;   /* (Fallback) Textfarbe im Drawer */
-  --hero-bg:   #0e3659;   /* Blau des Mittelbereichs/Hero */
+  --drawer-bg: #0c2a45;     /* dunkelblauer Drawer-Hintergrund */
+  --drawer-fg: #ffffff;     /* (Fallback) Textfarbe im Drawer */
+  --hero-bg:   #0e3659;     /* Blau des Mittelbereichs/Hero */
   --tile-bg:   #0b2f4d;
   --bg:        #ffffff;
   --bg-alt:    #f5f7f8;
@@ -98,6 +110,8 @@
    3) BASE / HELPERS – Grundlayout & Utilities
    =========================================================== */
 *, *::before, *::after { box-sizing: border-box; }
+
+/* Sanftes Scrollen – wird bei Reduced Motion abgeschaltet */
 html { scroll-behavior: smooth; }
 
 body{
@@ -110,15 +124,24 @@ body{
   text-rendering: optimizeLegibility;
 }
 
-img{ max-width: 100%; height: auto; display: block; }
+img{
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
 
 a{
-  color: #0b3a66;              /* Standard-Linkfarbe (außer Drawer/Hero) */
+  color: #0b3a66;                 /* Standard-Linkfarbe (außer Drawer/Hero) */
   text-decoration: none;
 }
-a:hover, a:focus { text-decoration: underline; }
+a:hover,
+a:focus{ text-decoration: underline; }
 
-.container{ width: min(1200px, 92vw); margin-inline: auto; padding-inline: 1rem; }
+.container{
+  width: min(1200px, 92vw);
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
 
 .section{ padding: 3rem 0; }
 .section--alt{ background: var(--bg-alt); }
@@ -126,22 +149,23 @@ a:hover, a:focus { text-decoration: underline; }
 .grid-2{
   display: grid;
   gap: 2rem;
-  grid-template-columns: 1fr;          /* mobil: 1 Spalte */
+  grid-template-columns: 1fr;     /* mobil: 1 Spalte */
 }
 @media (min-width: 900px){
   .grid-2{ grid-template-columns: 2fr 1fr; }  /* ab 900px: 2 Spalten */
 }
 
-/* Fließtext */
+/* Fließtext/Lead – Blocksatz + bessere Wortabstände */
 .lead{
   color: var(--muted);
   line-height: 1.75;
-  text-align: justify;          /* Blocksatz für Fließtext */
-  text-justify: inter-word;     /* saubere Wortabstände */
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 .checklist{ list-style: "✔  "; padding-left: 1.1rem; }
 
+/* Basis-Karten (weiß, Schatten, Radius) */
 .card{
   background: #fff;
   border: 1px solid var(--border);
@@ -158,50 +182,82 @@ a:hover, a:focus { text-decoration: underline; }
    4) SKIP-LINK – Tastaturzugänglichkeit
    =========================================================== */
 .skip-link{
-  position: absolute; left: -9999px; top: auto;
+  position: absolute;
+  left: -9999px;
+  top: auto;
   z-index: 1000;
-  background: var(--brand-red); color: #fff;
-  padding: .5rem .75rem; border-radius: .5rem;
+  background: var(--brand-red);
+  color: #fff;
+  padding: .5rem .75rem;
+  border-radius: .5rem;
 }
-.skip-link:focus{ left: .5rem; top: .5rem; }
+.skip-link:focus{
+  left: .5rem;
+  top: .5rem;
+}
 
 
 /* ===========================================================
    5) HEADER / BRAND-BAR / DRAWER
    =========================================================== */
 /* dünne rote Linie unter dem Header */
-.brand-bar{ height: 6px; background: var(--brand-red); }
+.brand-bar{
+  height: 6px;
+  background: var(--brand-red);
+}
 
 /* Headerfläche (sticky) */
 .site-header{
   background: var(--header-bg);
   border-bottom: 1px solid var(--border);
-  position: sticky; top: 0; z-index: 60;
+  position: sticky;
+  top: 0;
+  z-index: 60;
 }
 
 /* Innenlayout im Header: Burger links, Logo rechts */
 .header-bar{
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: .6rem 0;
 }
 
 /* --- Burger (links) -------------------------------------- */
 .burger{
-  display: inline-flex; align-items: center; gap: .6rem;
-  background: #fff; border: 1px solid var(--border); border-radius: .7rem;
-  padding: .5rem .75rem; box-shadow: var(--shadow); cursor: pointer; color: #111;
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: .7rem;
+  padding: .5rem .75rem;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  color: #111;
 }
-.burger__icon{ width: 18px; height: 2px; background: currentColor; position: relative; }
+.burger__icon{
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+  position: relative;
+}
 .burger__icon::before,
 .burger__icon::after{
-  content: ""; position: absolute; left: 0; right: 0; height: 2px; background: currentColor;
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: currentColor;
 }
 .burger__icon::before{ top: -6px; }
 .burger__icon::after { top:  6px; }
 
 /* Label „Themen“ im Hero-Blau (Wunschfarbe) */
 .burger__label{
-  font-weight: 700; font-family: var(--font-cond);
+  font-weight: 700;
+  font-family: var(--font-cond);
   color: var(--hero-bg);
 }
 
@@ -212,13 +268,15 @@ a:hover, a:focus { text-decoration: underline; }
 /* --- Drawer (ausfahrende Navigation) --------------------- */
 .nav-drawer{
   position: fixed;
-  inset: 56px auto 0 0;               /* startet unter Header */
+  inset: 56px auto 0 0;                 /* startet unter Header */
   width: min(340px, 86vw);
-  transform: translateX(-100%);       /* initial verborgen (links draußen) */
-  background: var(--drawer-bg); color: var(--drawer-fg);
+  transform: translateX(-100%);         /* initial verborgen (links draußen) */
+  background: var(--drawer-bg);
+  color: var(--drawer-fg);
   padding: 1rem .75rem;
   border-right: 1px solid rgba(255,255,255,.12);
-  transition: transform .25s ease; z-index: 70;
+  transition: transform .25s ease;
+  z-index: 70;
 }
 .nav-drawer.is-open{ transform: none; }
 
@@ -227,11 +285,14 @@ a:hover, a:focus { text-decoration: underline; }
 
 /* Drawer-Links als weiße "Chips" (Kontrast) in Blau */
 .nav-drawer a{
-  display: block; padding: .8rem .9rem; border-radius: .7rem;
-  font-weight: 700; font-family: var(--font-cond);
+  display: block;
+  padding: .8rem .9rem;
+  border-radius: .7rem;
+  font-weight: 700;
+  font-family: var(--font-cond);
   text-decoration: none;
 
-  color: var(--hero-bg);               /* Blau (Default) */
+  color: var(--hero-bg);                /* Blau (Default) */
   background: var(--drawer-chip-bg);   /* Weißer Chip */
   border: 1px solid var(--drawer-chip-bord);
 }
@@ -243,11 +304,9 @@ a:hover, a:focus { text-decoration: underline; }
   text-decoration: none;
 }
 
-/* -------------------------------------------
-   Drawer-Links: ZUSTÄNDE (Blau → Rot)
-   ------------------------------------------- */
+/* Drawer-Links: ZUSTÄNDE (Blau → Rot) */
 .nav-drawer a:active{
-  color: var(--brand-red); /* kurzer Klick-Effekt in Rot */
+  color: var(--brand-red);              /* kurzer Klick-Effekt in Rot */
 }
 .nav-drawer a:focus{
   outline: 3px solid rgba(227, 6, 19, .25); /* roter Fokus-Schimmer */
@@ -265,37 +324,44 @@ a:hover, a:focus { text-decoration: underline; }
 
 
 /* ===========================================================
-   6) HERO – Kopfbereich (Blau) mit Titel/Lead
+   6) HERO – Kopfbereich (Blau) mit Titel/Lead (VARIANTE A)
    =========================================================== */
 .hero{
-  background: var(--hero-bg); color: #fff; border-bottom: 1px solid #08243e;
+  background: var(--hero-bg);
+  color: #fff;
+  border-bottom: 1px solid #08243e;
 }
-.hero-inner{ padding: 2.2rem 0 2.6rem; }
+/* Zentrierte Säule für Titel & Lead (gleiche Breite) */
+.hero-inner{
+  padding: 2.2rem 0 2.6rem;
+  display: flex;                 /* neu: sichert zentrierte Kolumne */
+  flex-direction: column;
+  align-items: center;           /* Inhalt horizontal zentrieren */
+}
 
-/* VARIANTE A: Titel ZENTRIERT und an Lead-Spaltenbreite angepasst */
 .hero__title{
-  /* ↓ neu/angepasst: Titel sitzt auf derselben Textsäule wie der Lead */
-  text-align: center;                 /* zentriert */
-  max-width: 80ch;                    /* gleiche Breite wie der Lead */
-  margin: 0 auto .5rem;               /* in der Mitte einrasten + Abstand nach unten */
-  line-height: 1.15;                  /* kompakte Zeilenhöhe für Headline */
+  /* Titel sitzt auf derselben Textsäule wie der Lead */
+  text-align: center;
+  max-width: 80ch;
+  margin: 0 auto .5rem;          /* Zentrierung + Abstand nach unten */
+  line-height: 1.15;
 
-  /* bestehende Typo-Eigenschaften */
+  /* Typografie */
   font-family: var(--font-cond);
   font-weight: 700;
   letter-spacing: .2px;
   font-size: clamp(1.6rem, 2.2vw + 1.1rem, 2.4rem);
 }
 
-/* Lead-Absatz im Hero: Blocksatz + responsive Größe */
+/* Lead-Absatz: Blocksatz + responsive Größe */
 .hero__lead{
-  margin: 0 auto;                       /* zentriert den Textblock */
+  margin: 0 auto;                /* zentrierter Textblock */
   color: #d7e3ef;
-  max-width: 80ch;                      /* lesefreundliche Breite */
-  text-align: justify;                  /* Blocksatz */
-  text-justify: inter-word;             /* Wortabstände optimieren */
-  font-size: clamp(1rem, 1.1vw, 1.2rem);/* responsive Schriftgröße */
-  line-height: 1.75;                    /* luftiger für Lesbarkeit */
+  max-width: 80ch;               /* lesefreundliche Breite */
+  text-align: justify;           /* Blocksatz */
+  text-justify: inter-word;      /* Wortabstände optimieren */
+  font-size: clamp(1rem, 1.1vw, 1.2rem);
+  line-height: 1.75;
 }
 
 
@@ -303,25 +369,44 @@ a:hover, a:focus { text-decoration: underline; }
    7) TILES – 2×2 Bildkacheln (Links)
    =========================================================== */
 .section--tiles{ background: var(--hero-bg); }
+
 .tiles{
-  display: grid; gap: 1.2rem; grid-template-columns: repeat(2, 1fr);
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(2, 1fr);
 }
 @media (max-width: 680px){
-  .tiles{ grid-template-columns: 1fr; } /* mobil: 1 Spalte */
+  .tiles{ grid-template-columns: 1fr; }          /* mobil: 1 Spalte */
 }
+
 .tile{
-  background: var(--tile-bg); border: 1px solid rgba(255,255,255,.15);
-  border-radius: 14px; overflow: hidden; display: block; text-decoration: none;
+  background: var(--tile-bg);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 14px;
+  overflow: hidden;
+  display: block;
+  text-decoration: none;
   box-shadow: 0 6px 18px rgba(0,0,0,.25);
 }
-.tile figure{ margin: 0; display: grid; grid-template-rows: auto auto; }
+.tile figure{
+  margin: 0;
+  display: grid;
+  grid-template-rows: auto auto;
+}
 .tile img{
-  width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;
-  filter: saturate(.96); transition: transform .25s ease;
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+  filter: saturate(.96);
+  transition: transform .25s ease;
 }
 .tile:hover img{ transform: scale(1.02); }
 .tile figcaption{
-  padding: .6rem .8rem; color: #fff; font-weight: 700; font-family: var(--font-cond);
+  padding: .6rem .8rem;
+  color: #fff;
+  font-weight: 700;
+  font-family: var(--font-cond);
   background: linear-gradient(0deg, rgba(255,255,255,.06), rgba(255,255,255,0));
 }
 
@@ -329,59 +414,97 @@ a:hover, a:focus { text-decoration: underline; }
 /* ===========================================================
    8) SECTION-HEADINGS – roter Punkt + Titel
    =========================================================== */
-.sec-head{ display: flex; align-items: center; gap: 10px; margin: 0 0 12px; }
-.sec-dot{ width: 12px; height: 12px; border-radius: 999px; background: var(--brand-red-ink); }
+.sec-head{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+}
+.sec-dot{
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--brand-red-ink);
+}
 .sec-title{
-  margin: 0; color: var(--brand-red-ink);
+  margin: 0;
+  color: var(--brand-red-ink);
   font-family: var(--font-cond);
   font-size: clamp(1.2rem, 1.2vw + 1rem, 1.6rem);
-  font-weight: 700; letter-spacing: .2px;
+  font-weight: 700;
+  letter-spacing: .2px;
 }
 
 
 /* ===========================================================
    9) CARDS – Raster für Projektkarten
    =========================================================== */
-.cards{ display: grid; gap: 1.2rem; grid-template-columns: repeat(3, 1fr); }
-@media (max-width: 900px){ .cards{ grid-template-columns: 1fr 1fr; } }
-@media (max-width: 640px){ .cards{ grid-template-columns: 1fr; } }
+.cards{
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+@media (max-width: 900px){
+  .cards{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px){
+  .cards{ grid-template-columns: 1fr; }
+}
 
 
 /* ===========================================================
    10) ACCORDION – ITSM Konzept
    =========================================================== */
 .accordion__trigger{
-  width: 100%; text-align: left; background: #fff; border: 1px solid var(--border);
-  border-radius: .75rem; padding: .8rem 1rem;
-  font-weight: 700; font-family: var(--font-cond);
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: .75rem;
+  padding: .8rem 1rem;
+  font-weight: 700;
+  font-family: var(--font-cond);
   transition: border-color .2s ease, color .2s ease;
 }
 .accordion__trigger[aria-expanded="true"]{
-  border-color: var(--brand-red); color: var(--brand-red);
+  border-color: var(--brand-red);
+  color: var(--brand-red);
 }
 .accordion__panel{
   border-left: 3px solid var(--brand-red);
-  margin: .5rem 0 1rem; padding: .6rem 1rem;
-  background: #fff; border-radius: .5rem; box-shadow: var(--shadow);
+  margin: .5rem 0 1rem;
+  padding: .6rem 1rem;
+  background: #fff;
+  border-radius: .5rem;
+  box-shadow: var(--shadow);
 }
 
 
 /* ===========================================================
    11) BREADCRUMB – optional (derzeit ungenutzt)
    =========================================================== */
-.breadcrumb{ background: #fff; border-block: 1px solid var(--border); }
+.breadcrumb{
+  background: #fff;
+  border-block: 1px solid var(--border);
+}
 .breadcrumb ol{
-  list-style: none; margin: 0; padding: .5rem 0;
-  display: flex; gap: .75rem; flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: .5rem 0;
+  display: flex;
+  gap: .75rem;
+  flex-wrap: wrap;
 }
 .breadcrumb a{ color: var(--muted); }
-.breadcrumb li + li::before{ content: "/"; color: var(--muted); margin-right: .75rem; }
+.breadcrumb li + li::before{
+  content: "/";
+  color: var(--muted);
+  margin-right: .75rem;
+}
 
 
 /* ===========================================================
    12) KONTAKTBLOCK – global, KOMPAKT
-   -----------------------------------------------------------
-   Das ist die hellgraue Fläche VOR dem Footer.
    =========================================================== */
 .contact-block{
   /* vorher: 2.5rem 0 → kompakt */
@@ -395,19 +518,22 @@ a:hover, a:focus { text-decoration: underline; }
 }
 .contact-inner{ max-width: 800px; margin: 0 auto; text-align: center; }
 .contact-title{
-  font-family: var(--font-cond); font-size: 1.6rem;
-  margin-bottom: .35rem; color: var(--brand-red-ink);
+  font-family: var(--font-cond);
+  font-size: 1.6rem;
+  margin-bottom: .35rem;
+  color: var(--brand-red-ink);
 }
 .contact-name{ font-weight: 600; margin-bottom: .3rem; }
-.contact-email a{ font-weight: 700; color: var(--brand-red); text-decoration: none; }
+.contact-email a{
+  font-weight: 700;
+  color: var(--brand-red);
+  text-decoration: none;
+}
 .contact-email a:hover{ text-decoration: underline; }
 
 
 /* ===========================================================
    13) FOOTER – kompakter Bereich + „Nach oben“
-   -----------------------------------------------------------
-   Dunkler Abschlussbereich nach dem Kontaktblock.
-   Kompakt = kleineres vertikales Padding.
    =========================================================== */
 .site-footer{
   background: #0b0f13;   /* sehr dunkler Hintergrund */
@@ -415,20 +541,24 @@ a:hover, a:focus { text-decoration: underline; }
   margin-top: 2rem;      /* Abstand zum Inhalt */
 }
 .subfooter__inner{
-  display: flex; justify-content: space-between; gap: 1rem; align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
 
   /* kompakter Footer: Höhe über Padding steuern */
   padding: 0.3rem 0;     /* vorher 1rem 0 → deutlich schlanker */
 }
-.to-top{ color: #9ab; }      /* dezenter Linkton */
-.to-top:hover{ color: #fff; }/* Hover: weiß für Kontrast */
+.to-top{ color: #9ab; }            /* dezenter Linkton */
+.to-top:hover{ color: #fff; }      /* Hover: weiß für Kontrast */
 
 
 /* ===========================================================
    14) FOCUS SICHTBAR – Tastaturfokus
    =========================================================== */
 :focus-visible{
-  outline: 3px solid #0a7cff; outline-offset: 2px;
+  outline: 3px solid #0a7cff;
+  outline-offset: 2px;
 }
 
 
@@ -436,17 +566,39 @@ a:hover, a:focus { text-decoration: underline; }
    15) PRINT – Druckfreundliche Ansicht
    =========================================================== */
 @media print{
-  .nav-drawer, .burger, .tiles, .brand-bar{ display: none !important; }
-  .card, .accordion__panel{ box-shadow: none; border-color: #999; }
+  .nav-drawer,
+  .burger,
+  .tiles,
+  .brand-bar{ display: none !important; }
+
+  .card,
+  .accordion__panel{
+    box-shadow: none;
+    border-color: #999;
+  }
+}
+
+
+/* ===========================================================
+   16) REDUCED MOTION – Barrierearme Animationen
+   -----------------------------------------------------------
+   Deaktiviert glatte Scrolls und Transition-Effekte, wenn
+   das System "weniger Bewegung" wünscht.
+   =========================================================== */
+@media (prefers-reduced-motion: reduce){
+  html { scroll-behavior: auto; }
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 
 /* ===========================================================
    OPTIONAL: HELLER DRAWER STATT CHIPS
+   (Für später – aktuell lassen wir die weißen Chips)
    -----------------------------------------------------------
-   Aktivieren, wenn der gesamte Drawer hell/weiß sein soll.
-   Danach die Chip-Regeln oben entfernen/auskommentieren.
---------------------------------------------------------------
 .nav-drawer{
   background: #ffffff; color: var(--hero-bg);
   border-right: 1px solid var(--border);
@@ -455,4 +607,142 @@ a:hover, a:focus { text-decoration: underline; }
   color: var(--hero-bg); background: transparent; border: 1px solid var(--border);
 }
 .nav-drawer a:hover, .nav-drawer a:focus{ background: rgba(0,0,0,0.03); }
+}
 */
+
+
+/* ===========================================================
+   CV / ÜBER MICH – Styles
+   - Timeline (cv-card), Meta, Listen (.cv-list)
+   - Tags/Badges (.tags .tag)
+   - 3er-Grid (.cv-grid .cv-box)
+   - Actions/Buttons (.cv-actions .btn)
+   =========================================================== */
+
+/* Block-Titel innerhalb der Sektion (z. B. "Berufserfahrung") */
+.cv-block-title{
+  margin: 1.5rem 0 .75rem;
+  font-family: var(--font-cond);
+  font-weight: 700;
+  color: var(--brand-red-ink);
+  font-size: clamp(1.1rem, 1vw + 1rem, 1.35rem);
+}
+
+/* Timeline / Karten */
+.timeline{
+  display: grid;
+  gap: 1rem; /* Abstand zwischen den cv-card-Elementen */
+}
+.cv-card{
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1rem .9rem;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.cv-card::before{
+  /* dezente linke Linie als Timeline-Indikator */
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+  background: linear-gradient(180deg, var(--brand-red) 0%, rgba(227,6,19,.15) 100%);
+}
+.cv-title{
+  margin: 0 0 .25rem;
+  font-weight: 700;
+  font-family: var(--font-cond);
+  letter-spacing: .2px;
+}
+.cv-meta{
+  color: var(--muted);
+  font-size: .95rem;
+  margin-bottom: .35rem;
+}
+/* Einheitliche, gut lesbare Listen */
+.cv-list{
+  margin: 0;
+  padding-left: 1.15rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Tags/Badges */
+.tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.tag{
+  display: inline-block;
+  padding: .25rem .55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: #0b3a66;
+  font-size: .9rem;
+  box-shadow: var(--shadow);
+}
+
+/* 3-Spalten-Grid (Skills/Certs/Sprachen) */
+.cv-grid{
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;              /* mobil: 1 Spalte */
+  margin-top: 1.25rem;
+}
+@media (min-width: 860px){
+  .cv-grid{ grid-template-columns: 1fr 1fr 1fr; } /* ab Tablet: 3 Spalten */
+}
+.cv-box{
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: var(--shadow);
+}
+.cv-subtitle{
+  margin: 0 0 .4rem;
+  font-family: var(--font-cond);
+  font-weight: 700;
+  color: var(--brand-red-ink);
+}
+
+/* Actions / Buttons */
+.cv-actions{
+  display: flex;
+  gap: .75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+.btn{
+  display: inline-block;
+  padding: .6rem .9rem;
+  border-radius: .7rem;
+  background: var(--brand-red);
+  color: #fff;
+  font-weight: 700;
+  font-family: var(--font-cond);
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: transform .05s ease, filter .2s ease;
+}
+.btn:hover,
+.btn:focus{
+  filter: brightness(1.05);
+  text-decoration: none;
+}
+.btn:active{ transform: translateY(1px); }
+
+/* Ghost-Variante (sekundärer Button) */
+.btn--ghost{
+  background: #fff;
+  color: var(--hero-bg);
+  border: 1px solid var(--border);
+}
+.btn--ghost:hover,
+.btn--ghost:focus{
+  background: var(--drawer-chip-hov);
+}
