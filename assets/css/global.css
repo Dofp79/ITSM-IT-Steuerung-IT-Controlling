@@ -132,7 +132,7 @@ a:hover, a:focus { text-decoration: underline; }
   .grid-2{ grid-template-columns: 2fr 1fr; }  /* ab 900px: 2 Spalten */
 }
 
-/* Hinweistexte / Absätze in normalem Content */
+/* Fließtext */
 .lead{
   color: var(--muted);
   line-height: 1.75;
@@ -245,9 +245,6 @@ a:hover, a:focus { text-decoration: underline; }
 
 /* -------------------------------------------
    Drawer-Links: ZUSTÄNDE (Blau → Rot)
-   - :active  = während des Klicks
-   - :focus   = sichtbarer Fokusrahmen mit Rot
-   - .is-active / [aria-current] = dauerhaft aktiv (Rot)
    ------------------------------------------- */
 .nav-drawer a:active{
   color: var(--brand-red); /* kurzer Klick-Effekt in Rot */
@@ -275,25 +272,27 @@ a:hover, a:focus { text-decoration: underline; }
 }
 .hero-inner{ padding: 2.2rem 0 2.6rem; }
 
-/* Überschrift im Hero */
+/* VARIANTE A: Titel ZENTRIERT und an Lead-Spaltenbreite angepasst */
 .hero__title{
-  margin: 0 0 .35rem;
+  /* ↓ neu/angepasst: Titel sitzt auf derselben Textsäule wie der Lead */
+  text-align: center;                 /* zentriert */
+  max-width: 80ch;                    /* gleiche Breite wie der Lead */
+  margin: 0 auto .5rem;               /* in der Mitte einrasten + Abstand nach unten */
+  line-height: 1.15;                  /* kompakte Zeilenhöhe für Headline */
+
+  /* bestehende Typo-Eigenschaften */
   font-family: var(--font-cond);
   font-weight: 700;
   letter-spacing: .2px;
   font-size: clamp(1.6rem, 2.2vw + 1.1rem, 2.4rem);
 }
 
-/* Lead-Absatz im Hero
-   - Blocksatz (justify)
-   - responsiv über clamp()
-   - Maximalbreite für gute Lesbarkeit
-*/
+/* Lead-Absatz im Hero: Blocksatz + responsive Größe */
 .hero__lead{
   margin: 0 auto;                       /* zentriert den Textblock */
   color: #d7e3ef;
   max-width: 80ch;                      /* lesefreundliche Breite */
-  text-align: justify;                  /* Blocksatanordnung */
+  text-align: justify;                  /* Blocksatz */
   text-justify: inter-word;             /* Wortabstände optimieren */
   font-size: clamp(1rem, 1.1vw, 1.2rem);/* responsive Schriftgröße */
   line-height: 1.75;                    /* luftiger für Lesbarkeit */
