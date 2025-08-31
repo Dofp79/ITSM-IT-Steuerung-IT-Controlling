@@ -132,7 +132,14 @@ a:hover, a:focus { text-decoration: underline; }
   .grid-2{ grid-template-columns: 2fr 1fr; }  /* ab 900px: 2 Spalten */
 }
 
-.lead{ color: var(--muted); line-height: 1.75; text-align: justify; }
+/* Hinweistexte / Absätze in normalem Content */
+.lead{
+  color: var(--muted);
+  line-height: 1.75;
+  text-align: justify;          /* Blocksatz für Fließtext */
+  text-justify: inter-word;     /* saubere Wortabstände */
+}
+
 .checklist{ list-style: "✔  "; padding-left: 1.1rem; }
 
 .card{
@@ -192,7 +199,7 @@ a:hover, a:focus { text-decoration: underline; }
 .burger__icon::before{ top: -6px; }
 .burger__icon::after { top:  6px; }
 
-/* Label „Themen“ in Hero-Blau (Wunschfarbe) */
+/* Label „Themen“ im Hero-Blau (Wunschfarbe) */
 .burger__label{
   font-weight: 700; font-family: var(--font-cond);
   color: var(--hero-bg);
@@ -268,11 +275,29 @@ a:hover, a:focus { text-decoration: underline; }
 }
 .hero-inner{ padding: 2.2rem 0 2.6rem; }
 
+/* Überschrift im Hero */
 .hero__title{
-  margin: 0 0 .35rem; font-family: var(--font-cond); font-weight: 700;
-  letter-spacing: .2px; font-size: clamp(1.6rem, 2.2vw + 1.1rem, 2.4rem);
+  margin: 0 0 .35rem;
+  font-family: var(--font-cond);
+  font-weight: 700;
+  letter-spacing: .2px;
+  font-size: clamp(1.6rem, 2.2vw + 1.1rem, 2.4rem);
 }
-.hero__lead{ margin: 0; color: #d7e3ef; max-width: 80ch; }
+
+/* Lead-Absatz im Hero
+   - Blocksatz (justify)
+   - responsiv über clamp()
+   - Maximalbreite für gute Lesbarkeit
+*/
+.hero__lead{
+  margin: 0 auto;                       /* zentriert den Textblock */
+  color: #d7e3ef;
+  max-width: 80ch;                      /* lesefreundliche Breite */
+  text-align: justify;                  /* Blocksatanordnung */
+  text-justify: inter-word;             /* Wortabstände optimieren */
+  font-size: clamp(1rem, 1.1vw, 1.2rem);/* responsive Schriftgröße */
+  line-height: 1.75;                    /* luftiger für Lesbarkeit */
+}
 
 
 /* ===========================================================
