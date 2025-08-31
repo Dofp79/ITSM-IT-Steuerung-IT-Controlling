@@ -8,17 +8,16 @@
    - Tiles (2×2)
    - Sections & Cards
    - Accordion
-   - Kontaktblock & Footer
+   - Kontaktblock & Footer (schmal)
    - A11y (Skip-Link, Focus)
    - Print
    =========================================================== */
 
 
 /* ===========================================================
-   1) Fonts: Lato (self-hosted)
-   -----------------------------------------------------------
-   - WOFF-Varianten liegen unter: /assets/fonts/
-   - "swap": schnelle Darstellung mit Fallback, dann Austausch
+   1) FONTS – Lato (self-hosted, WOFF)
+      → Dateien liegen in /assets/fonts/
+      → font-display: swap = schnelle Textdarstellung
    =========================================================== */
 
 /* Regular */
@@ -57,7 +56,7 @@
   font-display: swap;
 }
 
-/* Bold */
+/* Bold (700) */
 @font-face {
   font-family: "Lato";
   src: url("../fonts/lato-bold-woff-data.woff") format("woff");
@@ -66,7 +65,7 @@
   font-display: swap;
 }
 
-/* Bold Italic */
+/* Bold Italic (700 italic) */
 @font-face {
   font-family: "Lato";
   src: url("../fonts/lato-bolditalic-woff-data.woff") format("woff");
@@ -86,51 +85,48 @@
 
 
 /* ===========================================================
-   2) Design Tokens (CSS Custom Properties)
-   -----------------------------------------------------------
-   - Zentrale Variablen für Farben, Typo, Abstände, Effekte
-   - Ein Punkt ändert sich → überall konsistent
+   2) DESIGN TOKENS – zentrale Variablen
+      → Hier Farbe/Typo/Abstände pflegen
    =========================================================== */
 :root {
-  /* Typografie-Stacks */
+  /* Typografie */
   --font-sans: "Lato", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   --font-cond: "Lato", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
 
-  /* Brandfarben */
+  /* Markenfarben */
   --brand-red:     #e30613;
   --brand-red-ink: #7d212b;
 
-  /* Flächen / Hintergründe */
+  /* Flächen */
   --header-bg: #ffffff;
-  --drawer-bg: #0c2a45; /* Dunkelblau (Drawer-Hintergrund) */
-  --drawer-fg: #ffffff; /* Drawer-Textfarbe (falls benötigt) */
-  --hero-bg:   #0e3659; /* Dunkelblau aus dem Mittelbereich/Hero */
+  --drawer-bg: #0c2a45;  /* Dunkelblau – Drawer-Hintergrund */
+  --drawer-fg: #ffffff;  /* Drawer-Standardtext (falls benötigt) */
+  --hero-bg:   #0e3659;  /* Dunkelblau – Hero/Mittelbereich */
   --tile-bg:   #0b2f4d;
   --bg:        #ffffff;
   --bg-alt:    #f5f7f8;
 
-  /* Text & Linien */
+  /* Text/Linien */
   --text:   #222;
   --muted:  #54616e;
   --border: #e3e6e8;
 
-  /* Form & Effekte */
+  /* Form/Effekte */
   --radius: 14px;
   --shadow: 0 6px 18px rgba(0,0,0,.06);
 
-  /* Drawer-Link-Pill (für Kontrast, wenn Links Blau auf dunklem Drawer sind) */
-  --drawer-chip-bg:   #ffffff;              /* Weißer Chip-Hintergrund */
-  --drawer-chip-bord: rgba(0,0,0,0.08);     /* zarter Rahmen */
-  --drawer-chip-hov:  rgba(0,0,0,0.05);     /* Hover-Hintergrund */
+  /* Drawer-Link-Chips (für guten Kontrast: Blau auf Weiß) */
+  --drawer-chip-bg:   #ffffff;
+  --drawer-chip-bord: rgba(0,0,0,0.08);
+  --drawer-chip-hov:  rgba(0,0,0,0.05);
 }
 
 
 /* ===========================================================
-   3) Base / Helpers
-   -----------------------------------------------------------
-   - Reset-ähnliche Grundregeln + Layout-Helfer
+   3) BASE & HELPERS – Grundlayout, Utilities
    =========================================================== */
 *, *::before, *::after { box-sizing: border-box; }
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -146,7 +142,7 @@ body {
 img { max-width: 100%; height: auto; display: block; }
 
 a {
-  color: #0b3a66;            /* Linkfarbe außerhalb Drawer/Hero */
+  color: #0b3a66;              /* Standard-Linkfarbe (außer Drawer/Hero) */
   text-decoration: none;
 }
 a:hover, a:focus { text-decoration: underline; }
@@ -159,10 +155,10 @@ a:hover, a:focus { text-decoration: underline; }
 .grid-2 {
   display: grid;
   gap: 2rem;
-  grid-template-columns: 1fr; /* mobil: 1 Spalte */
+  grid-template-columns: 1fr;            /* mobil: 1 Spalte */
 }
 @media (min-width: 900px) {
-  .grid-2 { grid-template-columns: 2fr 1fr; } /* ab 900px: 2 Spalten */
+  .grid-2 { grid-template-columns: 2fr 1fr; }  /* ab 900px: 2 Spalten */
 }
 
 .lead { color: var(--muted); line-height: 1.75; text-align: justify; }
@@ -182,9 +178,7 @@ a:hover, a:focus { text-decoration: underline; }
 
 
 /* ===========================================================
-   4) Skip-Link (A11y)
-   -----------------------------------------------------------
-   - Tastatur/Screenreader-Nutzern Direktzugriff auf Hauptinhalt
+   4) SKIP-LINK – Tastaturzugänglichkeit
    =========================================================== */
 .skip-link {
   position: absolute;
@@ -200,17 +194,13 @@ a:hover, a:focus { text-decoration: underline; }
 
 
 /* ===========================================================
-   5) Header / Brand-Bar / Drawer
-   -----------------------------------------------------------
-   - Sticky Header mit Brand-Bar
-   - Burger (links), Logo (rechts)
-   - Drawer (ausfahrende Navigation)
+   5) HEADER / BRAND-BAR / DRAWER
    =========================================================== */
 
 /* Dünne rote Linie unter dem Header */
 .brand-bar { height: 6px; background: var(--brand-red); }
 
-/* Header-Grundfläche (sticky) */
+/* Header – sticky mit Kante unten */
 .site-header {
   background: var(--header-bg);
   border-bottom: 1px solid var(--border);
@@ -219,7 +209,7 @@ a:hover, a:focus { text-decoration: underline; }
   z-index: 60;
 }
 
-/* Flex-Layout im Header */
+/* Header-Inhalt: Burger links, Logo rechts */
 .header-bar {
   display: flex;
   justify-content: space-between;
@@ -227,7 +217,7 @@ a:hover, a:focus { text-decoration: underline; }
   padding: .6rem 0;
 }
 
-/* --- Burger (links) --- */
+/* --- Burger (links) -------------------------------------- */
 .burger {
   display: inline-flex;
   align-items: center;
@@ -241,7 +231,7 @@ a:hover, a:focus { text-decoration: underline; }
   color: #111;
 }
 
-/* Burger-Icon: 3 Linien */
+/* Icon: drei horizontale Linien */
 .burger__icon {
   width: 18px; height: 2px;
   background: currentColor;
@@ -256,24 +246,24 @@ a:hover, a:focus { text-decoration: underline; }
 .burger__icon::before { top: -6px; }
 .burger__icon::after  { top:  6px; }
 
-/* Burger-Label: deine Anforderung → Blau wie Hero */
+/* Label „Themen“: Wunschfarbe = Hero-Blau */
 .burger__label {
   font-weight: 700;
   font-family: var(--font-cond);
-  color: var(--hero-bg); /* Wunschfarbe: gleich wie Mittelbereich/Hero */
+  color: var(--hero-bg);
 }
 
-/* --- Logo (rechts) --- */
+/* --- Logo (rechts) --------------------------------------- */
 .brand-right { display: inline-flex; align-items: center; }
 .brand-right__logo { width: 150px; height: auto; object-fit: contain; }
 
-/* --- Drawer (ausfahrende Navigation) --- */
+/* --- Drawer (ausfahrende Navigation) --------------------- */
 .nav-drawer {
   position: fixed;
-  inset: 56px auto 0 0;                  /* unterhalb Header */
+  inset: 56px auto 0 0;                 /* beginnt unter Header */
   width: min(340px, 86vw);
-  transform: translateX(-100%);          /* initial: versteckt (links draußen) */
-  background: var(--drawer-bg);          /* dunkles Blau */
+  transform: translateX(-100%);         /* initial: verborgen */
+  background: var(--drawer-bg);         /* dunkler Drawer */
   color: var(--drawer-fg);
   padding: 1rem .75rem;
   border-right: 1px solid rgba(255,255,255,.12);
@@ -285,10 +275,10 @@ a:hover, a:focus { text-decoration: underline; }
 .nav-drawer ul { list-style: none; margin: 0; padding: 0; }
 .nav-drawer li + li { margin-top: .35rem; }
 
-/* Drawer-Links als „Chips“:
-   - Text: Hero-Blau (Wunsch)
-   - Hintergrund: Weiß (für guten Kontrast auf dunklem Drawer)
-   - leichte Rundung + dünne Linie */
+/* Drawer-Links als „Chips“ in Weiß:
+   – Text: Hero-Blau (Wunschfarbe)
+   – Hintergrund: weiß (max. Lesbarkeit)
+   – zarter Rahmen, leicht gerundet */
 .nav-drawer a {
   display: block;
   padding: .8rem .9rem;
@@ -296,12 +286,10 @@ a:hover, a:focus { text-decoration: underline; }
   font-weight: 700;
   font-family: var(--font-cond);
   text-decoration: none;
-  color: var(--hero-bg);                   /* Wunschfarbe */
-  background: var(--drawer-chip-bg);       /* Weißer Chip für Lesbarkeit */
+  color: var(--hero-bg);
+  background: var(--drawer-chip-bg);
   border: 1px solid var(--drawer-chip-bord);
 }
-
-/* Hover/Fokus: dezentes Feedback, Farbe bleibt Blau */
 .nav-drawer a:hover,
 .nav-drawer a:focus {
   background: var(--drawer-chip-hov);
@@ -310,9 +298,7 @@ a:hover, a:focus { text-decoration: underline; }
 
 
 /* ===========================================================
-   6) Hero (Mittelbereich oben)
-   -----------------------------------------------------------
-   - Dunkelblauer Block mit Titel + Unterzeile
+   6) HERO – Kopfbereich mit Titel & Unterzeile
    =========================================================== */
 .hero {
   background: var(--hero-bg);
@@ -328,7 +314,6 @@ a:hover, a:focus { text-decoration: underline; }
   letter-spacing: .2px;
   font-size: clamp(1.6rem, 2.2vw + 1.1rem, 2.4rem);
 }
-
 .hero__lead {
   margin: 0;
   color: #d7e3ef;
@@ -337,10 +322,7 @@ a:hover, a:focus { text-decoration: underline; }
 
 
 /* ===========================================================
-   7) Tiles (2×2 – vier verlinkte Bilder)
-   -----------------------------------------------------------
-   - dunkler Hintergrund (gleich wie Hero)
-   - Karten mit leichtem Zoom-Effekt
+   7) TILES – 2×2 Bild-Kacheln mit Links
    =========================================================== */
 .section--tiles { background: var(--hero-bg); }
 
@@ -350,7 +332,7 @@ a:hover, a:focus { text-decoration: underline; }
   grid-template-columns: repeat(2, 1fr);
 }
 @media (max-width: 680px) {
-  .tiles { grid-template-columns: 1fr; } /* mobil: 1 Spalte */
+  .tiles { grid-template-columns: 1fr; }   /* mobil: 1 Spalte */
 }
 
 .tile {
@@ -377,6 +359,7 @@ a:hover, a:focus { text-decoration: underline; }
   filter: saturate(.96);
   transition: transform .25s ease;
 }
+.tile:hover img { transform: scale(1.02); }
 
 .tile figcaption {
   padding: .6rem .8rem;
@@ -386,13 +369,9 @@ a:hover, a:focus { text-decoration: underline; }
   background: linear-gradient(0deg, rgba(255,255,255,.06), rgba(255,255,255,0));
 }
 
-.tile:hover img { transform: scale(1.02); }
-
 
 /* ===========================================================
-   8) Section-Headings (roter Punkt + Titel)
-   -----------------------------------------------------------
-   - Wiederkehrender Musterkopf für Abschnittstitel
+   8) SECTION-HEADINGS – roter Punkt + Titel
    =========================================================== */
 .sec-head {
   display: flex;
@@ -416,9 +395,7 @@ a:hover, a:focus { text-decoration: underline; }
 
 
 /* ===========================================================
-   9) Cards-Grid (untere Kacheln in „Projekte“)
-   -----------------------------------------------------------
-   - 3/2/1-spaltig je nach Breite
+   9) CARDS-GRID – Projektkarten (3/2/1 Spalten)
    =========================================================== */
 .cards {
   display: grid;
@@ -430,10 +407,7 @@ a:hover, a:focus { text-decoration: underline; }
 
 
 /* ===========================================================
-   10) Accordion (ITSM Konzept)
-   -----------------------------------------------------------
-   - Trigger (Button) wechselt Farbe/Rahmen bei "expanded"
-   - Panel mit roter Seitenlinie
+   10) ACCORDION – ITSM Konzept
    =========================================================== */
 .accordion__trigger {
   width: 100%;
@@ -461,9 +435,7 @@ a:hover, a:focus { text-decoration: underline; }
 
 
 /* ===========================================================
-   11) Breadcrumb (optional – aktuell nicht genutzt)
-   -----------------------------------------------------------
-   - Kann bei Unterseiten eingesetzt werden
+   11) BREADCRUMB – optional (derzeit nicht genutzt)
    =========================================================== */
 .breadcrumb { background: #fff; border-block: 1px solid var(--border); }
 .breadcrumb ol {
@@ -480,9 +452,7 @@ a:hover, a:focus { text-decoration: underline; }
 
 
 /* ===========================================================
-   12) Kontaktblock (global, immer vor Footer)
-   -----------------------------------------------------------
-   - Einheitlicher Kontaktbereich mit E-Mail-Link (JS setzt href)
+   12) KONTAKTBLOCK – global vor Footer
    =========================================================== */
 .contact-block {
   background: var(--bg-alt);
@@ -509,30 +479,30 @@ a:hover, a:focus { text-decoration: underline; }
 
 
 /* ===========================================================
-   13) Footer
-   -----------------------------------------------------------
-   - Dunkler Abschluss mit "Nach oben"-Link
+   13) FOOTER – schmaler Bereich + „Nach oben“
    =========================================================== */
 .site-footer {
   background: #0b0f13;
   color: #cbd3d8;
   margin-top: 2rem;
 }
+
 .subfooter__inner {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
   align-items: center;
-  padding: 1rem 0;
+
+  /* ↓ schmaler Footer: geringeres vertikales Padding */
+  padding: 0.5rem 0;           /* vorher 1rem 0 → jetzt schlanker */
 }
+
 .to-top { color: #9ab; }
 .to-top:hover { color: #fff; }
 
 
 /* ===========================================================
-   14) Focus sichtbar (A11y)
-   -----------------------------------------------------------
-   - Klarer, gut sichtbarer Fokusrahmen
+   14) FOCUS SICHTBAR – Tastaturfokus
    =========================================================== */
 :focus-visible {
   outline: 3px solid #0a7cff;
@@ -541,10 +511,7 @@ a:hover, a:focus { text-decoration: underline; }
 
 
 /* ===========================================================
-   15) Print (Druckansicht)
-   -----------------------------------------------------------
-   - Navigations-/Deko-Elemente ausblenden
-   - Schatten reduzieren
+   15) PRINT – Druckfreundliche Ansicht
    =========================================================== */
 @media print {
   .nav-drawer, .burger, .tiles, .brand-bar { display: none !important; }
@@ -553,18 +520,15 @@ a:hover, a:focus { text-decoration: underline; }
 
 
 /* ===========================================================
-   OPTIONAL: Hellere Drawer-Variante (statt Chips)
-   -----------------------------------------------------------
-   - Falls du die Chips NICHT möchtest und lieber den
-     gesamten Drawer hell (weiß) haben willst, dann diese
-     Zeilen aktivieren und die Chip-Regeln oben entfernen.
-
+   OPTIONAL: HELLER DRAWER STATT CHIPS
+   Aktivieren, wenn der gesamte Drawer weiß sein soll.
+   Danach die Chip-Regeln oben entfernen.
+--------------------------------------------------------------
 .nav-drawer {
   background: #ffffff;
   color: var(--hero-bg);
   border-right: 1px solid var(--border);
 }
-
 .nav-drawer a {
   color: var(--hero-bg);
   background: transparent;
