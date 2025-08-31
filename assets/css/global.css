@@ -479,26 +479,35 @@ a:hover, a:focus { text-decoration: underline; }
 
 
 /* ===========================================================
-   13) FOOTER – schmaler Bereich + „Nach oben“
+   13) FOOTER – schmaler Bereich + „Nach oben“-Link
    =========================================================== */
+
+/* ====== Gesamter Footerbereich (dunkel) ====== */
 .site-footer {
-  background: #0b0f13;
-  color: #cbd3d8;
-  margin-top: 2rem;
+  background: #0b0f13;   /* sehr dunkler Hintergrund (fast schwarz) */
+  color: #cbd3d8;        /* helle graue Schriftfarbe */
+  margin-top: 2rem;      /* Abstand nach oben zum restlichen Content */
 }
 
+/* ====== Innerer Container des Footers ====== */
 .subfooter__inner {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: center;
+  display: flex;               /* Flexbox Layout – Elemente nebeneinander */
+  justify-content: space-between; /* Text links, „Nach oben“-Link rechts */
+  gap: 1rem;                   /* Abstand zwischen den Elementen */
+  align-items: center;         /* vertikal mittig ausrichten */
 
-  /* ↓ schmaler Footer: geringeres vertikales Padding */
+  /* ↓ hier haben wir die Höhe (vertikales Padding) reduziert,
+        um den Footer schmaler zu machen */
   padding: 0.3rem 0;           /* vorher 1rem 0 → jetzt schlanker */
 }
 
-.to-top { color: #9ab; }
-.to-top:hover { color: #fff; }
+/* ====== „Nach oben“-Link (rechts im Footer) ====== */
+.to-top {
+  color: #9ab;   /* dezentes hellblau/grau im Normalzustand */
+}
+.to-top:hover {
+  color: #fff;   /* beim Hover weiß für bessere Sichtbarkeit */
+}
 
 
 /* ===========================================================
