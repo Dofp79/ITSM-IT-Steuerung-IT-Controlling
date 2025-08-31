@@ -2,96 +2,78 @@
    Global Stylesheet
    - Self-hosted Lato (WOFF)
    - Design Tokens (Farben, Typo, Effekte)
-   - Base/Helpers
-   - Header (Brand-Bar, Burger, Drawer)
-   - Hero
-   - Tiles (2×2)
-   - Sections, Cards
+   - Base/Helpers & Skip-Link
+   - Header (Brand-Bar, Burger), Drawer-Navigation
+   - Drawer-States: aktiv/Focus/Active (Rot)
+   - Hero, Tiles, Sections, Cards
    - Accordion
    - Kontaktblock (kompakt) & Footer (kompakt)
-   - A11y (Skip-Link, Focus)
-   - Print
+   - A11y (Focus sichtbar) & Print
    =========================================================== */
 
 
 /* ===========================================================
    1) FONTS – Lato (self-hosted)
    -----------------------------------------------------------
-   Dateien liegen unter /assets/fonts/
-   "swap" = Start mit Fallback, dann Austausch, kein FOIT
+   Dateien liegen unter /assets/fonts/  (WOFF)
+   "font-display: swap" → schnelle Darstellung ohne FOIT
    =========================================================== */
-
-@font-face { /* Regular */
+@font-face { /* Regular 400 */
   font-family: "Lato";
   src: url("../fonts/lato-regular-woff-data.woff") format("woff");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+  font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face { /* Italic 400 */
   font-family: "Lato";
   src: url("../fonts/lato-italic-woff-data.woff") format("woff");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
+  font-weight: 400; font-style: italic; font-display: swap;
 }
 @font-face { /* Medium 500 */
   font-family: "Lato";
   src: url("../fonts/lato-medium-woff-data.woff") format("woff");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
+  font-weight: 500; font-style: normal; font-display: swap;
 }
 @font-face { /* SemiBold 600 */
   font-family: "Lato";
   src: url("../fonts/lato-semibold-woff-data.woff") format("woff");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
+  font-weight: 600; font-style: normal; font-display: swap;
 }
 @font-face { /* Bold 700 */
   font-family: "Lato";
   src: url("../fonts/lato-bold-woff-data.woff") format("woff");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+  font-weight: 700; font-style: normal; font-display: swap;
 }
 @font-face { /* Bold Italic 700i */
   font-family: "Lato";
   src: url("../fonts/lato-bolditalic-woff-data.woff") format("woff");
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
+  font-weight: 700; font-style: italic; font-display: swap;
 }
 @font-face { /* Thin 100 */
   font-family: "Lato";
   src: url("../fonts/lato-thin-woff-data.woff") format("woff");
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
+  font-weight: 100; font-style: normal; font-display: swap;
 }
 
 
 /* ===========================================================
    2) DESIGN TOKENS – zentrale Variablen
    -----------------------------------------------------------
-   Einmal pflegen → überall konsistent.
+   Einmal pflegen → global konsistent.
    =========================================================== */
-
 :root{
   /* Typografie-Stacks */
   --font-sans: "Lato", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   --font-cond: "Lato", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
 
   /* Markenfarben */
-  --brand-red:     #e30613;
-  --brand-red-ink: #7d212b;
+  --brand-red:     #e30613;  /* Rot für Akzente/aktiv */
+  --brand-red-ink: #7d212b;  /* Rotbraun für Überschriftenpunkte */
 
   /* Flächen/Hintergründe */
   --header-bg: #ffffff;
-  --drawer-bg: #0c2a45;   /* dunkler Drawer-Hintergrund */
-  --drawer-fg: #ffffff;   /* Drawer-Text (falls benötigt) */
-  --hero-bg:   #0e3659;   /* Blau aus dem Mittelbereich */
+  --drawer-bg: #0c2a45;   /* dunkelblauer Drawer-Hintergrund */
+  --drawer-fg: #ffffff;   /* (Fallback) Textfarbe im Drawer */
+  --hero-bg:   #0e3659;   /* Blau des Mittelbereichs/Hero */
   --tile-bg:   #0b2f4d;
   --bg:        #ffffff;
   --bg-alt:    #f5f7f8;
@@ -105,7 +87,7 @@
   --radius: 14px;
   --shadow: 0 6px 18px rgba(0,0,0,.06);
 
-  /* Drawer-Links als „Chips“ (Kontrast Blau auf Dunkel) */
+  /* Drawer-Link-Chips (weiß, für Kontrast zum dunklen Drawer) */
   --drawer-chip-bg:   #ffffff;
   --drawer-chip-bord: rgba(0,0,0,0.08);
   --drawer-chip-hov:  rgba(0,0,0,0.05);
@@ -115,8 +97,7 @@
 /* ===========================================================
    3) BASE / HELPERS – Grundlayout & Utilities
    =========================================================== */
-
-*,*::before,*::after { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
 body{
@@ -132,11 +113,10 @@ body{
 img{ max-width: 100%; height: auto; display: block; }
 
 a{
-  color: #0b3a66;                /* Standard-Linkfarbe (außer Drawer/Hero) */
+  color: #0b3a66;              /* Standard-Linkfarbe (außer Drawer/Hero) */
   text-decoration: none;
 }
-a:hover,
-a:focus{ text-decoration: underline; }
+a:hover, a:focus { text-decoration: underline; }
 
 .container{ width: min(1200px, 92vw); margin-inline: auto; padding-inline: 1rem; }
 
@@ -170,15 +150,11 @@ a:focus{ text-decoration: underline; }
 /* ===========================================================
    4) SKIP-LINK – Tastaturzugänglichkeit
    =========================================================== */
-
 .skip-link{
-  position: absolute;
-  left: -9999px; top: auto;
+  position: absolute; left: -9999px; top: auto;
   z-index: 1000;
-  background: var(--brand-red);
-  color: #fff;
-  padding: .5rem .75rem;
-  border-radius: .5rem;
+  background: var(--brand-red); color: #fff;
+  padding: .5rem .75rem; border-radius: .5rem;
 }
 .skip-link:focus{ left: .5rem; top: .5rem; }
 
@@ -186,7 +162,6 @@ a:focus{ text-decoration: underline; }
 /* ===========================================================
    5) HEADER / BRAND-BAR / DRAWER
    =========================================================== */
-
 /* dünne rote Linie unter dem Header */
 .brand-bar{ height: 6px; background: var(--brand-red); }
 
@@ -194,33 +169,22 @@ a:focus{ text-decoration: underline; }
 .site-header{
   background: var(--header-bg);
   border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 60;
+  position: sticky; top: 0; z-index: 60;
 }
 
 /* Innenlayout im Header: Burger links, Logo rechts */
 .header-bar{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: flex; justify-content: space-between; align-items: center;
   padding: .6rem 0;
 }
 
 /* --- Burger (links) -------------------------------------- */
 .burger{
   display: inline-flex; align-items: center; gap: .6rem;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: .7rem;
-  padding: .5rem .75rem;
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  color: #111;
+  background: #fff; border: 1px solid var(--border); border-radius: .7rem;
+  padding: .5rem .75rem; box-shadow: var(--shadow); cursor: pointer; color: #111;
 }
-.burger__icon{
-  width: 18px; height: 2px; background: currentColor; position: relative;
-}
+.burger__icon{ width: 18px; height: 2px; background: currentColor; position: relative; }
 .burger__icon::before,
 .burger__icon::after{
   content: ""; position: absolute; left: 0; right: 0; height: 2px; background: currentColor;
@@ -228,10 +192,9 @@ a:focus{ text-decoration: underline; }
 .burger__icon::before{ top: -6px; }
 .burger__icon::after { top:  6px; }
 
-/* Label „Themen“ in Hero-Blau (Wunsch) */
+/* Label „Themen“ in Hero-Blau (Wunschfarbe) */
 .burger__label{
-  font-weight: 700;
-  font-family: var(--font-cond);
+  font-weight: 700; font-family: var(--font-cond);
   color: var(--hero-bg);
 }
 
@@ -242,99 +205,99 @@ a:focus{ text-decoration: underline; }
 /* --- Drawer (ausfahrende Navigation) --------------------- */
 .nav-drawer{
   position: fixed;
-  inset: 56px auto 0 0;               /* beginnt unter Header */
+  inset: 56px auto 0 0;               /* startet unter Header */
   width: min(340px, 86vw);
-  transform: translateX(-100%);       /* initial verborgen */
-  background: var(--drawer-bg);
-  color: var(--drawer-fg);
+  transform: translateX(-100%);       /* initial verborgen (links draußen) */
+  background: var(--drawer-bg); color: var(--drawer-fg);
   padding: 1rem .75rem;
   border-right: 1px solid rgba(255,255,255,.12);
-  transition: transform .25s ease;
-  z-index: 70;
+  transition: transform .25s ease; z-index: 70;
 }
 .nav-drawer.is-open{ transform: none; }
 
 .nav-drawer ul{ list-style: none; margin: 0; padding: 0; }
 .nav-drawer li + li{ margin-top: .35rem; }
 
-/* Drawer-Links als „Chips“ (Weiß) mit blauem Text */
+/* Drawer-Links als weiße "Chips" (Kontrast) in Blau */
 .nav-drawer a{
-  display: block;
-  padding: .8rem .9rem;
-  border-radius: .7rem;
-  font-weight: 700;
-  font-family: var(--font-cond);
+  display: block; padding: .8rem .9rem; border-radius: .7rem;
+  font-weight: 700; font-family: var(--font-cond);
   text-decoration: none;
 
-  color: var(--hero-bg);                /* Wunschfarbe: Hero-Blau */
-  background: var(--drawer-chip-bg);    /* Weißer Chip für Kontrast */
+  color: var(--hero-bg);               /* Blau (Default) */
+  background: var(--drawer-chip-bg);   /* Weißer Chip */
   border: 1px solid var(--drawer-chip-bord);
 }
+
+/* Hover/Focus (nicht-aktiv): leichtes Feedback */
 .nav-drawer a:hover,
 .nav-drawer a:focus{
   background: var(--drawer-chip-hov);
   text-decoration: none;
 }
 
+/* -------------------------------------------
+   Drawer-Links: ZUSTÄNDE (Blau → Rot)
+   - :active  = während des Klicks
+   - :focus   = sichtbarer Fokusrahmen mit Rot
+   - .is-active / [aria-current] = dauerhaft aktiv (Rot)
+   ------------------------------------------- */
+.nav-drawer a:active{
+  color: var(--brand-red); /* kurzer Klick-Effekt in Rot */
+}
+.nav-drawer a:focus{
+  outline: 3px solid rgba(227, 6, 19, .25); /* roter Fokus-Schimmer */
+  outline-offset: 2px;
+  color: var(--brand-red);
+}
+.nav-drawer a.is-active,
+.nav-drawer a[aria-current="page"],
+.nav-drawer a[aria-current="true"]{
+  color: var(--brand-red);                       /* aktiv = Rot */
+  border-color: rgba(227, 6, 19, .35);           /* Chip-Rand rötlich */
+  box-shadow: inset 0 0 0 2px rgba(227, 6, 19, .12); /* dezenter Innenrahmen */
+  background: #fff;                              /* Weiß behalten für Kontrast */
+}
+
 
 /* ===========================================================
    6) HERO – Kopfbereich (Blau) mit Titel/Lead
    =========================================================== */
-
 .hero{
-  background: var(--hero-bg);
-  color: #fff;
-  border-bottom: 1px solid #08243e;
+  background: var(--hero-bg); color: #fff; border-bottom: 1px solid #08243e;
 }
 .hero-inner{ padding: 2.2rem 0 2.6rem; }
 
 .hero__title{
-  margin: 0 0 .35rem;
-  font-family: var(--font-cond);
-  font-weight: 700;
-  letter-spacing: .2px;
-  font-size: clamp(1.6rem, 2.2vw + 1.1rem, 2.4rem);
+  margin: 0 0 .35rem; font-family: var(--font-cond); font-weight: 700;
+  letter-spacing: .2px; font-size: clamp(1.6rem, 2.2vw + 1.1rem, 2.4rem);
 }
-.hero__lead{
-  margin: 0;
-  color: #d7e3ef;
-  max-width: 80ch;
-}
+.hero__lead{ margin: 0; color: #d7e3ef; max-width: 80ch; }
 
 
 /* ===========================================================
    7) TILES – 2×2 Bildkacheln (Links)
    =========================================================== */
-
 .section--tiles{ background: var(--hero-bg); }
-
 .tiles{
-  display: grid; gap: 1.2rem;
-  grid-template-columns: repeat(2, 1fr);
+  display: grid; gap: 1.2rem; grid-template-columns: repeat(2, 1fr);
 }
 @media (max-width: 680px){
   .tiles{ grid-template-columns: 1fr; } /* mobil: 1 Spalte */
 }
-
 .tile{
-  background: var(--tile-bg);
-  border: 1px solid rgba(255,255,255,.15);
-  border-radius: 14px;
-  overflow: hidden;
-  display: block;
-  text-decoration: none;
+  background: var(--tile-bg); border: 1px solid rgba(255,255,255,.15);
+  border-radius: 14px; overflow: hidden; display: block; text-decoration: none;
   box-shadow: 0 6px 18px rgba(0,0,0,.25);
 }
 .tile figure{ margin: 0; display: grid; grid-template-rows: auto auto; }
 .tile img{
   width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;
-  filter: saturate(.96);
-  transition: transform .25s ease;
+  filter: saturate(.96); transition: transform .25s ease;
 }
 .tile:hover img{ transform: scale(1.02); }
 .tile figcaption{
-  padding: .6rem .8rem;
-  color: #fff; font-weight: 700; font-family: var(--font-cond);
+  padding: .6rem .8rem; color: #fff; font-weight: 700; font-family: var(--font-cond);
   background: linear-gradient(0deg, rgba(255,255,255,.06), rgba(255,255,255,0));
 }
 
@@ -342,7 +305,6 @@ a:focus{ text-decoration: underline; }
 /* ===========================================================
    8) SECTION-HEADINGS – roter Punkt + Titel
    =========================================================== */
-
 .sec-head{ display: flex; align-items: center; gap: 10px; margin: 0 0 12px; }
 .sec-dot{ width: 12px; height: 12px; border-radius: 999px; background: var(--brand-red-ink); }
 .sec-title{
@@ -356,7 +318,6 @@ a:focus{ text-decoration: underline; }
 /* ===========================================================
    9) CARDS – Raster für Projektkarten
    =========================================================== */
-
 .cards{ display: grid; gap: 1.2rem; grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 900px){ .cards{ grid-template-columns: 1fr 1fr; } }
 @media (max-width: 640px){ .cards{ grid-template-columns: 1fr; } }
@@ -365,10 +326,8 @@ a:focus{ text-decoration: underline; }
 /* ===========================================================
    10) ACCORDION – ITSM Konzept
    =========================================================== */
-
 .accordion__trigger{
-  width: 100%; text-align: left;
-  background: #fff; border: 1px solid var(--border);
+  width: 100%; text-align: left; background: #fff; border: 1px solid var(--border);
   border-radius: .75rem; padding: .8rem 1rem;
   font-weight: 700; font-family: var(--font-cond);
   transition: border-color .2s ease, color .2s ease;
@@ -386,7 +345,6 @@ a:focus{ text-decoration: underline; }
 /* ===========================================================
    11) BREADCRUMB – optional (derzeit ungenutzt)
    =========================================================== */
-
 .breadcrumb{ background: #fff; border-block: 1px solid var(--border); }
 .breadcrumb ol{
   list-style: none; margin: 0; padding: .5rem 0;
@@ -399,80 +357,60 @@ a:focus{ text-decoration: underline; }
 /* ===========================================================
    12) KONTAKTBLOCK – global, KOMPAKT
    -----------------------------------------------------------
-   Hinweis: Das ist die hellgraue Fläche direkt vor dem Footer.
-   „kompakt“ = geringeres vertikales Padding.
+   Das ist die hellgraue Fläche VOR dem Footer.
    =========================================================== */
-
 .contact-block{
-  /* vorher 2.5rem 0 → kompakt */
+  /* vorher: 2.5rem 0 → kompakt */
   padding: 1.2rem 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   background: var(--bg-alt);
 }
 @media (min-width: 900px){
-  .contact-block{ padding: 1.4rem 0; } /* am Desktop minimal luftiger */
+  .contact-block{ padding: 1.4rem 0; } /* Desktop minimal luftiger */
 }
-
 .contact-inner{ max-width: 800px; margin: 0 auto; text-align: center; }
-
 .contact-title{
-  font-family: var(--font-cond);
-  font-size: 1.6rem;
-  margin-bottom: .35rem;              /* vorher .5rem → kompakter */
-  color: var(--brand-red-ink);
+  font-family: var(--font-cond); font-size: 1.6rem;
+  margin-bottom: .35rem; color: var(--brand-red-ink);
 }
-.contact-name{ font-weight: 600; margin-bottom: .3rem; }  /* vorher .5rem */
-
-.contact-email a{
-  font-weight: 700;                   /* auf Wunsch auch 600 möglich */
-  color: var(--brand-red);
-  text-decoration: none;
-}
+.contact-name{ font-weight: 600; margin-bottom: .3rem; }
+.contact-email a{ font-weight: 700; color: var(--brand-red); text-decoration: none; }
 .contact-email a:hover{ text-decoration: underline; }
 
 
 /* ===========================================================
    13) FOOTER – kompakter Bereich + „Nach oben“
    -----------------------------------------------------------
-   Das ist der dunkle Abschlussbereich unter dem Kontaktblock.
-   „kompakt“ = kleines vertikales Padding in .subfooter__inner.
+   Dunkler Abschlussbereich nach dem Kontaktblock.
+   Kompakt = kleineres vertikales Padding.
    =========================================================== */
-
 .site-footer{
   background: #0b0f13;   /* sehr dunkler Hintergrund */
   color: #cbd3d8;        /* helle Schrift */
-  margin-top: 2rem;      /* Abstand zum Inhalt darüber */
+  margin-top: 2rem;      /* Abstand zum Inhalt */
 }
-
 .subfooter__inner{
-  display: flex;                      /* Elemente nebeneinander */
-  justify-content: space-between;     /* Text links, Link rechts */
-  gap: 1rem;                          /* horizontaler Abstand */
-  align-items: center;                /* vertikal mittig */
+  display: flex; justify-content: space-between; gap: 1rem; align-items: center;
 
-  /* ↓ kompakter Footer – Höhe über Padding steuern */
-  padding: 0.3rem 0;                  /* vorher 1rem 0 → deutlich schlanker */
+  /* kompakter Footer: Höhe über Padding steuern */
+  padding: 0.3rem 0;     /* vorher 1rem 0 → deutlich schlanker */
 }
-
-.to-top{ color: #9ab; }               /* dezenter Linkton */
-.to-top:hover{ color: #fff; }         /* Hover: weiß für Kontrast */
+.to-top{ color: #9ab; }      /* dezenter Linkton */
+.to-top:hover{ color: #fff; }/* Hover: weiß für Kontrast */
 
 
 /* ===========================================================
    14) FOCUS SICHTBAR – Tastaturfokus
    =========================================================== */
-
 :focus-visible{
-  outline: 3px solid #0a7cff;
-  outline-offset: 2px;
+  outline: 3px solid #0a7cff; outline-offset: 2px;
 }
 
 
 /* ===========================================================
    15) PRINT – Druckfreundliche Ansicht
    =========================================================== */
-
 @media print{
   .nav-drawer, .burger, .tiles, .brand-bar{ display: none !important; }
   .card, .accordion__panel{ box-shadow: none; border-color: #999; }
@@ -482,21 +420,15 @@ a:focus{ text-decoration: underline; }
 /* ===========================================================
    OPTIONAL: HELLER DRAWER STATT CHIPS
    -----------------------------------------------------------
-   Aktivieren, wenn der gesamte Drawer weiß sein soll.
-   Danach die Chip-Regeln oben entfernen.
+   Aktivieren, wenn der gesamte Drawer hell/weiß sein soll.
+   Danach die Chip-Regeln oben entfernen/auskommentieren.
 --------------------------------------------------------------
 .nav-drawer{
-  background: #ffffff;
-  color: var(--hero-bg);
+  background: #ffffff; color: var(--hero-bg);
   border-right: 1px solid var(--border);
 }
 .nav-drawer a{
-  color: var(--hero-bg);
-  background: transparent;
-  border: 1px solid var(--border);
+  color: var(--hero-bg); background: transparent; border: 1px solid var(--border);
 }
-.nav-drawer a:hover,
-.nav-drawer a:focus{
-  background: rgba(0,0,0,0.03);
-}
+.nav-drawer a:hover, .nav-drawer a:focus{ background: rgba(0,0,0,0.03); }
 */
