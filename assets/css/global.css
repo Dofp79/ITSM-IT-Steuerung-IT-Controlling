@@ -494,7 +494,7 @@ a:hover, a:focus { text-decoration: underline; }
   align-items: center;
 
   /* ↓ schmaler Footer: geringeres vertikales Padding */
-  padding: 0.5rem 0;           /* vorher 1rem 0 → jetzt schlanker */
+  padding: 0.3rem 0;           /* vorher 1rem 0 → jetzt schlanker */
 }
 
 .to-top { color: #9ab; }
