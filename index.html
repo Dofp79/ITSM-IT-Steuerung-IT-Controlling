@@ -1,145 +1,210 @@
 <!DOCTYPE html>
 <html lang="de" dir="ltr">
 <head>
+  <!-- =========================================================
+       Basis-Meta & Dokument-Setup
+       ========================================================= -->
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>IT-Steuerung & IT-Controlling mit Hilfe von ITSM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IT-Steuerung &amp; IT-Controlling mit Hilfe von ITSM</title>
+  <meta name="description" content="IT-Steuerung & IT-Controlling mit Hilfe von ITSM – Über mich, Projekte und ITSM Konzept." />
 
-  <!-- Self-hosted Fonts (Lato) -->
+  <!-- =========================================================
+       Fonts (self-hosted) – Preload für schnelleren First Paint
+       Pfade: /assets/fonts/*.woff  (müssen existieren)
+       ========================================================= -->
   <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
 
-  <!-- Globales CSS -->
+  <!-- =========================================================
+       Globales Stylesheet (enthält Tokens, Layout, Komponenten)
+       Pfad: /assets/css/global.css
+       ========================================================= -->
   <link rel="stylesheet" href="assets/css/global.css" />
-
-  <meta name="description" content="IT-Steuerung & IT-Controlling mit Hilfe von ITSM – Über mich, Projekte und ITSM Konzept." />
 </head>
+
 <body id="top">
-  <!-- Skip-Link -->
+  <!-- =========================================================
+       Skip-Link – Tastaturnutzern sofort den Inhalt anbieten
+       Ziel-ID muss auf <main> verweisen
+       ========================================================= -->
   <a class="skip-link" href="#hauptinhalt">Zum Inhalt springen</a>
 
-  <!-- ================ Header ================ -->
+  <!-- =========================================================
+       HEADER (Sticky) mit Burger (links) + Logo (rechts)
+       - .brand-bar ist die dünne rote Linie unter dem Header
+       - Offcanvas-Navigation folgt direkt danach
+       ========================================================= -->
   <header class="site-header" role="banner">
     <div class="container header-bar">
-      <!-- Burger links -->
+      <!-- Burger öffnet/schließt den Drawer; JS toggelt aria-expanded -->
       <button class="burger" aria-expanded="false" aria-controls="navdrawer">
         <span class="burger__icon" aria-hidden="true"></span>
         <span class="burger__label">Themen</span>
       </button>
 
-      <!-- Logo rechts -->
+      <!-- Logo (rechte Seite); verlinkt zur Seiten-Spitze -->
       <a class="brand-right" href="#top" aria-label="Startseite">
-        <img src="assets/DoniLogo_1.0.0.png" alt="Logo" class="brand-right__logo">
+        <img src="assets/DoniLogo_1.0.0.png" alt="Logo Doniman F. Peña Parra" class="brand-right__logo">
       </a>
     </div>
 
-    <!-- Ausfahrende Navigation -->
-    <nav id="navdrawer" class="nav-drawer" aria-label="Hauptnavigation">
+    <!-- Ausfahrende Navigation (Drawer) – wird per JS ein-/ausgeblendet -->
+    <nav id="navdrawer" class="nav-drawer" aria-label="Hauptnavigation" role="navigation">
       <ul>
+        <!-- Link 1: Interne Unterseite „Über mich“ (eigene HTML-Datei) -->
         <li><a href="ueber-mich.html">Über mich</a></li>
+        <!-- Link 2: In-Page-Anker (Scroll zu Abschnitt) -->
         <li><a href="#projekte">Projekte</a></li>
+        <!-- Link 3: In-Page-Anker (Scroll zu Abschnitt) -->
         <li><a href="#itsm-konzept">ITSM Konzept</a></li>
       </ul>
     </nav>
 
+    <!-- Markenlinie (rot) unter dem Header -->
     <div class="brand-bar" aria-hidden="true"></div>
   </header>
 
-  <!-- ================ Hero ================ -->
+  <!-- =========================================================
+       HERO – Titelbereich mit Headline + Lead-Text
+       Typografie/Blocksatz über CSS (.hero__title / .hero__lead)
+       ========================================================= -->
   <section class="hero">
     <div class="container hero-inner">
       <h1 class="hero__title">IT-Steuerung &amp; IT-Controlling mit Hilfe von ITSM</h1>
+
+      <!-- Lead-Absatz: bewusst als Fließtext (kein <br>, kein <ul>) -->
       <p class="hero__lead">
-        Eine effiziente IT-Steuerung und ein verlässliches Controlling sind die Grundlage moderner IT-Organisationen. 
-        Mithilfe eines strukturierten IT-Service-Managements (ITSM) auf Basis von ITIL 4 lassen sich Prozesse, KPIs 
-        und Entscheidungsstrukturen systematisch digitalisieren.
-        Mit ITSM wird die IT-Steuerung also nicht nur verwaltet, sondern aktiv gestaltet. Durch die Kombination von 
-        ITIL-4-Standards, modernen Tools wie Power BI und agilen Methoden wie Scrum wird Ihre IT-Abteilung zum Treiber 
-        der digitalen Transformation.
+        Eine effiziente IT-Steuerung und ein verlässliches Controlling sind die Grundlage moderner IT-Organisationen.
+        Mithilfe eines strukturierten IT-Service-Managements (ITSM) auf Basis von ITIL&nbsp;4 lassen sich Prozesse, KPIs
+        und Entscheidungsstrukturen systematisch digitalisieren. Mit ITSM wird die IT-Steuerung also nicht nur verwaltet,
+        sondern aktiv gestaltet. Durch die Kombination von ITIL-4-Standards, modernen Tools wie Power BI und agilen
+        Methoden wie Scrum wird Ihre IT-Abteilung zum Treiber der digitalen Transformation.
       </p>
     </div>
   </section>
 
-  <!-- ================ 2×2 Kachel-Grid (vier Links) ================ -->
+  <!-- =========================================================
+       TILES – 2×2 Kachelraster mit vier Links (Bilder + Caption)
+       Bildpfade unter /assets/images/tiles/... (müssen existieren)
+       Kachel 3 ist ein externer Link (öffnet im neuen Tab)
+       ========================================================= -->
   <section class="section section--tiles">
     <div class="container tiles">
-      <!-- Kachel 1: intern → Über mich -->
+      <!-- Kachel 1: interne Navigation zu Abschnitt „Über mich“ -->
       <a class="tile" href="#ueber-mich">
         <figure>
-          <img src="assets/images/tiles/UeberMich_1.0.0.png" alt="Über mich" loading="lazy">
+          <img src="assets/images/tiles/UeberMich_1.0.0.png" alt="Vorschau: Über mich" loading="lazy">
           <figcaption>Über mich</figcaption>
         </figure>
       </a>
 
-      <!-- Kachel 2: intern → Projekte -->
+      <!-- Kachel 2: interne Navigation zu Abschnitt „Projekte“ -->
       <a class="tile" href="#projekte">
         <figure>
-          <img src="assets/images/tiles/Projekte_1.0.0.png" alt="Projekte" loading="lazy">
+          <img src="assets/images/tiles/Projekte_1.0.0.png" alt="Vorschau: Projekte" loading="lazy">
           <figcaption>Projekte</figcaption>
         </figure>
       </a>
 
-      <!-- Kachel 3: extern → KI-Agent -->
+      <!-- Kachel 3: externer Link – Sicherheit: noopener/noreferrer -->
       <a class="tile" href="https://example.com/ki-agent" target="_blank" rel="noopener noreferrer">
         <figure>
-          <img src="assets/images/tiles/KI-Agent.png" alt="KI-Agent (extern)" loading="lazy">
+          <img src="assets/images/tiles/KI-Agent.png" alt="Externer Link: KI-Agent" loading="lazy">
           <figcaption>KI-Agent</figcaption>
         </figure>
       </a>
 
-      <!-- Kachel 4: intern → ITSM Konzept -->
+      <!-- Kachel 4: interne Navigation zu Abschnitt „ITSM Konzept“ -->
       <a class="tile" href="#itsm-konzept">
         <figure>
-          <img src="assets/images/tiles/Die-sieben-Grundprinzipien-von-ITIL-4.png" alt="ITSM Konzept" loading="lazy">
+          <img src="assets/images/tiles/Die-sieben-Grundprinzipien-von-ITIL-4.png" alt="Vorschau: ITSM Konzept" loading="lazy">
           <figcaption>ITSM Konzept</figcaption>
         </figure>
       </a>
     </div>
   </section>
 
-  <!-- ================ Hauptinhalt ================ -->
+  <!-- =========================================================
+       MAIN – Seiteninhalt mit drei Abschnitten:
+       1) Über mich  2) Projekte  3) ITSM Konzept (Accordion)
+       ========================================================= -->
   <main id="hauptinhalt" class="main" role="main">
-    <!-- Über mich -->
+    <!-- ---------- Über mich ---------- -->
     <section id="ueber-mich" class="section">
       <div class="container grid-2">
         <div>
-          <div class="sec-head"><span class="sec-dot" aria-hidden="true"></span><h2 class="sec-title">Über mich</h2></div>
+          <!-- Abschnittstitel (roter Punkt + Headline) -->
+          <div class="sec-head">
+            <span class="sec-dot" aria-hidden="true"></span>
+            <h2 class="sec-title">Über mich</h2>
+          </div>
+
+          <!-- Kurzprofil mit Checkliste -->
           <p class="lead">
             Kurzvorstellung, Kompetenzen und Fokus: IT-Steuerung, IT-Controlling, KPI-Design, Servicekatalog und Governance.
           </p>
           <ul class="checklist">
-            <li>Mehr als 20 Jahre Führungs- und Organisationserfahrung, Leitung von Teams mit bis zu 25 Mitarbeitenden, einschließlich Recruiting, Onboarding, Einsatzplanung und Personalentwicklung.</li>
-            <li>Fundierte Expertise im ITSM nach ITIL® 4, mit Fokus auf pragmatische und messbare Prozessoptimierungen sowie Umfassende Kenntnisse im Lizenzmanagement. </li>
-            <li>Erfahrung in der Entwicklung von KPIs, Reporting-Standards und Power BI/DAX Dashboards für datenbasierte Entscheidungsprozesse.</li>
+            <li>Mehr als 20 Jahre Führungs- und Organisationserfahrung (Teams bis 25 MA; Recruiting, Onboarding, Einsatzplanung, Personalentwicklung).</li>
+            <li>Fundierte Expertise in ITSM nach ITIL®&nbsp;4 mit pragmatischen, messbaren Prozessoptimierungen; umfassende Kenntnisse im Lizenzmanagement.</li>
+            <li>Erfahrung im KPI-Design, Reporting-Standards und Power BI/DAX-Dashboards für datenbasierte Entscheidungen.</li>
           </ul>
         </div>
+
+        <!-- Kontaktkarte rechts -->
         <aside class="card">
           <h3>Kontakt</h3>
-          <p><strong>E-Mail:</strong> kontakt@example.org<br><strong>Standort:</strong> Hamburg</p>
+          <p>
+            <strong>E-Mail:</strong> kontakt@example.org<br>
+            <strong>Standort:</strong> Hamburg
+          </p>
         </aside>
       </div>
     </section>
 
-    <!-- Projekte -->
+    <!-- ---------- Projekte ---------- -->
     <section id="projekte" class="section section--alt">
       <div class="container">
-        <div class="sec-head"><span class="sec-dot" aria-hidden="true"></span><h2 class="sec-title">Projekte</h2></div>
+        <div class="sec-head">
+          <span class="sec-dot" aria-hidden="true"></span>
+          <h2 class="sec-title">Projekte</h2>
+        </div>
+
+        <!-- Dreispaltiges Kartenraster (responsive) -->
         <div class="cards">
-          <article class="card"><h3>KPIs Dashboarding</h3><p>SLA/OLA, MTTR, FCR – verlässliche Kennzahlen &amp; Visualisierungen.</p></article>
-          <article class="card"><h3>Prozessmodellierung</h3><p>Ist-/Soll-Prozesse, RACI, Schnittstellen, Automatisierung.</p></article>
-          <article class="card"><h3>ITIL® 4 / Governance</h3><p>Guiding Principles, Rollenmodell, Gremien, KVP.</p></article>
+          <article class="card">
+            <h3>KPIs Dashboarding</h3>
+            <p>SLA/OLA, MTTR, FCR – verlässliche Kennzahlen &amp; Visualisierungen.</p>
+          </article>
+
+          <article class="card">
+            <h3>Prozessmodellierung</h3>
+            <p>Ist-/Soll-Prozesse, RACI, Schnittstellen, Automatisierung.</p>
+          </article>
+
+          <article class="card">
+            <h3>ITIL® 4 / Governance</h3>
+            <p>Guiding Principles, Rollenmodell, Gremien, KVP.</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- ITSM Konzept -->
+    <!-- ---------- ITSM Konzept (Accordion) ---------- -->
     <section id="itsm-konzept" class="section">
       <div class="container grid-2">
         <div>
-          <div class="sec-head"><span class="sec-dot" aria-hidden="true"></span><h2 class="sec-title">ITSM Konzept</h2></div>
+          <div class="sec-head">
+            <span class="sec-dot" aria-hidden="true"></span>
+            <h2 class="sec-title">ITSM Konzept</h2>
+          </div>
 
+          <!-- Accordion nach WAI-ARIA-Light; JS setzt aria-expanded/hidden -->
           <div class="accordion" data-accordion>
-            <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-1">Prozesslandschaft</button>
+            <!-- Panel 1 -->
+            <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-1">
+              Prozesslandschaft
+            </button>
             <div id="acc-1" class="accordion__panel" hidden>
               <ul>
                 <li>Incident / Request / Problem / Change</li>
@@ -148,7 +213,10 @@
               </ul>
             </div>
 
-            <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-2">KPIs &amp; Reporting</button>
+            <!-- Panel 2 -->
+            <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-2">
+              KPIs &amp; Reporting
+            </button>
             <div id="acc-2" class="accordion__panel" hidden>
               <ul>
                 <li>SLAs/OLAs, First Contact Resolution</li>
@@ -157,7 +225,10 @@
               </ul>
             </div>
 
-            <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-3">Governance &amp; Rollen</button>
+            <!-- Panel 3 -->
+            <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-3">
+              Governance &amp; Rollen
+            </button>
             <div id="acc-3" class="accordion__panel" hidden>
               <ul>
                 <li>Service Owner, Process Owner</li>
@@ -168,6 +239,7 @@
           </div>
         </div>
 
+        <!-- Downloads (Platzhalter) -->
         <aside class="card">
           <h3>Downloads</h3>
           <ul class="link-list">
@@ -179,13 +251,16 @@
     </section>
   </main>
 
-  <!-- ================ Kontakt (global, immer vor dem Footer) ================ -->
+  <!-- =========================================================
+       GLOBALER KONTAKTBLOCK – immer vor dem Footer
+       E-Mail-Adresse wird aus Datenattributen in site.js gesetzt
+       ========================================================= -->
   <section class="contact-block" aria-labelledby="kontaktTitle">
     <div class="contact-inner container">
       <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
       <p class="contact-name">Doniman F. Peña Parra</p>
 
-      <!-- Spam-sicher: Text + href werden per site.js gesetzt -->
+      <!-- Spam-sicher: Text + href werden per site.js generiert -->
       <p class="contact-email">
         <a id="contactEmail"
            data-email-user="dofp79"
@@ -197,7 +272,10 @@
     </div>
   </section>
 
-  <!-- ================ Footer ================ -->
+  <!-- =========================================================
+       FOOTER – kompakt + „Nach oben“
+       data-year wird per site.js automatisch gesetzt
+       ========================================================= -->
   <footer class="site-footer" role="contentinfo">
     <div class="container subfooter__inner">
       <p>&copy; <span data-year></span> IT-Steuerung &amp; IT-Controlling</p>
@@ -205,7 +283,10 @@
     </div>
   </footer>
 
-  <!-- Globales JS -->
+  <!-- =========================================================
+       Globales Skript – Drawer/Accordion/Email/Year/SmoothScroll
+       Pfad: /assets/js/site.js  (muss existieren)
+       ========================================================= -->
   <script src="assets/js/site.js" defer></script>
 </body>
 </html>
