@@ -1,168 +1,305 @@
-<!-- =========================================================
-     ÜBER MICH – ausführliche Sektion mit Timeline, Skills, etc.
-     (ersetzt den bisherigen, kurzen Block)
-     ========================================================= -->
-<section id="ueber-mich" class="section">
-  <div class="container">
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+  <!-- =========================================================
+       (0) DOKUMENT-SETUP & META
+       - SEO-freundlicher Titel & Beschreibung
+       - Viewport für Responsive Verhalten
+       - Beibehaltung der globalen Typografie/Designfarben
+       ========================================================= -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Über mich – ITSM, IT-Steuerung & IT-Controlling</title>
+  <meta name="description" content="Über mich: ITSM-Prozessadministrator (ITIL 4), KPI-Design, Reporting, Prozessautomatisierung, Power BI/DAX, BPMN/UML, Scrum." />
 
-    <!-- Abschnittsüberschrift im einheitlichen Stil (.sec-head) -->
-    <div class="sec-head">
-      <span class="sec-dot" aria-hidden="true"></span>
-      <h2 class="sec-title">Über mich</h2>
-    </div>
+  <!-- Optional: Canonical (falls GitHub Pages/mehrere Pfade) -->
+  <!-- <link rel="canonical" href="https://dofp79.github.io/ITSM-IT-Steuerung-IT-Controlling/ueber-mich.html" /> -->
 
-    <!-- Kurz-Intro (Lead-Text): Blocksatz/Lesbarkeit über .lead in CSS -->
-    <p class="lead">
-      ITSM-Prozessadministrator mit Schwerpunkt auf
-      <strong>ITIL® 4</strong>, <strong>KPI-Design</strong>, <strong>Reporting</strong>
-      und <strong>Prozessautomatisierung</strong>. Ich verbinde Struktur und
-      Pragmatismus – mit Power&nbsp;BI/DAX, BPMN/UML und agilen Methoden (Scrum).
-    </p>
+  <!-- =========================================================
+       (1) FONTS – SELF-HOSTED (schneller First Paint via preload)
+       - Pfade müssen in /assets/fonts/ existieren
+       ========================================================= -->
+  <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
 
-    <!-- =====================================================
-         BERUFSERFAHRUNG – Timeline mit Karten
-         Markup nutzt .timeline + .cv-card (siehe global.css §CV)
-         ===================================================== -->
-    <h3 class="cv-block-title">Berufserfahrung</h3>
+  <!-- =========================================================
+       (2) GLOBAL CSS – dein zentrales Design
+       - Enthält: Tokens, Header/Drawer, Sektionen, CV-Styles etc.
+       ========================================================= -->
+  <link rel="stylesheet" href="assets/css/global.css" />
+</head>
 
-    <!-- Grid-Stack für Karten; Linie/Optik via .timeline/.cv-card -->
-    <div class="timeline" aria-label="Berufserfahrung">
+<body id="top">
+  <!-- =========================================================
+       (3) A11Y: SKIP-LINK
+       - Ermöglicht Tastaturnutzern den Direkt-Sprung zum Inhalt
+       - Ziel: #mainContent (siehe <main>)
+       ========================================================= -->
+  <a class="skip-link" href="#mainContent">Zum Inhalt springen</a>
 
-      <!-- Karte 1: aktuelle Rolle -->
-      <article class="cv-card">
-        <h4 class="cv-title">ITSM – Prozessadministrator</h4>
-        <div class="cv-meta">Polizei Hamburg · 01/2024 – heute</div>
-
-        <!-- Einheitliche Liste (Spacing/Farbe über .cv-list) -->
-        <ul class="cv-list">
-          <li>ITSM-Prozesse nach ITIL® 4 steuern und optimieren.</li>
-          <li>Koordination mit Fachbereichen, Anforderungen aufnehmen und Lösungen ausarbeiten.</li>
-          <li>KPI-Systeme mit Power&nbsp;BI/DAX entwickeln; Reporting-Richtlinien definieren.</li>
-          <li>Cross-Team „Daten“ koordinieren; Kanban-Boards steuern und anpassen.</li>
-          <li>Messung &amp; Reporting: ITSM-Prozesse optimieren und steuern.</li>
-          <li>Konzeption: ETL-Prozesse für Automatisierungen im Measuring &amp; Reporting aufbauen.</li>
-          <li>Orchestrierung KI-gestützter Agenten (Prompt Engineering).</li>
-          <li>Betreuung von Umschülern (Fachinformatik); Lernmodule entwickeln.</li>
-          <li>Lizenzmanagementprozesse compliance-gerecht abwickeln.</li>
+  <!-- =========================================================
+       (4) HEADER-CONTAINER
+       - Wird durch site.js via fetch() mit includes/header.html befüllt
+       - Enthält Burger/Drawer + globale Navigation
+       ========================================================= -->
+  <header id="site-header" class="site-header" role="banner">
+    <!-- Fallback für No-JS: wird nur sichtbar, wenn JS fehlt/fehlschlägt -->
+    <noscript>
+      <div class="container header-bar">
+        <a class="brand-right" href="index.html" aria-label="Startseite">
+          <img src="assets/DoniLogo_1.0.0.png" width="150" height="40" alt="Logo Doniman F. Peña Parra" class="brand-right__logo">
+        </a>
+      </div>
+      <nav class="nav-drawer" aria-label="Hauptnavigation">
+        <ul>
+          <li><a href="index.html">Start</a></li>
+          <li><a href="ueber-mich.html" aria-current="page">Über mich</a></li>
+          <li><a href="projekte.html">Projekte</a></li>
+          <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
         </ul>
-      </article>
+      </nav>
+      <div class="brand-bar" aria-hidden="true"></div>
+    </noscript>
+  </header>
 
-      <!-- Karte 2: Praktikum/Station -->
-      <article class="cv-card">
-        <h4 class="cv-title">Praktikum IT&nbsp;322 – ITIL Management</h4>
-        <div class="cv-meta">Polizei Hamburg · 11/2022 – 01/2024</div>
-        <ul class="cv-list">
-          <li>Bearbeitung von Incidents im Lizenzmanagement.</li>
-          <li>Hospitation in verschiedenen IT-Bereichen.</li>
-          <li>Einblicke ins ITD5 (Amt für IT und Digitalisierung der Senatskanzlei).</li>
-          <li>Schulungen/Meetings zu „ITIL® 4 Management und Scrum“.</li>
-          <li>BPMN-Prozessskizzen und Modellierung.</li>
-          <li>Praxisprojekt: .NET Framework/C#, T-SQL, HTML/CSS/JS, PowerShell (Entwurf bis Doku).</li>
-          <li>Koordination &amp; Teilnahme an einer ITIL® 4-Simulation (Apollo&nbsp;13).</li>
-        </ul>
-      </article>
-
-      <!-- Karte 3: Ausbildung – als Tag-Wolke -->
-      <article class="cv-card">
-        <h4 class="cv-title">Fachinformatiker Anwendungsentwicklung</h4>
-
-        <!-- Tags/Badges (flex-wrap in CSS) -->
-        <div class="tags" aria-label="Ausbildungsinhalte">
-          <span class="tag">Projektmanagement</span>
-          <span class="tag">OOP</span>
-          <span class="tag">Datenbanken</span>
-          <span class="tag">Scrum</span>
-          <span class="tag">SQL</span>
-          <span class="tag">Rechnungswesen</span>
-          <span class="tag">Systemanalyse &amp; UML</span>
-          <span class="tag">Anforderungsanalyse</span>
-        </div>
-      </article>
-
-      <!-- Karte 4: Querschnittserfahrung – Gastronomie -->
-      <article class="cv-card">
-        <h4 class="cv-title">Mehr als 20 Jahre Erfahrung im Gastronomiebereich</h4>
-        <div class="tags" aria-label="Schwerpunkte Gastronomie">
-          <span class="tag">Teamführung &amp; Einsatzplanung</span>
-          <span class="tag">Wareneinsatz/Budget</span>
-          <span class="tag">Qualitätsmanagement</span>
-          <span class="tag">Kundenservice</span>
-          <span class="tag">Leitung bis 25&nbsp;MA</span>
-          <span class="tag">Prozessverbesserung</span>
-          <span class="tag">Eventmanagement</span>
-          <span class="tag">Eigenverantwortliche Betriebsführung</span>
-        </div>
-      </article>
+  <!-- =========================================================
+       (5) HERO – Seitenkopf für "Über mich"
+       - Nutzt deine globalen Hero-Styles (blauer Bereich, typografisch)
+       ========================================================= -->
+  <section class="hero" aria-label="Seitenkopf Über mich">
+    <div class="container hero-inner">
+      <h1 class="hero__title">Über mich</h1>
+      <p class="hero__lead">
+        ITSM-Prozessadministrator mit Fokus auf <strong>ITIL® 4</strong>, <strong>KPI-Design</strong>,
+        <strong>Reporting</strong> und <strong>Prozessautomatisierung</strong>. Ich verbinde Struktur und Pragmatismus –
+        mit Power&nbsp;BI/DAX, BPMN/UML und agilen Methoden (Scrum).
+      </p>
     </div>
+  </section>
 
-    <!-- =====================================================
-         SKILLS • ZERTIFIKATE • SPRACHEN – 3-Spalten-Grid
-         (auf Mobil 1 Spalte; CSS: .cv-grid/.cv-box)
-         ===================================================== -->
-    <div class="cv-grid">
+  <!-- =========================================================
+       (6) MAIN – Seiteninhalt (vollständig eigenständig)
+       - ID #mainContent für Skip-Link, role="main" für A11y
+       - Enthält deinen gelieferten Block (Timeline/Skills/…)
+       - Klassen (sec-head, cv-card, cv-grid, …) kommen aus global.css
+       ========================================================= -->
+  <main id="mainContent" class="main" role="main">
+    <!-- =========================================================
+         ÜBER MICH – ausführliche Sektion mit Timeline, Skills, etc.
+         (dein Originalblock, minimal angepasst: semantische H-Levels)
+         ========================================================= -->
+    <section id="ueber-mich" class="section">
+      <div class="container">
 
-      <!-- Spalte 1: Skills -->
-      <section class="cv-box" aria-labelledby="skills">
-        <h5 id="skills" class="cv-subtitle">Skills</h5>
+        <!-- Abschnittsüberschrift im einheitlichen Stil (.sec-head) -->
+        <div class="sec-head">
+          <span class="sec-dot" aria-hidden="true"></span>
+          <h2 class="sec-title">Über mich</h2>
+        </div>
 
-        <!-- Kompakte Tag-Liste -->
-        <div class="tags">
-          <span class="tag">BPMN 2.0</span>
-          <span class="tag">UML</span>
-          <span class="tag">ITIL® 4</span>
-          <span class="tag">SCRUM</span>
-          <span class="tag">Power BI</span>
-          <span class="tag">DAX</span>
-          <span class="tag">Python</span>
-          <span class="tag">C#</span>
-          <span class="tag">JavaScript</span>
-          <span class="tag">T-SQL</span>
-          <span class="tag">Java</span>
+        <!-- Kurz-Intro (Lead-Text): Blocksatz/Lesbarkeit via .lead in CSS -->
+        <p class="lead">
+          ITSM-Prozessadministrator mit Schwerpunkt auf
+          <strong>ITIL® 4</strong>, <strong>KPI-Design</strong>, <strong>Reporting</strong>
+          und <strong>Prozessautomatisierung</strong>. Ich verbinde Struktur und
+          Pragmatismus – mit Power&nbsp;BI/DAX, BPMN/UML und agilen Methoden (Scrum).
+        </p>
+
+        <!-- =====================================================
+             BERUFSERFAHRUNG – Timeline mit Karten
+             Markup nutzt .timeline + .cv-card (siehe global.css §CV)
+             ===================================================== -->
+        <h3 class="cv-block-title">Berufserfahrung</h3>
+
+        <!-- Grid-Stack für Karten; Linie/Optik via .timeline/.cv-card -->
+        <div class="timeline" aria-label="Berufserfahrung">
+          <!-- Karte 1: aktuelle Rolle -->
+          <article class="cv-card">
+            <h4 class="cv-title">ITSM – Prozessadministrator</h4>
+            <div class="cv-meta">Polizei Hamburg · 01/2024 – heute</div>
+            <ul class="cv-list">
+              <li>ITSM-Prozesse nach ITIL® 4 steuern und optimieren.</li>
+              <li>Koordination mit Fachbereichen, Anforderungen aufnehmen und Lösungen ausarbeiten.</li>
+              <li>KPI-Systeme mit Power&nbsp;BI/DAX entwickeln; Reporting-Richtlinien definieren.</li>
+              <li>Cross-Team „Daten“ koordinieren; Kanban-Boards steuern und anpassen.</li>
+              <li>Messung &amp; Reporting: ITSM-Prozesse optimieren und steuern.</li>
+              <li>Konzeption: ETL-Prozesse für Automatisierungen im Measuring &amp; Reporting aufbauen.</li>
+              <li>Orchestrierung KI-gestützter Agenten (Prompt Engineering).</li>
+              <li>Betreuung von Umschülern (Fachinformatik); Lernmodule entwickeln.</li>
+              <li>Lizenzmanagementprozesse compliance-gerecht abwickeln.</li>
+            </ul>
+          </article>
+
+          <!-- Karte 2: Praktikum/Station -->
+          <article class="cv-card">
+            <h4 class="cv-title">Praktikum IT&nbsp;322 – ITIL Management</h4>
+            <div class="cv-meta">Polizei Hamburg · 11/2022 – 01/2024</div>
+            <ul class="cv-list">
+              <li>Bearbeitung von Incidents im Lizenzmanagement.</li>
+              <li>Hospitation in verschiedenen IT-Bereichen.</li>
+              <li>Einblicke ins ITD5 (Amt für IT und Digitalisierung der Senatskanzlei).</li>
+              <li>Schulungen/Meetings zu „ITIL® 4 Management und Scrum“.</li>
+              <li>BPMN-Prozessskizzen und Modellierung.</li>
+              <li>Praxisprojekt: .NET Framework/C#, T-SQL, HTML/CSS/JS, PowerShell (Entwurf bis Doku).</li>
+              <li>Koordination &amp; Teilnahme an einer ITIL® 4-Simulation (Apollo&nbsp;13).</li>
+            </ul>
+          </article>
+
+          <!-- Karte 3: Ausbildung – als Tag-Wolke -->
+          <article class="cv-card">
+            <h4 class="cv-title">Fachinformatiker Anwendungsentwicklung</h4>
+            <div class="tags" aria-label="Ausbildungsinhalte">
+              <span class="tag">Projektmanagement</span>
+              <span class="tag">OOP</span>
+              <span class="tag">Datenbanken</span>
+              <span class="tag">Scrum</span>
+              <span class="tag">SQL</span>
+              <span class="tag">Rechnungswesen</span>
+              <span class="tag">Systemanalyse &amp; UML</span>
+              <span class="tag">Anforderungsanalyse</span>
+            </div>
+          </article>
+
+          <!-- Karte 4: Querschnittserfahrung – Gastronomie -->
+          <article class="cv-card">
+            <h4 class="cv-title">Mehr als 20 Jahre Erfahrung im Gastronomiebereich</h4>
+            <div class="tags" aria-label="Schwerpunkte Gastronomie">
+              <span class="tag">Teamführung &amp; Einsatzplanung</span>
+              <span class="tag">Wareneinsatz/Budget</span>
+              <span class="tag">Qualitätsmanagement</span>
+              <span class="tag">Kundenservice</span>
+              <span class="tag">Leitung bis 25&nbsp;MA</span>
+              <span class="tag">Prozessverbesserung</span>
+              <span class="tag">Eventmanagement</span>
+              <span class="tag">Eigenverantwortliche Betriebsführung</span>
+            </div>
+          </article>
+        </div>
+
+        <!-- =====================================================
+             SKILLS • ZERTIFIKATE • SPRACHEN – 3-Spalten-Grid
+             (auf Mobil 1 Spalte; CSS: .cv-grid/.cv-box)
+             ===================================================== -->
+        <div class="cv-grid">
+          <!-- Spalte 1: Skills -->
+          <section class="cv-box" aria-labelledby="skills">
+            <h5 id="skills" class="cv-subtitle">Skills</h5>
+            <div class="tags">
+              <span class="tag">BPMN 2.0</span>
+              <span class="tag">UML</span>
+              <span class="tag">ITIL® 4</span>
+              <span class="tag">SCRUM</span>
+              <span class="tag">Power BI</span>
+              <span class="tag">DAX</span>
+              <span class="tag">Python</span>
+              <span class="tag">C#</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">T-SQL</span>
+              <span class="tag">Java</span>
+            </div>
+          </section>
+
+          <!-- Spalte 2: Zertifikate -->
+          <section class="cv-box" aria-labelledby="certs">
+            <h5 id="certs" class="cv-subtitle">Einige meiner Zertifizierungen</h5>
+            <ul class="cv-list">
+              <li>Power BI Data Analyst (PL-300), New Elements GmbH</li>
+              <li>AEVO – Ausbildereignung (IHK), Handelskammer Hamburg</li>
+              <li>ITIL® Foundation Certificate</li>
+              <li>EXIN Agile Scrum Master</li>
+            </ul>
+          </section>
+
+          <!-- Spalte 3: Sprachen -->
+          <section class="cv-box" aria-labelledby="lang">
+            <h5 id="lang" class="cv-subtitle">Sprachen</h5>
+            <ul class="cv-list">
+              <li>Deutsch – C1</li>
+              <li>Englisch – B1</li>
+              <li>Spanisch – Muttersprache</li>
+            </ul>
+          </section>
+        </div>
+
+        <!-- =====================================================
+             AKTIONEN – Buttons (PDF, LinkedIn)
+             Nutzen .btn / .btn--ghost aus global.css
+             ===================================================== -->
+        <div class="cv-actions">
+          <!-- Prüfe bitte den PDF-Pfad lokal/GitHub-Pages -->
+          <a class="btn"
+             href="assets/docs/LebenslaufDonimanPeña_052025_1.0.0.pdf"
+             target="_blank" rel="noopener">
+            Lebenslauf als PDF
+          </a>
+
+          <a class="btn btn--ghost"
+             href="https://www.linkedin.com/in/doniman-francisco-pe%C3%B1a-parra-609263232/"
+             target="_blank" rel="noopener">
+            LinkedIn
+          </a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================
+       (7) FOOTER-CONTAINER (globaler Kontakt + Footer)
+       - Wird durch site.js via fetch() mit includes/footer.html befüllt
+       - Enthält Kontaktblock + Copyright
+       ========================================================= -->
+  <div id="site-footer">
+    <!-- Fallback für No-JS -->
+    <noscript>
+      <section class="contact-block" aria-labelledby="kontaktTitle">
+        <div class="contact-inner container">
+          <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
+          <p class="contact-name">Doniman F. Peña Parra</p>
+          <p class="contact-email">
+            <a href="mailto:dofp79@hotmail.com" rel="nofollow">dofp79@hotmail.com</a>
+          </p>
         </div>
       </section>
-
-      <!-- Spalte 2: Zertifikate -->
-      <section class="cv-box" aria-labelledby="certs">
-        <h5 id="certs" class="cv-subtitle">Einige meiner Zertifizierungen</h5>
-        <ul class="cv-list">
-          <li>Power BI Data Analyst (PL-300), New Elements GmbH</li>
-          <li>AEVO – Ausbildereignung (IHK), Handelskammer Hamburg</li>
-          <li>ITIL® Foundation Certificate</li>
-          <li>EXIN Agile Scrum Master</li>
-        </ul>
-      </section>
-
-      <!-- Spalte 3: Sprachen -->
-      <section class="cv-box" aria-labelledby="lang">
-        <h5 id="lang" class="cv-subtitle">Sprachen</h5>
-        <ul class="cv-list">
-          <li>Deutsch – C1</li>
-          <li>Englisch – B1</li>
-          <li>Spanisch – Muttersprache</li>
-        </ul>
-      </section>
-    </div>
-
-    <!-- =====================================================
-         AKTIONEN – Buttons (PDF, LinkedIn)
-         Nutzen .btn / .btn--ghost aus global.css
-         ===================================================== -->
-    <div class="cv-actions">
-      <!-- Pfad bitte auf dein echtes PDF prüfen; rel="noopener" für Sicherheit -->
-      <a class="btn"
-         href="assets/docs/LebenslaufDonimanPeña_052025_1.0.0.pdf"
-         target="_blank"
-         rel="noopener">
-        Lebenslauf als PDF
-      </a>
-
-      <a class="btn btn--ghost"
-         href="https://www.linkedin.com/in/doniman-francisco-pe%C3%B1a-parra-609263232/"
-         target="_blank"
-         rel="noopener">
-        LinkedIn
-      </a>
-    </div>
-
+      <footer class="site-footer" role="contentinfo">
+        <div class="container subfooter__inner">
+          <p>&copy; <span data-year>2025</span> IT-Steuerung &amp; IT-Controlling</p>
+          <a class="to-top" href="#top">Nach oben ↑</a>
+        </div>
+      </footer>
+    </noscript>
   </div>
-</section>
+
+  <!-- =========================================================
+       (8) SCRIPTS
+       - site.js: enthält
+         • Drawer/Accordion/Scrollspy/Smooth Scroll
+         • E-Mail-Obfuskation
+         • Jahr im Footer
+         • fetch-Includes: #site-header & #site-footer
+       ========================================================= -->
+  <script src="assets/js/site.js" defer></script>
+
+  <!-- Optional: Mini-Inline-Guard – stellt sicher, dass Includes
+       auch ohne site.js (z. B. 404/Cache) nachgeladen werden.
+       Kann entfernt werden, wenn site.js stabil ausgeliefert wird. -->
+  <script>
+    /* Fallback-Include nur, wenn site.js den Header/ Footer nicht gesetzt hat */
+    document.addEventListener('DOMContentLoaded', () => {
+      const ensureInclude = (sel, url) => {
+        const host = document.querySelector(sel);
+        if (!host) return;
+        const hasContent = host.children.length > 0 && host.querySelector('noscript') === null;
+        if (hasContent) return; // bereits durch site.js geladen
+
+        fetch(url)
+          .then(r => r.ok ? r.text() : '')
+          .then(html => { if (html) host.innerHTML = html; })
+          .catch(() => { /* schweigend scheitern – Noscript-Fallback bleibt */ });
+      };
+      ensureInclude('#site-header', 'includes/header.html');
+      ensureInclude('#site-footer', 'includes/footer.html');
+    });
+  </script>
+</body>
+</html>
