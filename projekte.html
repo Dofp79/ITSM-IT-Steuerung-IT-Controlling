@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+  <!-- =========================================================
+       (0) DOKUMENT-SETUP & META
+       - SEO, Responsive, globales Design konsistent halten
+       ========================================================= -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projekte – ITSM · KPIs · Datenmodelle · Dashboards</title>
+  <meta name="description" content="Projekte: Measurement & Reporting nach ITIL 4, KPI-Design, Power BI Dashboards, Datenmodelle/ETL, Prozessmanagement." />
+
+  <!-- (Optional) Canonical falls GitHub Pages genutzt wird -->
+  <!-- <link rel="canonical" href="https://dofp79.github.io/ITSM-IT-Steuerung-IT-Controlling/projekte.html" /> -->
+
+  <!-- =========================================================
+       (1) FONTS – Self-hosted (Preload beschleunigt First Paint)
+       - Pfade müssen in /assets/fonts/ existieren
+       ========================================================= -->
+  <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
+
+  <!-- =========================================================
+       (2) GLOBAL CSS – zentrale Styles (Farben/Typo/Komponenten)
+       - Belässt das einheitliche Look & Feel
+       ========================================================= -->
+  <link rel="stylesheet" href="assets/css/global.css" />
+</head>
+
+<body id="top">
+  <!-- =========================================================
+       (3) A11Y: SKIP-LINK – Tastatur-Nutzer springen direkt zum Inhalt
+       Ziel: #mainContent
+       ========================================================= -->
+  <a class="skip-link" href="#mainContent">Zum Inhalt springen</a>
+
+  <!-- =========================================================
+       (4) HEADER-CONTAINER (wird via site.js dynamisch geladen)
+       - includes/header.html liefert Burger/Drawer + Navigation
+       - Noscript-Fallback stellt Funktion ohne JS sicher
+       ========================================================= -->
+  <header id="site-header" class="site-header" role="banner">
+    <noscript>
+      <!-- Fallback-Header (nur sichtbar, wenn JS deaktiviert ist) -->
+      <div class="container header-bar">
+        <a class="brand-right" href="index.html" aria-label="Startseite">
+          <img src="assets/DoniLogo_1.0.0.png" width="150" height="40" alt="Logo Doniman F. Peña Parra" class="brand-right__logo">
+        </a>
+      </div>
+      <nav class="nav-drawer" aria-label="Hauptnavigation">
+        <ul>
+          <li><a href="index.html">Start</a></li>
+          <li><a href="ueber-mich.html">Über mich</a></li>
+          <li><a href="projekte.html" aria-current="page">Projekte</a></li>
+          <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
+        </ul>
+      </nav>
+      <div class="brand-bar" aria-hidden="true"></div>
+    </noscript>
+  </header>
+
+  <!-- =========================================================
+       (5) HERO – Seitenkopf „Digitale Verwaltung gestalten“
+       HINWEIS:
+       - Klassen an globales Muster angepasst:
+         • Titel:   .hero__title (statt .headline)
+         • Lead:    .hero__lead  (statt .subhead)
+       - Mehrere Leads sind erlaubt (Absatz pro Zeile)
+       ========================================================= -->
+  <section class="hero" aria-label="Seitenkopf Projekte">
+    <div class="container hero-inner">
+      <h1 class="hero__title">Digitale Verwaltung gestalten</h1>
+      <p class="hero__lead">Von Daten zu Entscheidungen</p>
+      <p class="hero__lead">ITSM nach ITIL® 4 · KPIs · Datenmodelle/ETL · Dashboards · Prozessmanagement</p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       (6) MAIN – Eigenständiger Seiteninhalt
+       - ID #mainContent für Skip-Link
+       - Enthält: Projekte (Karten), Datenmodell, KI-Agenten
+       ========================================================= -->
+  <main id="mainContent" class="main" role="main">
+
+    <!-- =========================================================
+         (6.1) LEISTUNGSSCHWERPUNKTE / PROJEKTE
+         - Nutzt globales Karten-/Grid-Design
+         - data-full Attribute sind vorbereitet für Lightbox-Zoom
+           (Hinweis: Falls Lightbox genutzt werden soll, Script in site.js ergänzen)
+         ========================================================= -->
+    <section id="projekte" class="section container" aria-labelledby="projTitle">
+      <div class="sec-head">
+        <span class="sec-dot" aria-hidden="true"></span>
+        <h2 id="projTitle" class="sec-title">Measurement &amp; Reporting nach ITIL®&nbsp;4 Framework</h2>
+      </div>
+
+      <!-- HINWEIS: .grid ist im globalen CSS als 3-spaltiges Responsive Grid definiert -->
+      <div class="grid">
+        <!-- Karte 1 -->
+        <article class="card">
+          <!-- HINWEIS: data-full kann von einer optionalen Lightbox ausgewertet werden -->
+          <img
+            src="assets/img/PowerBI/CIM.png"
+            alt="ITIL Monitoring – Continual Improvement Dashboard mit Reifegrad, KPI-Ampeln und Priorisierung"
+            loading="lazy"
+            decoding="async"
+            data-full="assets/img/PowerBI/CIM.png">
+          <div class="card-body">
+            <h4>ITIL® Monitoring mit Continual Improvement</h4>
+            <p>
+              Das Dashboard zeigt Reifegrade verschiedener ITIL®&nbsp;4 Practices. Über KPI-Ampeln (Rot/Gelb/Grün) und
+              Priorisierung nach Phasen (Service Transition, Service Design, Service Operation usw.) lassen sich kritische
+              Handlungsfelder und Optimierungspotenziale faktenbasiert identifizieren.
+            </p>
+          </div>
+        </article>
+
+        <!-- Karte 2 -->
+        <article class="card">
+          <img
+            src="assets/img/PowerBI/KPIs_Dashboard.png"
+            alt="KPI-Dashboard – Tickets, Changes, IT-Assets und Vertragsvolumen, inklusive Performance-Übersicht"
+            loading="lazy"
+            decoding="async"
+            data-full="assets/img/PowerBI/KPIs_Dashboard.png">
+          <div class="card-body">
+            <h4>KPI-Design, Reporting &amp; ITSM-Controlling</h4>
+            <p>
+              Dieses Dashboard wurde mit Power BI zu demonstrativen Zwecken erstellt und visualisiert zentrale ITSM-Kennzahlen
+              nach ITIL®&nbsp;4. Es kombiniert KPI-Ampeln, Prozesskennzahlen (z.&nbsp;B. Tickets, Anrufe, Durchlaufzeiten) und eine
+              Service-Performance-Analyse – für eine auf einen Blick erfassbare Lage und faktenbasierte Entscheidungen.
+            </p>
+          </div>
+        </article>
+
+        <!-- Karte 3 -->
+        <article class="card">
+          <img
+            src="assets/img/PowerBI/ReferatKapasi.png"
+            alt="Kapazitäts-Dashboard – Auslastung, Story-Bearbeitung, Kapazitätstage und -stunden je Team"
+            loading="lazy"
+            decoding="async"
+            data-full="assets/img/PowerBI/ReferatKapasi.png">
+          <div class="card-body">
+            <h4>Kapazitäts-Dashboard</h4>
+            <p>
+              Transparente Darstellung der Kapazitäten einer IT-Abteilung mit Power&nbsp;BI: Teamverteilung, Aufgabenstatus sowie
+              Kapazitätstage/-stunden pro Story. Liefert Überblick über Auslastung, Fortschritt und Planungssicherheit – Basis
+              für steuerbare Ressourcenplanung im ITSM.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         (6.2) POWER BI / DATENMODELL
+         - zentrierte Darstellung eines Modells (1 Spalte)
+         - nutzt globale Kartenstyles
+         ========================================================= -->
+    <section class="section" id="architektur" aria-labelledby="archTitle">
+      <div class="sec-head">
+        <span class="sec-dot" aria-hidden="true"></span>
+        <h2 id="archTitle" class="sec-title">Datenmodell</h2>
+      </div>
+
+      <!-- HINWEIS: .center-wrap/.grid-1-centered sind projektabhängig;
+           falls nicht vorhanden, sorgt .container alleine für gute Breite -->
+      <div class="center-wrap centered">
+        <div class="grid-1-centered">
+          <article class="card">
+            <img
+              src="assets/img/PowerBI/Datenmodell.png"
+              alt="Power BI Datenmodell für ITSM – Fakten- und Dimensionstabellen"
+              loading="lazy"
+              decoding="async"
+              data-full="assets/img/PowerBI/Datenmodell.png" />
+            <div class="card-body stack">
+              <h4>Steuerung &amp; Reporting von ITSM-Daten im Power-BI-Datenmodell</h4>
+              <p>
+                Verknüpft Incidents, Changes, Assets &amp; SLAs über eine zentrale Datumstabelle und liefert die Basis für
+                belastbare KPIs und Dashboards.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         (6.3) KI-AGENTEN (Karten als Links, KEINE Lightbox)
+         - Komplette Karte klickbar (a umschließt Bild + Text)
+         - rel="noopener" für Sicherheit (neuer Prozesskontext)
+         ========================================================= -->
+    <section id="ki-agents" class="section container" aria-labelledby="kiTitle">
+      <div class="sec-head">
+        <span class="sec-dot" aria-hidden="true"></span>
+        <h2 id="kiTitle" class="sec-title">Einige von mir geprompte KI-Agenten</h2>
+      </div>
+
+      <div class="grid">
+        <!-- Agent 1 -->
+        <article class="card">
+          <a href="https://chatgpt.com/g/g-UYiBEofKD-itsm-standards-consultant" target="_blank" rel="noopener">
+            <img
+              src="assets/img/GPT_ITSM_StandardsConsultant.png"
+              alt="KI-Agent: ITSM-Standards Consultant – ITIL® 4, ISO/IEC 20000, COBIT; Empfehlungen von Strategie bis Betrieb"
+              loading="lazy" decoding="async">
+            <div class="card-body">
+              <h4>ITSM-Standards Consultant</h4>
+              <p>
+                Virtueller Berater für IT-Service-Management, spezialisiert auf Implementierung und Optimierung von
+                ITIL®&nbsp;4, ISO/IEC&nbsp;20000 und COBIT – zur wertorientierten Weiterentwicklung von IT-Organisationen.
+              </p>
+            </div>
+          </a>
+        </article>
+
+        <!-- Agent 2 -->
+        <article class="card">
+          <a href="https://chatgpt.com/g/g-6734f04e060c8190a7fadc8c552b0e6e-modellierung-betrieblichen-informationssystemen" target="_blank" rel="noopener">
+            <img
+              src="assets/img/GPT_ModellierungBetrieblicheInformationssystemen.png"
+              alt="KI-Agent: Modellierung betrieblicher Informationssysteme – Daten-/Prozessmodelle, sichere Architekturen"
+              loading="lazy" decoding="async">
+            <div class="card-body">
+              <h4>Modellierung betrieblicher Informationssysteme</h4>
+              <p>
+                Assistent &amp; Berater zu ITSM, Prozessmodellierung und Systemarchitekturen – Analyse, Visualisierung,
+                Optimierung nach ITIL®&nbsp;4, praxisnah und umsetzungsorientiert.
+              </p>
+            </div>
+          </a>
+        </article>
+
+        <!-- Agent 3 -->
+        <article class="card">
+          <a href="https://chatgpt.com/g/g-68150f83fda081919d979c8418039ee5-dashboard-design" target="_blank" rel="noopener">
+            <img
+              src="assets/img/GPT_DashboardDesingn.png"
+              alt="KI-Agent: Dashboard Design – KPI-Design, barrierearme Visualisierung, wartbare BI-Modelle"
+              loading="lazy" decoding="async">
+            <div class="card-body">
+              <h4>Dashboard Design</h4>
+              <p>
+                Begleitung rund um Power&nbsp;BI, ITSM nach ITIL®&nbsp;4 und agile Steuerung – für verständliche, effiziente und
+                managementtaugliche Dashboards mit echtem Mehrwert.
+              </p>
+            </div>
+          </a>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       (7) FOOTER-CONTAINER (globaler Kontakt + Footer)
+       - Wird via site.js dynamisch aus includes/footer.html geladen
+       - Noscript-Fallback hält Seite ohne JS funktionsfähig
+       ========================================================= -->
+  <div id="site-footer">
+    <noscript>
+      <section class="contact-block" aria-labelledby="kontaktTitle">
+        <div class="contact-inner container">
+          <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
+          <p class="contact-name">Doniman F. Peña Parra</p>
+          <p class="contact-email">
+            <a href="mailto:dofp79@hotmail.com" rel="nofollow">dofp79@hotmail.com</a>
+          </p>
+        </div>
+      </section>
+      <footer class="site-footer" role="contentinfo">
+        <div class="container subfooter__inner">
+          <p>&copy; <span data-year>2025</span> IT-Steuerung &amp; IT-Controlling</p>
+          <a class="to-top" href="#top">Nach oben ↑</a>
+        </div>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- =========================================================
+       (8) SCRIPTS
+       - site.js lädt Header/Footer, steuert Drawer/Accordion/Scrollspy
+       - E-Mail-Obfuskation + Jahr + Smooth-Scroll
+       ========================================================= -->
+  <script src="assets/js/site.js" defer></script>
+
+  <!-- (Optional) Mini-Fallback: Lädt Includes, falls site.js nicht greift.
+       Kann entfernt werden, wenn site.js stabil verfügbar ist. -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const ensureInclude = (sel, url) => {
+        const host = document.querySelector(sel);
+        if (!host) return;
+        const hasContent = host.children.length > 0 && host.querySelector('noscript') === null;
+        if (hasContent) return; // bereits durch site.js geladen
+        fetch(url).then(r => r.ok ? r.text() : '').then(html => { if (html) host.innerHTML = html; });
+      };
+      ensureInclude('#site-header', 'includes/header.html');
+      ensureInclude('#site-footer', 'includes/footer.html');
+    });
+  </script>
+</body>
+</html>
