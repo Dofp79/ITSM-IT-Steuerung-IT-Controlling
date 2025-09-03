@@ -3,18 +3,18 @@
 <head>
   <!-- =========================================================
        (0) DOKUMENT-SETUP & META
-       - SEO, Responsive, globales Design konsistent halten
+       - Responsive, SEO, globales Design konsistent halten
        ========================================================= -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Projekte – ITSM · KPIs · Datenmodelle · Dashboards</title>
   <meta name="description" content="Projekte: Measurement & Reporting nach ITIL 4, KPI-Design, Power BI Dashboards, Datenmodelle/ETL, Prozessmanagement." />
 
-  <!-- (Optional) Canonical falls GitHub Pages genutzt wird -->
+  <!-- (Optional) Canonical, falls GitHub Pages o. ä. -->
   <!-- <link rel="canonical" href="https://dofp79.github.io/ITSM-IT-Steuerung-IT-Controlling/projekte.html" /> -->
 
   <!-- =========================================================
-       (1) FONTS – Self-hosted (Preload beschleunigt First Paint)
+       (1) FONTS – Self-hosted (Preload für schnelleren First Paint)
        - Pfade müssen in /assets/fonts/ existieren
        ========================================================= -->
   <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
@@ -22,14 +22,14 @@
 
   <!-- =========================================================
        (2) GLOBAL CSS – zentrale Styles (Farben/Typo/Komponenten)
-       - Belässt das einheitliche Look & Feel
+       - Belässt das einheitliche Look & Feel aus global.css
        ========================================================= -->
   <link rel="stylesheet" href="assets/css/global.css" />
 </head>
 
 <body id="top">
   <!-- =========================================================
-       (3) A11Y: SKIP-LINK – Tastatur-Nutzer springen direkt zum Inhalt
+       (3) A11Y: SKIP-LINK – Tastaturnutzende springen zum Inhalt
        Ziel: #mainContent
        ========================================================= -->
   <a class="skip-link" href="#mainContent">Zum Inhalt springen</a>
@@ -37,7 +37,9 @@
   <!-- =========================================================
        (4) HEADER-CONTAINER (wird via site.js dynamisch geladen)
        - includes/header.html liefert Burger/Drawer + Navigation
-       - Noscript-Fallback stellt Funktion ohne JS sicher
+       - Noscript-Fallback stellt Navigation ohne JS sicher
+       - WICHTIG: Stelle sicher, dass includes/header.html
+         die gleichen Links hat wie im Fallback unten.
        ========================================================= -->
   <header id="site-header" class="site-header" role="banner">
     <noscript>
@@ -49,6 +51,7 @@
       </div>
       <nav class="nav-drawer" aria-label="Hauptnavigation">
         <ul>
+          <!-- MENÜ: Nutzer können auf die anderen Seiten navigieren -->
           <li><a href="index.html">Start</a></li>
           <li><a href="ueber-mich.html">Über mich</a></li>
           <li><a href="projekte.html" aria-current="page">Projekte</a></li>
@@ -62,10 +65,10 @@
   <!-- =========================================================
        (5) HERO – Seitenkopf „Digitale Verwaltung gestalten“
        HINWEIS:
-       - Klassen an globales Muster angepasst:
-         • Titel:   .hero__title (statt .headline)
-         • Lead:    .hero__lead  (statt .subhead)
-       - Mehrere Leads sind erlaubt (Absatz pro Zeile)
+       - Klassen am globalen Muster ausgerichtet:
+         • Titel: .hero__title
+         • Lead:  .hero__lead
+       - Mehrere Lead-Absätze sind erlaubt (je Zeile ein <p>)
        ========================================================= -->
   <section class="hero" aria-label="Seitenkopf Projekte">
     <div class="container hero-inner">
@@ -78,15 +81,16 @@
   <!-- =========================================================
        (6) MAIN – Eigenständiger Seiteninhalt
        - ID #mainContent für Skip-Link
-       - Enthält: Projekte (Karten), Datenmodell, KI-Agenten
+       - Enthält: Projekte (Karten), Datenmodell (zentriert), KI-Agenten
        ========================================================= -->
   <main id="mainContent" class="main" role="main">
 
     <!-- =========================================================
-         (6.1) LEISTUNGSSCHWERPUNKTE / PROJEKTE
-         - Nutzt globales Karten-/Grid-Design
-         - data-full Attribute sind vorbereitet für Lightbox-Zoom
-           (Hinweis: Falls Lightbox genutzt werden soll, Script in site.js ergänzen)
+         (6.1) LEISTUNGSSCHWERPUNKTE / PROJEKTE (GRUPPE A)
+         ANFORDERUNG: Die Bilder + Infos zu
+          • „ITIL® Monitoring mit Continual Improvement“ und
+          • „Kapazitäts-Dashboard“
+         müssen zusammenstehen → daher in derselben Grid-Gruppe.
          ========================================================= -->
     <section id="projekte" class="section container" aria-labelledby="projTitle">
       <div class="sec-head">
@@ -94,11 +98,11 @@
         <h2 id="projTitle" class="sec-title">Measurement &amp; Reporting nach ITIL®&nbsp;4 Framework</h2>
       </div>
 
-      <!-- HINWEIS: .grid ist im globalen CSS als 3-spaltiges Responsive Grid definiert -->
+      <!-- GRUPPE A: genau diese beiden Karten zusammen in EINEM Grid -->
       <div class="grid">
-        <!-- Karte 1 -->
+        <!-- Karte A1: ITIL Monitoring (Bild + Text gehören zusammen) -->
         <article class="card">
-          <!-- HINWEIS: data-full kann von einer optionalen Lightbox ausgewertet werden -->
+          <!-- HINWEIS: data-full → optionales Lightbox-Zoom (kann in site.js ergänzt werden) -->
           <img
             src="assets/images/projekte/ITIL_Monitoring.png"
             alt="ITIL Monitoring – Continual Improvement Dashboard mit Reifegrad, KPI-Ampeln und Priorisierung"
@@ -109,31 +113,13 @@
             <h4>ITIL® Monitoring mit Continual Improvement</h4>
             <p>
               Das Dashboard zeigt Reifegrade verschiedener ITIL®&nbsp;4 Practices. Über KPI-Ampeln (Rot/Gelb/Grün) und
-              Priorisierung nach Phasen (Service Transition, Service Design, Service Operation usw.) lassen sich kritische
-              Handlungsfelder und Optimierungspotenziale faktenbasiert identifizieren.
+              die Priorisierung nach Phasen (Service Transition, Service Design, Service Operation usw.) lassen sich
+              kritische Handlungsfelder und Optimierungspotenziale faktenbasiert identifizieren.
             </p>
           </div>
         </article>
 
-        <!-- Karte 2 -->
-        <article class="card">
-          <img
-            src="assets/images/projekte/KPIs_Dashboard.png"
-            alt="KPI-Dashboard – Tickets, Changes, IT-Assets und Vertragsvolumen, inklusive Performance-Übersicht"
-            loading="lazy"
-            decoding="async"
-            data-full="assets/images/projekte/KPIs_Dashboard.png">
-          <div class="card-body">
-            <h4>KPI-Design, Reporting &amp; ITSM-Controlling</h4>
-            <p>
-              Dieses Dashboard wurde mit Power BI zu demonstrativen Zwecken erstellt und visualisiert zentrale ITSM-Kennzahlen
-              nach ITIL®&nbsp;4. Es kombiniert KPI-Ampeln, Prozesskennzahlen (z.&nbsp;B. Tickets, Anrufe, Durchlaufzeiten) und eine
-              Service-Performance-Analyse – für eine auf einen Blick erfassbare Lage und faktenbasierte Entscheidungen.
-            </p>
-          </div>
-        </article>
-
-        <!-- Karte 3 -->
+        <!-- Karte A2: Kapazitäts-Dashboard (direkt neben A1, selbe Grid-Gruppe) -->
         <article class="card">
           <img
             src="assets/images/projekte/IT32ReferatKapa.png"
@@ -144,9 +130,30 @@
           <div class="card-body">
             <h4>Kapazitäts-Dashboard</h4>
             <p>
-              Transparente Darstellung der Kapazitäten einer IT-Abteilung mit Power&nbsp;BI: Teamverteilung, Aufgabenstatus sowie
-              Kapazitätstage/-stunden pro Story. Liefert Überblick über Auslastung, Fortschritt und Planungssicherheit – Basis
-              für steuerbare Ressourcenplanung im ITSM.
+              Transparente Darstellung der Kapazitäten einer IT-Abteilung mit Power&nbsp;BI: Teamverteilung, Aufgabenstatus
+              sowie Kapazitätstage/-stunden pro Story. Liefert Überblick über Auslastung, Fortschritt und Planungssicherheit –
+              die Basis für steuerbare Ressourcenplanung im ITSM.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <!-- GRUPPE B: weitere Karte(n) separat, damit A1+A2 visuell zusammen bleiben -->
+      <div class="grid">
+        <!-- Karte B1: KPI-Design (separates Grid → bricht nicht zwischen A1/A2) -->
+        <article class="card">
+          <img
+            src="assets/images/projekte/KPIs_Dashboard.png"
+            alt="KPI-Dashboard – Tickets, Changes, IT-Assets und Vertragsvolumen, inklusive Performance-Übersicht"
+            loading="lazy"
+            decoding="async"
+            data-full="assets/images/projekte/KPIs_Dashboard.png">
+          <div class="card-body">
+            <h4>KPI-Design, Reporting &amp; ITSM-Controlling</h4>
+            <p>
+              Power-BI-Dashboard zur Visualisierung zentraler ITSM-Kennzahlen nach ITIL®&nbsp;4. Kombiniert KPI-Ampeln,
+              Prozesskennzahlen (z.&nbsp;B. Tickets, Anrufe, Durchlaufzeiten) und eine Service-Performance-Analyse – für
+              eine auf einen Blick erfassbare Lage und faktenbasierte Entscheidungen.
             </p>
           </div>
         </article>
@@ -155,8 +162,10 @@
 
     <!-- =========================================================
          (6.2) POWER BI / DATENMODELL
-         - zentrierte Darstellung eines Modells (1 Spalte)
-         - nutzt globale Kartenstyles
+         ANFORDERUNG: Bild MUSS zentriert sein.
+         Umsetzung:
+         - img erhält style="display:block;margin-inline:auto" → echte Zentrierung
+         - zusätzlich Containerlayout belassen (kompatibel zum globalen Stil)
          ========================================================= -->
     <section class="section" id="architektur" aria-labelledby="archTitle">
       <div class="sec-head">
@@ -164,26 +173,24 @@
         <h2 id="archTitle" class="sec-title">Datenmodell</h2>
       </div>
 
-      <!-- HINWEIS: .center-wrap/.grid-1-centered sind projektabhängig;
-           falls nicht vorhanden, sorgt .container alleine für gute Breite -->
-      <div class="center-wrap centered">
-        <div class="grid-1-centered">
-          <article class="card">
-            <img
-              src="assets/images/projekte/Datenmodell_2.png"
-              alt="Power BI Datenmodell für ITSM – Fakten- und Dimensionstabellen"
-              loading="lazy"
-              decoding="async"
-              data-full="assets/img/PowerBI/Datenmodell.png" />
-            <div class="card-body stack">
-              <h4>Steuerung &amp; Reporting von ITSM-Daten im Power-BI-Datenmodell</h4>
-              <p>
-                Verknüpft Incidents, Changes, Assets &amp; SLAs über eine zentrale Datumstabelle und liefert die Basis für
-                belastbare KPIs und Dashboards.
-              </p>
-            </div>
-          </article>
-        </div>
+      <div class="container">
+        <!-- Einspaltig zentrierte Karte -->
+        <article class="card" style="max-width: 1100px; margin: 0 auto;">
+          <img
+            src="assets/images/projekte/Datenmodell_2.png"
+            alt="Power BI Datenmodell für ITSM – Fakten- und Dimensionstabellen"
+            loading="lazy"
+            decoding="async"
+            data-full="assets/images/projekte/Datenmodell_2.png"
+            style="display:block; margin-inline:auto;" /><!-- ← harte Zentrierung -->
+          <div class="card-body stack">
+            <h4>Steuerung &amp; Reporting von ITSM-Daten im Power-BI-Datenmodell</h4>
+            <p>
+              Verknüpft Incidents, Changes, Assets &amp; SLAs über eine zentrale Datumstabelle und liefert die Basis für
+              belastbare KPIs und Dashboards.
+            </p>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -209,8 +216,8 @@
             <div class="card-body">
               <h4>ITSM-Standards Consultant</h4>
               <p>
-                Virtueller Berater für IT-Service-Management, spezialisiert auf Implementierung und Optimierung von
-                ITIL®&nbsp;4, ISO/IEC&nbsp;20000 und COBIT – zur wertorientierten Weiterentwicklung von IT-Organisationen.
+                Virtueller Berater für IT-Service-Management – Implementierung &amp; Optimierung von ITIL®&nbsp;4,
+                ISO/IEC&nbsp;20000 und COBIT zur wertorientierten Weiterentwicklung der IT-Organisation.
               </p>
             </div>
           </a>
@@ -283,8 +290,46 @@
        (8) SCRIPTS
        - site.js lädt Header/Footer, steuert Drawer/Accordion/Scrollspy
        - E-Mail-Obfuskation + Jahr + Smooth-Scroll
+       - Zusätzliches Mini-Script setzt aria-current im Menü,
+         wenn includes/header.html per fetch geladen wurde.
        ========================================================= -->
   <script src="assets/js/site.js" defer></script>
+  <script>
+    // -----------------------------------------------
+    // NAV-STATUS nach dynamischem Header-Load setzen:
+    // Markiert den aktuellen Menüpunkt (aria-current="page"),
+    // auch wenn der Header via fetch() nachgeladen wurde.
+    // -----------------------------------------------
+    (function () {
+      const setActiveNav = () => {
+        const path = location.pathname.split('/').pop() || 'index.html';
+        const container = document.getElementById('site-header');
+        if (!container) return;
+        const links = container.querySelectorAll('a[href]');
+        links.forEach(a => {
+          const href = a.getAttribute('href');
+          if (!href) return;
+          const isCurrent = href.endsWith(path);
+          if (isCurrent) {
+            a.setAttribute('aria-current', 'page');
+            a.classList.add('is-active'); // falls dein CSS dies berücksichtigt
+          } else {
+            a.removeAttribute('aria-current');
+            a.classList.remove('is-active');
+          }
+        });
+      };
+
+      // Versuche nach DOMContentLoaded und nach kurzer Verzögerung (Header-include braucht Zeit)
+      document.addEventListener('DOMContentLoaded', () => {
+        setActiveNav();
+        setTimeout(setActiveNav, 200); // zweiter Versuch nach Include
+      });
+
+      // Optional: bei History-Navigation (falls SPA-ähnlich genutzt)
+      window.addEventListener('popstate', setActiveNav);
+    })();
+  </script>
 
   <!-- (Optional) Mini-Fallback: Lädt Includes, falls site.js nicht greift.
        Kann entfernt werden, wenn site.js stabil verfügbar ist. -->
