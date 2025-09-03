@@ -1,313 +1,335 @@
 /* ===========================================================================
    Globales JavaScript für ITSM-Website
    ===========================================================================
-   Funktionen:
+   Enthält:
    - $ / $$ Utilities
-   - Burger-Menü (offcanvas Drawer mit A11y und Focus-Handling)
-   - Aktive Link-Markierung (Blau → Rot)
-   - Scrollspy (Menü folgt Scroll)
-   - Accordion nach WAI-ARIA
-   - E-Mail-Spamschutz per JS
-   - Automatisches Jahr im Footer
-   - Smooth Scroll für "Nach oben"
-   - Dynamisches Laden von Header und Footer (Modularisierung)
+   - Header-Includes (fetch) + NACHLAUFENDE Initialisierung
+   - Burger / Drawer (A11y, Focus-Trap, Close-Logik)
+   - Aktiver Menüpunkt (aria-current + .is-active)
+   - Optional: Scrollspy (für In-Page-Anker)
+   - Accordion (WAI-ARIA light)
+   - Kontakt-Mail (Spam-Schutz)
+   - Jahr im Footer
+   - Optional: Smooth Scroll für "Nach oben"
+   ===========================================================================
+   WICHTIG:
+   - Der Header (mit .burger & #navdrawer) wird per fetch() geladen.
+   - Alle Event-Listener für Menü/Drawer werden ERST DANACH gebunden.
    =========================================================================== */
 
 (() => {
   "use strict";
 
   /* ---------------------------------------------------------------------------
-   * 0) GRUNDEINSTELLUNGEN + HILFSFUNKTIONEN
-   * ---------------------------------------------------------------------------
-   * Hier werden Konfigurationswerte und Mini-Utilities definiert.
-   * --------------------------------------------------------------------------- */
+   * (0) GRUNDEINSTELLUNGEN + HILFSFUNKTIONEN
+   * ------------------------------------------------------------------------- */
 
-  const trapFocusEnabled  = true;    // Fokusfang im geöffneten Drawer aktivieren
-  const SINGLE_OPEN       = false;   // Nur ein Accordion-Panel gleichzeitig offen?
-  const SCROLLSPY_ENABLED = true;    // Scrollspy aktivieren?
-  const SCROLLSPY_OFFSET  = 120;     // Offset für Scrollspy in Pixel
+  // Konfig
+  const trapFocusEnabled  = true;   // Fokusfang im geöffneten Drawer
+  const SINGLE_OPEN       = false;  // Accordion: nur ein Panel gleichzeitig?
+  const SCROLLSPY_ENABLED = true;   // Scrollspy für In-Page-Anker
+  const SCROLLSPY_OFFSET  = 120;    // Offset in px (abhängig von Headerhöhe)
 
-  // Kurzschreibweise für DOM-Selektoren
+  // DOM-Helfer
   const $  = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
-  // Selektor für fokussierbare Elemente im Drawer (für Fokus-Management)
-  const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  // Selektor für fokussierbare Elemente (für Focus-Trap)
+  const FOCUSABLE =
+    'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+
+  // Name der aktuellen Datei (zur Menü-Markierung bei Seitenwechseln)
+  const CURRENT_PAGE = (() => {
+    const p = location.pathname.split("/").pop();
+    return p && p !== "/" ? p : "index.html";
+  })();
+
 
   /* ---------------------------------------------------------------------------
-   * 1) BURGER / DRAWER (Offcanvas-Navigation)
+   * (1) HEADER & FOOTER – dynamisch laden
    * ---------------------------------------------------------------------------
-   * Öffnet und schließt den seitlichen Drawer.
-   * - mit aria-expanded
-   * - Fokusfang bei geöffnetem Drawer
-   * - Schließt bei ESC, Klick außerhalb, Resize etc.
-   * --------------------------------------------------------------------------- */
+   * Lädt includes/header.html & includes/footer.html in #site-header/#site-footer
+   * und ruft DANACH die Initialisierung des Menüs auf.
+   * ------------------------------------------------------------------------- */
 
-  const burger = $('.burger');
-  const drawer = $('#navdrawer');
-  let lastFocus = null; // Für Fokus-Rückgabe nach Schließen
+  document.addEventListener("DOMContentLoaded", () => {
+    // Mini-Include-Loader: lädt HTML in Zielcontainer
+    const loadInclude = (selector, url) => {
+      const host = document.querySelector(selector);
+      if (!host) return Promise.resolve(false); // Container existiert nicht → fertig
+      return fetch(url)
+        .then(res => (res.ok ? res.text() : ""))
+        .then(html => {
+          if (html) host.innerHTML = html;
+          return !!html;
+        })
+        .catch(() => false);
+    };
 
-  // Aktuelles Label im Burger-Button setzen
-  const updateBurgerLabel = (open) => {
-    const label = burger?.querySelector('.burger__label');
-    if (label) label.textContent = open ? 'Menü schließen' : 'Themen';
-  };
+    // Header + Footer laden → anschließend Menü initialisieren
+    Promise.all([
+      loadInclude("#site-header", "includes/header.html"),
+      loadInclude("#site-footer", "includes/footer.html"),
+    ]).then(() => {
+      initHeaderAndMenu();   // jetzt existieren .burger & #navdrawer → Events binden
+      markActiveMenuLink();  // aktiven Menüpunkt markieren (aria-current / .is-active)
+    });
+  });
 
-  // Fokus innerhalb des Drawers halten (Focus Trap)
-  const handleFocusTrap = (e) => {
-    if (!trapFocusEnabled || !drawer?.classList.contains('is-open') || e.key !== 'Tab') return;
 
-    const focusables = $$(FOCUSABLE, drawer).filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
-    if (!focusables.length) return;
+  /* ---------------------------------------------------------------------------
+   * (2) HEADER/ MENÜ – Initialisierung NACH Include
+   * ---------------------------------------------------------------------------
+   * - Burger/Drawer-Logik (A11y, Focus-Trap, Close-Mechaniken)
+   * - Outside-Click, ESC, Resize, Link-Klick → Drawer schließen
+   * ------------------------------------------------------------------------- */
 
-    const first = focusables[0];
-    const last  = focusables[focusables.length - 1];
+  function initHeaderAndMenu() {
+    // Sicherheit: Elemente existieren erst nach Include
+    const burger = $(".burger");
+    const drawer = $("#navdrawer");
+    if (!burger || !drawer) return; // Kein Header auf der Seite
 
-    if (e.shiftKey && document.activeElement === first) {
-      last.focus();
-      e.preventDefault();
-    }
-    if (!e.shiftKey && document.activeElement === last) {
-      first.focus();
-      e.preventDefault();
-    }
-  };
+    let lastFocus = null; // Zurück zum vorherigen Fokus beim Schließen
 
-  // Drawer öffnen oder schließen
-  const setDrawer = (open) => {
-    if (!burger || !drawer) return;
+    // Label des Burgers (visuelles Feedback)
+    const updateBurgerLabel = (open) => {
+      const label = burger.querySelector(".burger__label");
+      if (label) label.textContent = open ? "Menü schließen" : "Themen";
+    };
 
-    burger.setAttribute('aria-expanded', String(open));
-    drawer.classList.toggle('is-open', open);
-    document.body.style.overflow = open ? 'hidden' : '';
-    updateBurgerLabel(open);
+    // Focus-Trap im geöffneten Drawer halten
+    const handleFocusTrap = (e) => {
+      if (!trapFocusEnabled || e.key !== "Tab" || !drawer.classList.contains("is-open")) return;
+      const focusables = $$(FOCUSABLE, drawer).filter(el => !el.hasAttribute("disabled") && el.offsetParent !== null);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last  = focusables[focusables.length - 1];
+      // Shift + Tab → vom ersten zum letzten
+      if (e.shiftKey && document.activeElement === first) {
+        last.focus();
+        e.preventDefault();
+      }
+      // Tab → vom letzten zum ersten
+      if (!e.shiftKey && document.activeElement === last) {
+        first.focus();
+        e.preventDefault();
+      }
+    };
 
-    if (open) {
-      lastFocus = document.activeElement;
-      const firstFocusable = drawer.querySelector(FOCUSABLE);
-      firstFocusable?.focus({ preventScroll: true });
-      document.addEventListener('keydown', handleFocusTrap);
-    } else {
-      (lastFocus instanceof HTMLElement ? lastFocus : burger).focus({ preventScroll: true });
-      document.removeEventListener('keydown', handleFocusTrap);
-    }
-  };
+    // Drawer öffnen/schließen
+    const setDrawer = (open) => {
+      burger.setAttribute("aria-expanded", String(open));
+      drawer.classList.toggle("is-open", open);
+      document.body.style.overflow = open ? "hidden" : "";
+      updateBurgerLabel(open);
 
-  // Drawer-Ereignisse initialisieren
-  if (burger && drawer) {
-    setDrawer(false); // Start: Drawer geschlossen
+      if (open) {
+        lastFocus = document.activeElement;
+        const firstFocusable = drawer.querySelector(FOCUSABLE);
+        firstFocusable?.focus({ preventScroll: true });
+        document.addEventListener("keydown", handleFocusTrap);
+      } else {
+        (lastFocus instanceof HTMLElement ? lastFocus : burger).focus({ preventScroll: true });
+        document.removeEventListener("keydown", handleFocusTrap);
+      }
+    };
 
-    // Klick auf Burger toggelt Drawer
-    burger.addEventListener('click', () => {
-      const open = burger.getAttribute('aria-expanded') === 'true';
-      setDrawer(!open);
+    // Startzustand
+    setDrawer(false);
+
+    // A) Burger klick → toggeln
+    burger.addEventListener("click", () => {
+      const isOpen = burger.getAttribute("aria-expanded") === "true";
+      setDrawer(!isOpen);
     });
 
-    // Klick außerhalb schließt den Drawer
-    document.addEventListener('click', (e) => {
-      if (!drawer.classList.contains('is-open')) return;
+    // B) Klick außerhalb → schließen
+    document.addEventListener("click", (e) => {
+      if (!drawer.classList.contains("is-open")) return;
       const t = e.target;
       if (!(t instanceof Node)) return;
       if (!drawer.contains(t) && !burger.contains(t)) setDrawer(false);
     });
 
-    // ESC-Taste schließt den Drawer
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') setDrawer(false);
+    // C) ESC → schließen
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") setDrawer(false);
     });
 
-    // Klick auf Link im Drawer schließt diesen
-    drawer.addEventListener('click', (e) => {
-      const link = (e.target instanceof HTMLElement) ? e.target.closest('a') : null;
+    // D) Navigation im Drawer → nach Klick schließen
+    drawer.addEventListener("click", (e) => {
+      const link = (e.target instanceof HTMLElement) ? e.target.closest("a") : null;
       if (link) setDrawer(false);
     });
 
-    // Fenstergröße ändert sich → Drawer zur Sicherheit schließen
-    window.addEventListener('resize', () => setDrawer(false));
+    // E) Layoutwechsel → schließen
+    window.addEventListener("resize", () => setDrawer(false));
   }
 
+
   /* ---------------------------------------------------------------------------
-   * 2) AKTIVER LINK IM DRAWER (Blau → Rot)
+   * (3) AKTIVER MENÜPUNKT – Multi-Page & In-Page
    * ---------------------------------------------------------------------------
-   * Markiert den aktuell aktiven Menüpunkt (z. B. beim Klick oder Hash-Wechsel)
-   * --------------------------------------------------------------------------- */
+   * - Markiert den Link der aktuellen Seite (index.html, projekte.html …)
+   * - Für In-Page-Anker (#id) gibt es zusätzlich Scrollspy (unten)
+   * ------------------------------------------------------------------------- */
 
-  const drawerLinks = $$('#navdrawer a[href^="#"]');
+  function markActiveMenuLink() {
+    const header = $("#site-header");
+    if (!header) return;
 
-  const clearActive = () => {
-    drawerLinks.forEach(l => {
-      l.classList.remove('is-active');
-      l.removeAttribute('aria-current');
+    // Alle Links im Header/Drawer
+    const links = header.querySelectorAll('a[href]');
+    links.forEach(a => {
+      const href = a.getAttribute("href") || "";
+      const isSamePage = href.endsWith(CURRENT_PAGE);
+      a.classList.toggle("is-active", isSamePage);
+      if (isSamePage) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
     });
-  };
 
-  const setActiveByHash = (hash) => {
-    if (!hash) return;
-    const link = drawerLinks.find(l => l.getAttribute('href') === hash);
-    if (link) {
-      clearActive();
-      link.classList.add('is-active');
-      link.setAttribute('aria-current', 'page');
-    }
-  };
-
-  // Klick → aktiven Link setzen
-  drawerLinks.forEach(link => {
-    link.addEventListener('click', () => setActiveByHash(link.getAttribute('href')));
-  });
-
-  // Seite lädt → aktiven Link setzen
-  if (location.hash) setActiveByHash(location.hash);
-
-  // Hash in URL ändert sich (via Browser-Vor/Zurück) → aktiv setzen
-  window.addEventListener('hashchange', () => setActiveByHash(location.hash));
-
-  /* ---------------------------------------------------------------------------
-   * 3) SCROLLSPY
-   * ---------------------------------------------------------------------------
-   * Beobachtet Scrollposition und markiert den Menüpunkt der gerade sichtbaren Sektion
-   * --------------------------------------------------------------------------- */
-
-  if (SCROLLSPY_ENABLED) {
-    (function initScrollspy() {
-      const sectionMap = new Map();
-      drawerLinks.forEach(l => {
-        const id = (l.getAttribute('href') || '').replace('#', '');
-        const sec = id ? document.getElementById(id) : null;
-        if (sec) sectionMap.set(sec, l);
-      });
-      if (!sectionMap.size) return;
-
-      const onScroll = () => {
-        let current = null;
-        sectionMap.forEach((link, section) => {
-          const rect = section.getBoundingClientRect();
-          if (rect.top <= SCROLLSPY_OFFSET && rect.bottom > SCROLLSPY_OFFSET) {
-            current = link;
-          }
-        });
-        if (current) {
-          clearActive();
-          current.classList.add('is-active');
-          current.setAttribute('aria-current', 'page');
-        }
-      };
-
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll(); // Initiale Ausführung
-    })();
+    // In-Page-Links im Drawer (für Scrollspy)
+    // Beispiel: <a href="#projekte">…</a>
+    const drawerLinks = $$('#navdrawer a[href^="#"]');
+    if (drawerLinks.length && SCROLLSPY_ENABLED) initScrollspy(drawerLinks);
   }
 
+
   /* ---------------------------------------------------------------------------
-   * 4) ACCORDION (WAI-ARIA-konform)
+   * (4) SCROLLSPY – hält In-Page-Menüpunkte synchron zum Scroll
    * ---------------------------------------------------------------------------
-   * Öffnet und schließt Panels (optional: nur ein Panel offen)
-   * --------------------------------------------------------------------------- */
+   * - nur für Drawer-Links, die auf #anker verweisen
+   * ------------------------------------------------------------------------- */
 
-  const triggers = $$('.accordion__trigger');
+  function initScrollspy(drawerLinks) {
+    // Zuordnung: Abschnitt → Link
+    const sectionMap = new Map();
+    drawerLinks.forEach(l => {
+      const id = (l.getAttribute("href") || "").replace("#", "");
+      const sec = id ? document.getElementById(id) : null;
+      if (sec) sectionMap.set(sec, l);
+    });
+    if (!sectionMap.size) return;
 
-  if (triggers.length) {
+    const clearActive = () => {
+      drawerLinks.forEach(l => { l.classList.remove("is-active"); l.removeAttribute("aria-current"); });
+    };
+
+    const onScroll = () => {
+      let current = null;
+      sectionMap.forEach((link, section) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= SCROLLSPY_OFFSET && rect.bottom > SCROLLSPY_OFFSET) current = link;
+      });
+      if (current) {
+        clearActive();
+        current.classList.add("is-active");
+        current.setAttribute("aria-current", "page");
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll(); // initial
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * (5) ACCORDION – WAI-ARIA light
+   * ------------------------------------------------------------------------- */
+
+  function initAccordion() {
+    const triggers = $$('.accordion__trigger');
+    if (!triggers.length) return;
+
     const panels = new Map(
       triggers.map(btn => {
-        const id = btn.getAttribute('aria-controls');
+        const id = btn.getAttribute("aria-controls");
         return [btn, id ? document.getElementById(id) : null];
       })
     );
 
-    // Start: alles geschlossen
+    // Startzustand: alle zu
     panels.forEach((panel, btn) => {
-      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute("aria-expanded", "false");
       if (panel) panel.hidden = true;
     });
 
-    // Klick-Event für jedes Accordion-Element
-    triggers.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const panelId = btn.getAttribute('aria-controls');
-        const panel = panelId ? document.getElementById(panelId) : null;
-        const willOpen = btn.getAttribute('aria-expanded') !== 'true';
+    // Klicklogik
+    triggers.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const panelId  = btn.getAttribute("aria-controls");
+        const panel    = panelId ? document.getElementById(panelId) : null;
+        const willOpen = btn.getAttribute("aria-expanded") !== "true";
 
         if (SINGLE_OPEN) {
-          triggers.forEach(other => {
-            if (other === btn) return;
-            other.setAttribute('aria-expanded', 'false');
-          });
+          triggers.forEach(other => { if (other !== btn) other.setAttribute("aria-expanded", "false"); });
           panels.forEach(p => { if (p) p.hidden = true; });
         }
 
-        btn.setAttribute('aria-expanded', String(willOpen));
+        btn.setAttribute("aria-expanded", String(willOpen));
         if (panel) panel.hidden = !willOpen;
       });
     });
   }
 
-  /* ---------------------------------------------------------------------------
-   * 5) KONTAKT-MAIL (SPAM-SCHUTZ)
-   * ---------------------------------------------------------------------------
-   * Baut "mailto:"-Link aus data-Attributen (verhindert Spam durch Crawler)
-   * --------------------------------------------------------------------------- */
 
-  const mailLink = $('#contactEmail');
-  if (mailLink) {
-    const user = mailLink.dataset.emailUser || '';
-    const domain = mailLink.dataset.emailDomain || '';
-    if (user && domain) {
-      const addr = `${user}@${domain}`;
-      mailLink.href = `mailto:${addr}`;
-      mailLink.textContent = addr;
-    }
+  /* ---------------------------------------------------------------------------
+   * (6) KONTAKT-MAIL – Spam-Schutz
+   * ------------------------------------------------------------------------- */
+
+  function initSafeMail() {
+    const mailLink = $("#contactEmail");
+    if (!mailLink) return;
+    const user   = mailLink.dataset.emailUser   || "";
+    const domain = mailLink.dataset.emailDomain || "";
+    if (!user || !domain) return;
+    const addr = `${user}@${domain}`;
+    mailLink.href = `mailto:${addr}`;
+    mailLink.textContent = addr;
   }
 
-  /* ---------------------------------------------------------------------------
-   * 6) AKTUELLES JAHR IM FOOTER
-   * ---------------------------------------------------------------------------
-   * Fügt das aktuelle Jahr automatisch ein
-   * --------------------------------------------------------------------------- */
-
-  const yearEl = $('[data-year]');
-  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
   /* ---------------------------------------------------------------------------
-   * 7) SMOOTH SCROLL für "Nach oben"
-   * ---------------------------------------------------------------------------
-   * Weiches Scrollen zu #top (respektiert Reduced Motion)
-   * --------------------------------------------------------------------------- */
+   * (7) FOOTER-JAHR – automatisch setzen
+   * ------------------------------------------------------------------------- */
 
-  const toTop = $('.to-top');
-  if (toTop) {
-    toTop.addEventListener('click', (e) => {
-      const href = toTop.getAttribute('href') || '';
-      if (!href.startsWith('#')) return;
+  function initYear() {
+    const yearEl = $("[data-year]");
+    if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+  }
+
+
+  /* ---------------------------------------------------------------------------
+   * (8) SMOOTH SCROLL – nur für „Nach oben“-Link (falls vorhanden)
+   * ------------------------------------------------------------------------- */
+
+  function initSmoothToTop() {
+    const toTop = $(".to-top");
+    if (!toTop) return;
+    toTop.addEventListener("click", (e) => {
+      const href = toTop.getAttribute("href") || "";
+      if (!href.startsWith("#")) return;
       const target = $(href);
       if (!target) return;
 
       e.preventDefault();
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      target.scrollIntoView({
-        behavior: prefersReduced ? 'auto' : 'smooth',
-        block: 'start'
-      });
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      target.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth", block: "start" });
     });
   }
 
+
   /* ---------------------------------------------------------------------------
-   * 8) HEADER & FOOTER automatisch laden
-   * ---------------------------------------------------------------------------
-   * Modularisierung durch includes/header.html & includes/footer.html
-   * --------------------------------------------------------------------------- */
+   * (9) REST INITIALISIEREN (akkordeon, mail, jahr, scroll)
+   * ------------------------------------------------------------------------- */
 
   document.addEventListener("DOMContentLoaded", () => {
-    const loadInclude = (selector, file) => {
-      const el = document.querySelector(selector);
-      if (el) {
-        fetch(file)
-          .then((res) => res.text())
-          .then((html) => (el.innerHTML = html));
-      }
-    };
-
-    loadInclude("#site-header", "includes/header.html");
-    loadInclude("#site-footer", "includes/footer.html");
+    initAccordion();
+    initSafeMail();
+    initYear();
+    initSmoothToTop();
+    // Scrollspy wird in markActiveMenuLink() gestartet, sobald Drawer-Links existieren.
   });
 
-})(); // Sofort ausgeführte Funktion (IIFE)
+})(); // IIFE: schützt den globalen Scope
