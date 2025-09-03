@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+  <!-- =========================================================
+       (0) DOKUMENT-SETUP & META
+       ========================================================= -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rechenzentrumsstruktur (RZ) – ITSM · Incident Management</title>
+  <meta name="description" content="Systemmodellierung und Analyse der Rechenzentrumsstruktur (RZ) für ein ITSM-Tool – Komponenten, Funktionen und Incident-Ablauf." />
+
+  <!-- =========================================================
+       (1) FONTS (self-hosted) – wie auf allen Seiten
+       ========================================================= -->
+  <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
+
+  <!-- =========================================================
+       (2) GLOBAL CSS – beibehaltener Look & Feel
+       ========================================================= -->
+  <link rel="stylesheet" href="assets/css/global.css" />
+
+  <!-- =========================================================
+       (3) SEITENSPEZIFISCHE MINI-STYLES
+       - Nur Ergänzungen; Farben/Typo kommen aus global.css
+       - Tabelle: saubere Ränder + kompakte Typo
+       ========================================================= -->
+  <style>
+    /* Zentrierte, begrenzte Content-Breite für Diagramm */
+    .center-wrap { max-width: 1100px; margin-inline: auto; }
+
+    /* Diagramm-Bild immer skaliert, Verhältnis beibehalten */
+    .diagram { display:block; margin-inline:auto; max-width:100%; height:auto; }
+
+    /* Lesbarer geordneter Ablauf in der Card */
+    .text-block ol { padding-left: 1.2rem; }
+    .text-block li + li { margin-top: .35rem; }
+
+    /* Responsive Tabellenhülle */
+    .table-wrap { overflow-x:auto; }
+
+    /* ITSM-Tabelle im globalen Stil (Tokens!) */
+    .itsm-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .95rem;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .itsm-table th,
+    .itsm-table td {
+      border: 1px solid var(--border);
+      padding: .6rem .7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    .itsm-table thead th {
+      background: var(--bg-alt);
+      font-weight: 700;
+    }
+  </style>
+</head>
+
+<body id="top">
+  <!-- =========================================================
+       (4) A11Y: SKIP-LINK – Tastatur-Nutzer springen direkt zum Inhalt
+       ========================================================= -->
+  <a class="skip-link" href="#mainContent">Zum Inhalt springen</a>
+
+  <!-- =========================================================
+       (5) HEADER-CONTAINER – wird via site.js includiert
+       - Drawer/Burger/Navigation kommen aus includes/header.html
+       - Noscript-Fallback stellt Basisnavigation ohne JS sicher
+       ========================================================= -->
+  <header id="site-header" class="site-header" role="banner">
+    <noscript>
+      <!-- Fallback-Header (nur sichtbar ohne JS) -->
+      <div class="container header-bar">
+        <!-- Logo zur Startseite -->
+        <a class="brand-right" href="index.html" aria-label="Startseite">
+          <img src="assets/DoniLogo_1.0.0.png" width="150" height="40" alt="Logo Doniman F. Peña Parra" class="brand-right__logo">
+        </a>
+      </div>
+      <!-- Einfache Navigation als Fallback -->
+      <nav class="nav-drawer" aria-label="Hauptnavigation">
+        <ul>
+          <li><a href="index.html">Start</a></li>
+          <li><a href="ueber-mich.html">Über mich</a></li>
+          <li><a href="projekte.html">Projekte</a></li>
+          <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
+        </ul>
+      </nav>
+      <div class="brand-bar" aria-hidden="true"></div>
+    </noscript>
+  </header>
+
+  <!-- =========================================================
+       (6) HERO – an globales Muster angepasst
+       - Titel:   .hero__title
+       - Lead:    .hero__lead
+       ========================================================= -->
+  <section class="hero" aria-label="Seitenkopf RZ">
+    <div class="container hero-inner">
+      <h1 class="hero__title">Rechenzentrumsstruktur (RZ)</h1>
+      <p class="hero__lead">ITSM-System · Komponenten · Funktionen · Rolle im Incident Management</p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       (7) MAIN – Seiteninhalt
+       ========================================================= -->
+  <main id="mainContent" class="main" role="main">
+
+    <!-- (7.1) AUFGABENBESCHREIBUNG -->
+    <section class="section container" id="aufgabe">
+      <!-- Einheitlicher Abschnitts-Kopf -->
+      <div class="sec-head">
+        <span class="sec-dot" aria-hidden="true"></span>
+        <h2 class="sec-title">
+          Systemmodellierung &amp; Analyse der Rechenzentrumsstruktur (RZ) für ein ITSM-Tool
+        </h2>
+      </div>
+
+      <div class="grid-2">
+        <!-- Fließtext links -->
+        <div>
+          <h3 class="cv-title">Kontext &amp; Ziel</h3>
+          <p class="lead">
+            Visualisierung des kompletten Lebenszyklus eines Incidents: Vom Portalzugriff über Ticketanlage im
+            DB-Cluster bis zu Eskalation, Monitoring und Disaster-Recovery. Durch Integration von Mail-Gateways,
+            Directory-Services (SSO/LDAP) und Backups wird die Prozesskette konsistent abgebildet.
+          </p>
+          <p class="lead">
+            Das RZ-Diagramm zeigt die ITSM-Kernkomponenten für das Incident-Management: Portal, App-Cluster,
+            Datenbank, Integrationen. Der DB-Cluster ist das Herzstück, App-Cluster & Integrationen sichern
+            Funktionalität und Kommunikation.
+          </p>
+        </div>
+
+        <!-- Kompakte Fakten rechts -->
+        <aside class="card">
+          <h3>Schwerpunkte</h3>
+          <ul class="checklist">
+            <li>Ticket-Lebenszyklus &amp; SLA-Sicherung</li>
+            <li>Hochverfügbarkeit (LB/HA, DR-Standort)</li>
+            <li>Security: DMZ, TLS, SSO/MFA</li>
+            <li>Monitoring/Logging &amp; Benachrichtigung</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- (7.2) ARCHITEKTUR / DIAGRAMM -->
+    <section class="section container" id="rz-diagramm">
+      <div class="sec-head">
+        <span class="sec-dot" aria-hidden="true"></span>
+        <h2 class="sec-title">ITSM-RZ-Diagramm</h2>
+      </div>
+
+      <div class="center-wrap">
+        <article class="card">
+          <!-- HINWEIS: Pfad ggf. an deine Ordnerstruktur anpassen -->
+          <img
+            class="diagram"
+            src="assets/img/ITSM_RZ_1.0.0.png"
+            alt="Diagramm: Rechenzentrumsstruktur für ein ITSM-System"
+            loading="lazy"
+            decoding="async"
+            data-full="assets/img/ITSM_RZ_1.0.0.png" />
+
+          <div class="card-body">
+            <div class="text-block">
+              <h3>Incident-Management – Standardablauf</h3>
+              <p>Ein Incident (INC) durchläuft standardisiert folgende Schritte:</p>
+              <ol>
+                <li><strong>Incident-Erstellung:</strong>
+                  <ul>
+                    <li>User meldet Problem über Self-Service-Portal.</li>
+                    <li>Portal sendet Anfrage verschlüsselt an ITSM.</li>
+                  </ul>
+                </li>
+                <li><strong>Ticket-Anlage:</strong>
+                  <ul>
+                    <li>App-Server validiert Daten.</li>
+                    <li>Ticket im DB-Cluster gespeichert (inkl. INC-ID).</li>
+                  </ul>
+                </li>
+                <li><strong>Zuweisung &amp; Prüfung:</strong>
+                  <ul>
+                    <li>Workflow leitet den Incident an den zuständigen Support.</li>
+                  </ul>
+                </li>
+                <li><strong>Bearbeitung &amp; Lösung:</strong>
+                  <ul>
+                    <li>Support löst Incident oder eskaliert.</li>
+                    <li>Lösung und Workarounds werden dokumentiert.</li>
+                  </ul>
+                </li>
+                <li><strong>Benachrichtigung:</strong>
+                  <ul>
+                    <li>User erhält Updates via Mail-Gateway.</li>
+                    <li>Status jederzeit im Portal einsehbar.</li>
+                  </ul>
+                </li>
+                <li><strong>Abschluss:</strong>
+                  <ul>
+                    <li>Ticket wird geschlossen.</li>
+                    <li>Monitoring überwacht SLA und dokumentiert den Lifecycle.</li>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- (7.3) VERGLEICHSTABELLE ITSM-KOMPONENTEN -->
+    <section class="section container" id="vergleich">
+      <div class="sec-head">
+        <span class="sec-dot" aria-hidden="true"></span>
+        <h2 class="sec-title">ITSM-Komponenten im Vergleich</h2>
+      </div>
+
+      <!-- Tabellenhülle sorgt für mobiles Scrollen -->
+      <div class="table-wrap">
+        <article class="card">
+          <table class="itsm-table">
+            <thead>
+              <tr>
+                <th>Komponente</th>
+                <th>Beschreibung</th>
+                <th>Funktion im ITSM</th>
+                <th>Rolle im Incident-Management</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>User (Self-Service-Portal)</td>
+                <td>Endanwender:innen melden Incidents oder prüfen den Status.</td>
+                <td>Zugriff via HTTPS</td>
+                <td>Erstellt Tickets, prüft Status, empfängt Updates.</td>
+              </tr>
+              <tr>
+                <td>Load Balancer (HA)</td>
+                <td>Verteilt eingehenden Traffic auf Web-Gateways.</td>
+                <td>Hochverfügbarkeit (Active/Passive)</td>
+                <td>Gewährleistet Erreichbarkeit des Portals.</td>
+              </tr>
+              <tr>
+                <td>Web-Gateway / Reverse Proxy</td>
+                <td>Sicherheits- und Zugriffsebene in der DMZ.</td>
+                <td>TLS-Terminierung, Routing, Schutz interner Systeme</td>
+                <td>Filtert Anfragen, schützt interne Systeme.</td>
+              </tr>
+              <tr>
+                <td>Portal-Frontend (HTML/JS/CSS)</td>
+                <td>UI im Browser</td>
+                <td>Darstellung der ITSM-Oberfläche</td>
+                <td>Erfassung &amp; Anzeige von Incident-Daten</td>
+              </tr>
+              <tr>
+                <td>ITSM-App-Cluster</td>
+                <td>Applikationsschicht mit mehreren Servern</td>
+                <td>Workflows, Ticketmanagement</td>
+                <td>Validierung, Ticketanlage, Eskalation</td>
+              </tr>
+              <tr>
+                <td>DB-Cluster (Primary/Replica)</td>
+                <td>Zentrale Datenbank mit Redundanz</td>
+                <td>Tickets, User, CMDB, Knowledge</td>
+                <td>Herzstück: Speicherung und Verfügbarkeit</td>
+              </tr>
+              <tr>
+                <td>File/Blob-Storage</td>
+                <td>Ablage großer Dateien (z. B. Anhänge)</td>
+                <td>Speicherung von Attachments</td>
+                <td>Beweise/Anhänge zum Incident</td>
+              </tr>
+              <tr>
+                <td>Mail-Gateway</td>
+                <td>Anbindung an Mailsystem</td>
+                <td>Versand von Benachrichtigungen</td>
+                <td>Automatische Mails an User &amp; Support</td>
+              </tr>
+              <tr>
+                <td>Directory Services (AD/LDAP/SSO/MFA)</td>
+                <td>Authentifizierungssysteme</td>
+                <td>SSO, MFA</td>
+                <td>Verifiziert Identitäten beim Login</td>
+              </tr>
+              <tr>
+                <td>Monitoring &amp; Logging</td>
+                <td>Protokollierung &amp; Überwachung</td>
+                <td>SLA-Tracking, Dashboards, Alarmierung</td>
+                <td>Überwacht Ticketlaufzeit &amp; Systemzustand</td>
+              </tr>
+              <tr>
+                <td>Backup-Server</td>
+                <td>Lokales Backup-System</td>
+                <td>Snapshots &amp; Recovery</td>
+                <td>Wiederherstellung nach Fehler/Datenverlust</td>
+              </tr>
+              <tr>
+                <td>DR-Standort (optional)</td>
+                <td>Externes Disaster-Recovery-System</td>
+                <td>Georedundante Sicherung</td>
+                <td>Resilienz, Wiederaufnahme im Notfall</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+    </section>
+
+    <!-- (7.4) KONTAKT – globaler Block -->
+    <section class="contact-block" aria-labelledby="kontaktTitle">
+      <div class="contact-inner container">
+        <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
+        <p class="contact-name">Doniman F. Peña Parra</p>
+
+        <!-- Spam-sicher: Text + href werden per site.js gesetzt -->
+        <p class="contact-email">
+          <a id="contactEmail"
+             data-email-user="dofp79"
+             data-email-domain="hotmail.com"
+             href="#"
+             rel="nofollow">E-Mail anzeigen</a>
+          <noscript>(dofp79&nbsp;[at]&nbsp;hotmail&nbsp;[dot]&nbsp;com)</noscript>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================
+       (8) FOOTER-CONTAINER – wird via site.js includiert
+       ========================================================= -->
+  <div id="site-footer">
+    <noscript>
+      <!-- Minimaler Footer (nur ohne JS sichtbar) -->
+      <footer class="site-footer" role="contentinfo">
+        <div class="container subfooter__inner">
+          <p>&copy; <span data-year>2025</span> IT-Steuerung &amp; IT-Controlling</p>
+          <a class="to-top" href="#top">Nach oben ↑</a>
+        </div>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- =========================================================
+       (9) SCRIPTS
+       - site.js lädt Header/Footer, steuert Drawer/Accordion/Scrollspy
+       - E-Mail-Obfuskation + Jahr + Smooth-Scroll
+       ========================================================= -->
+  <script src="assets/js/site.js" defer></script>
+
+  <!-- Optionaler Fallback: lädt Includes, falls site.js mal fehlt -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const ensureInclude = (sel, url) => {
+        const host = document.querySelector(sel);
+        if (!host) return;
+        const hasContent = host.children.length > 0 && host.querySelector('noscript') === null;
+        if (hasContent) return; // bereits durch site.js geladen
+        fetch(url).then(r => r.ok ? r.text() : '').then(html => { if (html) host.innerHTML = html; });
+      };
+      ensureInclude('#site-header', 'includes/header.html');
+      ensureInclude('#site-footer', 'includes/footer.html');
+    });
+  </script>
+</body>
+</html>
