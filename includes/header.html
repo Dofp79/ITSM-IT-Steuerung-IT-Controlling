@@ -1,48 +1,33 @@
 <!-- includes/header.html -->
 <!-- =========================================================
-     GLOBALER HEADER (THEMEN-MENÜ)
-     ---------------------------------------------------------
-     Diese Datei wird per fetch() von site.js in <header id="site-header"> geladen.
-     WICHTIG:
-     - Genau EIN .header-bar (mit Burger + Logo)
-     - Genau EINE .brand-bar (rote Linie)
-     - Genau EIN #navdrawer (Offcanvas-Navigation)
-     - KEINE weiteren doppelten Blöcke/IDs!
-     site.js initialisiert danach:
-       • Burger-Toggle + aria-expanded
-       • Focus-Trap im Drawer
-       • Close-Logik (ESC, Outside-Click, Resize)
-       • Aktiven Link (.is-active + aria-current)
+     GLOBALER HEADER (einheitlich auf allen Seiten)
+     - Burger (.burger) öffnet Offcanvas-Drawer (#navdrawer)
+     - Logo rechts (immer konsistente Höhe via global.css)
+     - Navigation: echte Seitenlinks (keine #hashes)
+     - Interaktionen (A11y/Focus-Trap/ESC) kommen aus site.js
      ========================================================= -->
 
-<!-- 1) Headerleiste: Burger links, Logo rechts -->
 <div class="container header-bar">
-  <!-- Burger-Button: site.js toggelt aria-expanded + öffnet/schließt #navdrawer -->
+  <!-- Burger-Button: site.js toggelt aria-expanded & Drawer-State -->
   <button class="burger" aria-expanded="false" aria-controls="navdrawer">
-    <!-- Drei Linien – rein dekorativ -->
     <span class="burger__icon" aria-hidden="true"></span>
-    <!-- Sichtbares Label; site.js wechselt Text zu „Menü schließen“, wenn offen -->
-    <span class="burger__label">Themen</span>
+    <span class="burger__label">Themen</span> <!-- site.js ändert zu „Menü schließen“ -->
   </button>
 
-  <!-- Logo führt auf die Startseite -->
+  <!-- Logo: KEINE width/height-Attribute im HTML
+       → Größe wird ausschließlich über CSS gesteuert (brand-right__logo) -->
   <a class="brand-right" href="index.html" aria-label="Startseite">
-    <img
-      src="assets/DoniLogo_1.0.0.png"   <!-- Pfad beibehalten; liegt in /assets -->
-      width="150" height="40"
-      alt="Logo Doniman F. Peña Parra"
-      class="brand-right__logo">
+    <img src="assets/DoniLogo_1.0.0.png"
+         alt="Logo Doniman F. Peña Parra"
+         class="brand-right__logo">
   </a>
 </div>
 
-<!-- 2) Dünne Markenlinie (rot) unter dem Header -->
+<!-- dünne Markenlinie (Brand-Bar) -->
 <div class="brand-bar" aria-hidden="true"></div>
 
-<!-- 3) Offcanvas-Drawer (linke Navigation) -->
+<!-- Offcanvas-Drawer (Themen-Menü) -->
 <nav id="navdrawer" class="nav-drawer" aria-label="Hauptnavigation">
-  <!-- HINWEIS:
-       • Echte Seiten-Links (keine #hashes), damit Multi-Page-Navigation klappt.
-       • site.js markiert den aktiven Link (.is-active + aria-current="page"). -->
   <ul>
     <li><a href="index.html">Start</a></li>
     <li><a href="ueber-mich.html">Über mich</a></li>
