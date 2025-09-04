@@ -9,58 +9,36 @@
   <title>Projekte – ITSM · KPIs · Datenmodelle · Dashboards</title>
   <meta name="description" content="Projekte: Measurement & Reporting nach ITIL 4, KPI-Design, Power BI Dashboards, Datenmodelle/ETL, Prozessmanagement." />
 
-  <!-- Optional: Canonical -->
-  <!-- <link rel="canonical" href="https://dofp79.github.io/ITSM-IT-Steuerung-IT-Controlling/projekte.html" /> -->
-
-  <!-- =========================================================
-       (1) FONTS – self-hosted (Preload)
-       ========================================================= -->
+  <!-- (1) FONTS (self-hosted) -->
   <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
 
-  <!-- =========================================================
-       (2) GLOBAL CSS – beibehaltener Look & Feel
-       ========================================================= -->
+  <!-- (2) GLOBAL CSS -->
   <link rel="stylesheet" href="assets/css/global.css" />
 
-  <!-- =========================================================
-       (2b) SEITENSPEZIFISCHE MINIMAL-CSS
-       - Nur hier: erzwingt, dass genau ZWEI Karten nebeneinander
-         stehen (ITIL Monitoring + Kapazitäts-Dashboard).
-       - Greift erst ab 900px Breite; mobil bleibt 1 Spalte.
-       - Kollisionen mit globalen Styles werden vermieden durch
-         eigene Modifikator-Klasse .grid--two
-       ========================================================= -->
+  <!-- (2b) Seiten-CSS: nur Ergänzung für das 2er-Grid -->
   <style>
-    /* Container mit genau 2 Spalten ab Desktop */
-    .grid--two {
-      display: grid;
-      gap: 1.2rem;
-      grid-template-columns: 1fr;           /* mobil: 1 Spalte */
-      align-items: stretch;                  /* gleiche Kartenhöhe */
+    /* Exaktes 2er-Grid ab 900px (für ITIL + Kapazität nebeneinander) */
+    .grid--two{
+      display:grid; gap:1.2rem; grid-template-columns:1fr; align-items:stretch;
     }
-    @media (min-width: 900px){
-      .grid--two { grid-template-columns: 1fr 1fr; } /* Desktop: 2 Spalten */
-    }
-    /* (Optional) Bild im Datenmodell wirklich zentrieren,
-       falls globale Klassen fehlen/abweichen */
-    .centered-img {
-      display: block;
-      margin-inline: auto;
-    }
+    @media (min-width:900px){ .grid--two{ grid-template-columns:1fr 1fr; } }
+    /* Hilfsklasse zum Zentrieren einzelner Bilder (falls benötigt) */
+    .centered-img{ display:block; margin-inline:auto; }
   </style>
 </head>
 
 <body id="top">
   <!-- =========================================================
-       (3) A11Y: SKIP-LINK
+       (3) SKIP-LINK – Tastaturzugang
        ========================================================= -->
   <a class="skip-link" href="#mainContent">Zum Inhalt springen</a>
 
   <!-- =========================================================
-       (4) HEADER (via fetch() geladen) + Noscript-Fallback
-       - Menü: Start · Über mich · Projekte · Prozessmodellierung
-       - Nutzer können so auf die anderen Seiten navigieren
+       (4) HEADER-CONTAINER – wird via site.js geladen
+       HINWEIS:
+       - includes/header.html enthält das Themen-Menü (siehe oben)
+       - Noscript liefert Fallback (funktioniert ohne JS)
        ========================================================= -->
   <header id="site-header" class="site-header" role="banner">
     <noscript>
@@ -73,6 +51,7 @@
         <ul>
           <li><a href="index.html">Start</a></li>
           <li><a href="ueber-mich.html">Über mich</a></li>
+          <li><a href="projekte.html" aria-current="page" class="is-active">Projekte</a></li>
           <li><a href="rz-architektur.html">Rechenzentrumsstruktur</a></li>
           <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
         </ul>
@@ -82,7 +61,7 @@
   </header>
 
   <!-- =========================================================
-       (5) HERO – Seitenkopf
+       (5) HERO – nutzt globalen Stil (.hero__title / .hero__lead)
        ========================================================= -->
   <section class="hero" aria-label="Seitenkopf Projekte">
     <div class="container hero-inner">
@@ -97,114 +76,75 @@
        ========================================================= -->
   <main id="mainContent" class="main" role="main">
 
-    <!-- =========================================================
-         (6.1) PROJEKTE – GRUPPE A (NEBENEINANDER)
-         ANFORDERUNG: „ITIL® Monitoring …“ und „Kapazitäts-Dashboard“
-         müssen zusammenstehen → eigenes Grid .grid--two
-         ========================================================= -->
+    <!-- (6.1) PROJEKTE – A: ZWEI KARTEN NEBENEINANDER -->
     <section id="projekte" class="section container" aria-labelledby="projTitle">
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
         <h2 id="projTitle" class="sec-title">Measurement &amp; Reporting nach ITIL®&nbsp;4 Framework</h2>
       </div>
 
-      <!-- Genau diese zwei Karten bleiben zusammen (nebeneinander ab 900px) -->
+      <!-- Diese beiden Karten bleiben zusammen (grid--two) -->
       <div class="grid--two">
-        <!-- Karte A1: ITIL Monitoring -->
         <article class="card">
-          <img
-            src="assets/images/projekte/ITIL_Monitoring.png"
-            alt="ITIL Monitoring – Continual Improvement Dashboard mit Reifegrad, KPI-Ampeln und Priorisierung"
-            loading="lazy" decoding="async"
-            data-full="assets/images/projekte/ITIL_Monitoring.png">
+          <img src="assets/images/projekte/ITIL_Monitoring.png"
+               alt="ITIL Monitoring – Continual Improvement Dashboard"
+               loading="lazy" decoding="async"
+               data-full="assets/images/projekte/ITIL_Monitoring.png">
           <div class="card-body">
             <h4>ITIL® Monitoring mit Continual Improvement</h4>
-            <p>
-              Das Dashboard zeigt Reifegrade verschiedener ITIL®&nbsp;4 Practices. Über KPI-Ampeln (Rot/Gelb/Grün) und
-              die Priorisierung nach Phasen (Service Transition, Service Design, Service Operation usw.) lassen sich
-              kritische Handlungsfelder und Optimierungspotenziale faktenbasiert identifizieren.
-            </p>
+            <p>Reifegrade verschiedener ITIL®-4-Practices; KPI-Ampeln &amp; Phasenpriorisierung zeigen Optimierungspotenziale.</p>
           </div>
         </article>
 
-        <!-- Karte A2: Kapazitäts-Dashboard (direkt daneben) -->
         <article class="card">
-          <img
-            src="assets/images/projekte/IT32ReferatKapa.png"
-            alt="Kapazitäts-Dashboard – Auslastung, Story-Bearbeitung, Kapazitätstage und -stunden je Team"
-            loading="lazy" decoding="async"
-            data-full="assets/images/projekte/IT32ReferatKapa.png">
+          <img src="assets/images/projekte/IT32ReferatKapa.png"
+               alt="Kapazitäts-Dashboard – Auslastung und Kapazität je Team"
+               loading="lazy" decoding="async"
+               data-full="assets/images/projekte/IT32ReferatKapa.png">
           <div class="card-body">
             <h4>Kapazitäts-Dashboard</h4>
-            <p>
-              Transparente Darstellung der Kapazitäten einer IT-Abteilung mit Power&nbsp;BI: Teamverteilung, Aufgabenstatus
-              sowie Kapazitätstage/-stunden pro Story. Liefert Überblick über Auslastung, Fortschritt und Planungssicherheit –
-              die Basis für steuerbare Ressourcenplanung im ITSM.
-            </p>
+            <p>Transparente Auslastung/Planung per Power BI (Teams, Story-Status, Kapazitätstage/-stunden).</p>
           </div>
         </article>
       </div>
 
-      <!-- GRUPPE B: weitere Karte(n) separat – damit A1+A2 nicht getrennt werden -->
+      <!-- Gruppe B separat, damit A1 + A2 zusammen bleiben -->
       <div class="grid">
         <article class="card">
-          <img
-            src="assets/images/projekte/KPIs_Dashboard.png"
-            alt="KPI-Dashboard – Tickets, Changes, IT-Assets und Vertragsvolumen, inklusive Performance-Übersicht"
-            loading="lazy" decoding="async"
-            data-full="assets/images/projekte/KPIs_Dashboard.png">
+          <img src="assets/images/projekte/KPIs_Dashboard.png"
+               alt="KPI-Dashboard – Tickets/Changes/Assets/Verträge"
+               loading="lazy" decoding="async"
+               data-full="assets/images/projekte/KPIs_Dashboard.png">
           <div class="card-body">
             <h4>KPI-Design, Reporting &amp; ITSM-Controlling</h4>
-            <p>
-              Power-BI-Dashboard zur Visualisierung zentraler ITSM-Kennzahlen nach ITIL®&nbsp;4. Kombiniert KPI-Ampeln,
-              Prozesskennzahlen (z.&nbsp;B. Tickets, Anrufe, Durchlaufzeiten) und eine Service-Performance-Analyse –
-              für eine auf einen Blick erfassbare Lage und faktenbasierte Entscheidungen.
-            </p>
+            <p>Kern-KPIs nach ITIL® 4, Prozesskennzahlen &amp; Service-Performance auf einen Blick, faktenbasiert steuerbar.</p>
           </div>
         </article>
       </div>
     </section>
 
-    <!-- =========================================================
-         (6.2) DATENMODELL – Bild ZENTRIERT
-         Umsetzung:
-         - zentrierte Karte (max-width), Bild hart zentriert (.centered-img)
-         - globale Card-/Typo-Styles bleiben aktiv
-         ========================================================= -->
+    <!-- (6.2) DATENMODELL – gleiche Struktur wie oben (sec-head + grid + card) -->
     <section id="architektur" class="section container" aria-labelledby="archTitle">
-    <!-- Überschrift-Block -->
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
         <h2 id="archTitle" class="sec-title">Datenmodell</h2>
       </div>
 
-      <!-- Grid-Container für Karten -->
       <div class="grid">
-        <!-- Karte: Datenmodell -->
         <article class="card">
-          <!-- Bild -->
-          <img
-            src="assets/images/projekte/Datenmodell_2.png"
-            alt="Power BI Datenmodell für ITSM – Fakten- und Dimensionstabellen"
-            loading="lazy"
-            decoding="async"
-            data-full="assets/images/projekte/Datenmodell_2.png" />
-
-          <!-- Text-Inhalt -->
+          <img src="assets/images/projekte/Datenmodell_2.png"
+               alt="Power BI Datenmodell – Fakten & Dimensionen"
+               loading="lazy" decoding="async"
+               data-full="assets/images/projekte/Datenmodell_2.png" />
           <div class="card-body stack">
-            <h4>Steuerung &amp; Reporting von ITSM-Daten im Power-BI-Datenmodell</h4>
-            <p>
-              Verknüpft Incidents, Changes, Assets &amp; SLAs über eine zentrale Datumstabelle und bildet die Basis
-              für belastbare KPIs und Dashboards.
-            </p>
+            <h4>Steuerung &amp; Reporting von ITSM-Daten</h4>
+            <p>Verknüpft Incidents, Changes, Assets &amp; SLAs über eine Datumstabelle – Basis für belastbare KPIs &amp; Dashboards.</p>
           </div>
         </article>
       </div>
     </section>
 
-    <!-- =========================================================
-         (6.3) KI-AGENTEN (Karten als Links)
-         ========================================================= -->
+    <!-- (6.3) KI-AGENTEN – Karten als vollständige Links -->
     <section id="ki-agents" class="section container" aria-labelledby="kiTitle">
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
@@ -214,43 +154,30 @@
       <div class="grid">
         <article class="card">
           <a href="https://chatgpt.com/g/g-UYiBEofKD-itsm-standards-consultant" target="_blank" rel="noopener">
-            <img src="assets/images/projekte/GPT_ITSM_StandardsConsultant.png"
-                 alt="KI-Agent: ITSM-Standards Consultant – ITIL® 4, ISO/IEC 20000, COBIT" loading="lazy" decoding="async">
-            <div class="card-body">
-              <h4>ITSM-Standards Consultant</h4>
-              <p>Implementierung &amp; Optimierung von ITIL®&nbsp;4, ISO/IEC&nbsp;20000 und COBIT – wertorientiertes Service-Management.</p>
-            </div>
+            <img src="assets/images/projekte/GPT_ITSM_StandardsConsultant.png" alt="KI-Agent: ITSM-Standards Consultant" loading="lazy" decoding="async">
+            <div class="card-body"><h4>ITSM-Standards Consultant</h4><p>ITIL® 4, ISO/IEC 20000, COBIT – Implementierung &amp; Optimierung.</p></div>
           </a>
         </article>
 
         <article class="card">
           <a href="https://chatgpt.com/g/g-6734f04e060c8190a7fadc8c552b0e6e-modellierung-betrieblichen-informationssystemen" target="_blank" rel="noopener">
-            <img src="assets/images/projekte/GPT_ModellierungBetrieblicheInformationssystemen.png"
-                 alt="KI-Agent: Modellierung betrieblicher Informationssysteme" loading="lazy" decoding="async">
-            <div class="card-body">
-              <h4>Modellierung betrieblicher Informationssysteme</h4>
-              <p>Analyse, Visualisierung und Optimierung von ITSM-Prozessen und Systemarchitekturen – praxisnah nach ITIL®&nbsp;4.</p>
-            </div>
+            <img src="assets/images/projekte/GPT_ModellierungBetrieblicheInformationssystemen.png" alt="KI-Agent: Modellierung betrieblicher Informationssysteme" loading="lazy" decoding="async">
+            <div class="card-body"><h4>Modellierung betrieblicher Informationssysteme</h4><p>Analyse, Visualisierung &amp; Optimierung von Prozessen/Architekturen.</p></div>
           </a>
         </article>
 
         <article class="card">
           <a href="https://chatgpt.com/g/g-68150f83fda081919d979c8418039ee5-dashboard-design" target="_blank" rel="noopener">
-            <img src="assets/images/projekte/GPT_DashboardDesingn.png"
-                 alt="KI-Agent: Dashboard Design – KPI-Design & barrierearme Visualisierung" loading="lazy" decoding="async">
-            <div class="card-body">
-              <h4>Dashboard Design</h4>
-              <p>Power-BI-Dashboards, ITSM nach ITIL®&nbsp;4 und agile Steuerung – verständlich, effizient, managementtauglich.</p>
-            </div>
+            <img src="assets/images/projekte/GPT_DashboardDesingn.png" alt="KI-Agent: Dashboard Design" loading="lazy" decoding="async">
+            <div class="card-body"><h4>Dashboard Design</h4><p>Power-BI-Dashboards &amp; KPI-Design – verständlich und wartbar.</p></div>
           </a>
         </article>
       </div>
     </section>
-
   </main>
 
   <!-- =========================================================
-       (7) FOOTER (via fetch) + Noscript-Fallback
+       (7) FOOTER-CONTAINER – wird via site.js geladen
        ========================================================= -->
   <div id="site-footer">
     <noscript>
@@ -271,36 +198,36 @@
   </div>
 
   <!-- =========================================================
-       (8) SCRIPTS – global + kleiner Helfer für aktives Menü
+       (8) SCRIPTS
+       - assets/js/site.js lädt Header/Footer UND initialisiert Menü
+       - Kleiner Zusatz: markiert zur Sicherheit den aktiven Link
        ========================================================= -->
   <script src="assets/js/site.js" defer></script>
   <script>
-    // Markiere im dynamisch geladenen Header den aktuellen Menüpunkt (aria-current + .is-active)
-    (function () {
-      const setActiveNav = () => {
-        const path = location.pathname.split('/').pop() || 'index.html';
+    // (Optionaler Sicherheitsgurt) – markiert aktiven Menüpunkt,
+    // falls site.js durch Caching/Delay minimal später initialisiert.
+    (function(){
+      const mark = () => {
         const header = document.getElementById('site-header');
         if (!header) return;
+        const path = location.pathname.split('/').pop() || 'index.html';
         header.querySelectorAll('a[href]').forEach(a => {
           const href = a.getAttribute('href') || '';
           const isCurrent = href.endsWith(path);
           a.classList.toggle('is-active', isCurrent);
-          if (isCurrent) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+          if (isCurrent) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
         });
       };
-      document.addEventListener('DOMContentLoaded', () => {
-        setActiveNav();              // sofort versuchen
-        setTimeout(setActiveNav, 200); // nach Include erneut
-      });
+      document.addEventListener('DOMContentLoaded', () => { mark(); setTimeout(mark, 200); });
     })();
 
-    // Fallback: lade Includes, falls site.js (ausnahmsweise) nicht greifen sollte
+    // Fallback: lädt Includes, falls site.js (ausnahmsweise) nicht greift
     document.addEventListener('DOMContentLoaded', () => {
       const include = (sel, url) => {
         const host = document.querySelector(sel);
         if (!host) return;
         const has = host.children.length > 0 && !host.querySelector('noscript');
-        if (has) return;
+        if (has) return; // bereits per site.js gefüllt
         fetch(url).then(r => r.ok ? r.text() : '').then(html => { if (html) host.innerHTML = html; });
       };
       include('#site-header', 'includes/header.html');
