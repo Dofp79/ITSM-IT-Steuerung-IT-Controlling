@@ -1,25 +1,53 @@
+<!-- includes/header.html -->
+<!-- =========================================================
+     GLOBALER HEADER (THEMEN-MENÜ)
+     ---------------------------------------------------------
+     Diese Datei wird per fetch() von site.js in <header id="site-header"> geladen.
+     WICHTIG:
+     - Genau EIN .header-bar (mit Burger + Logo)
+     - Genau EINE .brand-bar (rote Linie)
+     - Genau EIN #navdrawer (Offcanvas-Navigation)
+     - KEINE weiteren doppelten Blöcke/IDs!
+     site.js initialisiert danach:
+       • Burger-Toggle + aria-expanded
+       • Focus-Trap im Drawer
+       • Close-Logik (ESC, Outside-Click, Resize)
+       • Aktiven Link (.is-active + aria-current)
+     ========================================================= -->
+
+<!-- 1) Headerleiste: Burger links, Logo rechts -->
 <div class="container header-bar">
+  <!-- Burger-Button: site.js toggelt aria-expanded + öffnet/schließt #navdrawer -->
   <button class="burger" aria-expanded="false" aria-controls="navdrawer">
+    <!-- Drei Linien – rein dekorativ -->
     <span class="burger__icon" aria-hidden="true"></span>
+    <!-- Sichtbares Label; site.js wechselt Text zu „Menü schließen“, wenn offen -->
     <span class="burger__label">Themen</span>
   </button>
 
+  <!-- Logo führt auf die Startseite -->
   <a class="brand-right" href="index.html" aria-label="Startseite">
-    <img src="assets/DoniLogo_1.0.0.png"
-         width="150" height="40"
-         alt="Logo Doniman F. Peña Parra"
-         class="brand-right__logo">
+    <img
+      src="assets/DoniLogo_1.0.0.png"   <!-- Pfad beibehalten; liegt in /assets -->
+      width="150" height="40"
+      alt="Logo Doniman F. Peña Parra"
+      class="brand-right__logo">
   </a>
 </div>
 
+<!-- 2) Dünne Markenlinie (rot) unter dem Header -->
+<div class="brand-bar" aria-hidden="true"></div>
+
+<!-- 3) Offcanvas-Drawer (linke Navigation) -->
 <nav id="navdrawer" class="nav-drawer" aria-label="Hauptnavigation">
+  <!-- HINWEIS:
+       • Echte Seiten-Links (keine #hashes), damit Multi-Page-Navigation klappt.
+       • site.js markiert den aktiven Link (.is-active + aria-current="page"). -->
   <ul>
     <li><a href="index.html">Start</a></li>
     <li><a href="ueber-mich.html">Über mich</a></li>
     <li><a href="projekte.html">Projekte</a></li>
+    <li><a href="rz-architektur.html">Rechenzentrumsstruktur</a></li>
     <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
   </ul>
 </nav>
-
-<div class="brand-bar" aria-hidden="true"></div>
-
