@@ -11,192 +11,158 @@
    - (6) Sicherheitsgurt: doppelte Kontaktblöcke entfernen  ←  **LÖST dein Problem**
    ============================================================================= */
 
+/* =======================================================================
+   Globale Includes + Header/Menu-Init + "nur EIN Kontakt"-Sicherheitsgurt
+   ======================================================================= */
+
 (() => {
   "use strict";
 
-  /* ---------------------------------------------------------------------------
-   * (0) Utilities
-   * ------------------------------------------------------------------------- */
-  const $  = (sel, ctx = document) => ctx.querySelector(sel);
-  const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+  /* ---------------------------------------------
+   * (0) Mini-Utils (Query-Helfer, einmalige Promises)
+   * ------------------------------------------- */
+  const $  = (sel, ctx=document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
 
-  // Aktuelle Datei (für .is-active Markierung)
-  const CURRENT_PAGE = (() => {
-    const p = location.pathname.split("/").pop();
-    return p && p !== "/" ? p : "index.html";
-  })();
+  const include = (sel, url) => {
+    // Lädt HTML in einen Ziel-Container (#site-header, #site-footer)
+    const host = $(sel);
+    if (!host) return Promise.resolve(false);
+    return fetch(url)
+      .then(r => (r.ok ? r.text() : ""))
+      .then(html => { if (html) host.innerHTML = html; return !!html; })
+      .catch(() => false);
+  };
 
-  // Fokusierbare Elemente (für Focus-Trap im Drawer)
-  const FOCUSABLE =
-    'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  /* ---------------------------------------------------------
+   * (1) Genau EIN Kontaktblock (.contact-block) auf der Seite
+   * ---------------------------------------------------------
+   * Regel:
+   * - Falls es mehrere gibt, behalten wir den aus dem Footer
+   *   (#site-footer .contact-block). Wenn keiner im Footer,
+   *   behalten wir den letzte(n) im DOM.
+   * - Wird nach dem Laden der Includes UND bei späteren DOM-
+   *   Änderungen (MutationObserver) angewandt.
+   */
+  function ensureSingleContact() {
+    const all = $$('.contact-block');
+    if (all.length <= 1) return; // alles gut
 
-  /* ---------------------------------------------------------------------------
-   * (1) Includes laden: Header + Footer – danach initialisieren
-   * ------------------------------------------------------------------------- */
-  document.addEventListener("DOMContentLoaded", () => {
-    const loadInclude = (selector, url) => {
-      const host = document.querySelector(selector);
-      if (!host) return Promise.resolve(false);
-      return fetch(url)
-        .then(res => (res.ok ? res.text() : ""))
-        .then(html => { if (html) host.innerHTML = html; return !!html; })
-        .catch(() => false);
-    };
+    const footerOne = $('#site-footer .contact-block');
+    const keep = footerOne || all[all.length - 1];
 
-    Promise.all([
-      loadInclude("#site-header", "includes/header.html"),
-      loadInclude("#site-footer", "includes/footer.html"),
-    ]).then(() => {
-      // WICHTIG: Alles erst nach Include verdrahten – Elemente existieren jetzt.
-      initHeaderHeightVar();   // (2) Headerhöhe → --header-h
-      initMenu();              // (3) Drawer/Burger (A11y)
-      markActiveMenuLink();    // (4) Aktiver Menüpunkt
-      initSafeMail();          // (5a) Spam-sichere Mail
-      initYear();              // (5b) Jahr setzen
-      ensureSingleContact();   // (6) ***Doppelte Kontaktblöcke entfernen***
-    });
-  });
-
-  /* ---------------------------------------------------------------------------
-   * (2) Headerhöhe messen → --header-h (Drawer beginnt direkt darunter)
-   * ------------------------------------------------------------------------- */
-  function initHeaderHeightVar(){
-    const header   = $(".site-header");
-    const brandBar = $(".brand-bar"); // dünne rote Linie direkt unter dem Header
-    if (!header) return;
-
-    const update = () => {
-      const h = header.offsetHeight + (brandBar ? brandBar.offsetHeight : 0);
-      document.documentElement.style.setProperty("--header-h", `${h}px`);
-    };
-    update();
-    window.addEventListener("resize", update);
+    all.forEach(el => { if (el !== keep) el.remove(); });
   }
 
-  /* ---------------------------------------------------------------------------
-   * (3) Menü/Drawer – A11y, Focus-Trap, Close-Mechaniken
-   * ------------------------------------------------------------------------- */
+  // Reagiere auch auf spätere DOM-Änderungen (z. B. zweites Include-Skript)
+  const maybeObserveOnce = (() => {
+    let done = false;
+    return () => {
+      if (done) return;
+      const obs = new MutationObserver(() => ensureSingleContact());
+      obs.observe(document.body, { childList: true, subtree: true });
+      done = true;
+    };
+  })();
+
+  /* ---------------------------------------------------------
+   * (2) Headerhöhe messen → CSS-Var --header-h setzen
+   *     (wichtig, damit der Drawer unter dem Header startet)
+   * --------------------------------------------------------- */
+  function setHeaderHeightVar(){
+    const header   = $('.site-header');
+    const brandBar = $('.brand-bar');
+    if (!header) return;
+
+    const compute = () => {
+      const h = header.offsetHeight + (brandBar ? brandBar.offsetHeight : 0);
+      document.documentElement.style.setProperty('--header-h', `${h}px`);
+    };
+    compute();
+    window.addEventListener('resize', compute);
+  }
+
+  /* ---------------------------------------------------------
+   * (3) Burger/Drawer initialisieren (A11y + Close-Logik)
+   * --------------------------------------------------------- */
   function initMenu(){
-    const burger = $(".burger");
-    const drawer = $("#navdrawer");
+    const burger = $('.burger');
+    const drawer = $('#navdrawer');
     if (!burger || !drawer) return;
 
+    const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
     let lastFocus = null;
 
-    const setBurgerLabel = (open) => {
-      const label = burger.querySelector(".burger__label");
-      if (label) label.textContent = open ? "Menü schließen" : "Themen";
+    const setLabel = open => {
+      const label = burger.querySelector('.burger__label');
+      if (label) label.textContent = open ? 'Menü schließen' : 'Themen';
     };
-
-    const handleFocusTrap = (e) => {
-      if (e.key !== "Tab" || !drawer.classList.contains("is-open")) return;
-      const list = $$(FOCUSABLE, drawer).filter(el => !el.disabled && el.offsetParent !== null);
+    const trap = e => {
+      if (e.key !== 'Tab' || !drawer.classList.contains('is-open')) return;
+      const list = [...drawer.querySelectorAll(FOCUSABLE)].filter(el => !el.disabled && el.offsetParent !== null);
       if (!list.length) return;
-      const first = list[0], last = list[list.length - 1];
-      if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
-      if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+      const first = list[0], last = list[list.length-1];
+      if (e.shiftKey && document.activeElement === first){ last.focus(); e.preventDefault(); }
+      if (!e.shiftKey && document.activeElement === last){ first.focus(); e.preventDefault(); }
     };
 
-    const setDrawer = (open) => {
-      burger.setAttribute("aria-expanded", String(open));
-      drawer.classList.toggle("is-open", open);
-      document.body.style.overflow = open ? "hidden" : "";
-      setBurgerLabel(open);
-
-      if (open) {
+    const openDrawer = open => {
+      burger.setAttribute('aria-expanded', String(open));
+      drawer.classList.toggle('is-open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+      setLabel(open);
+      if (open){
         lastFocus = document.activeElement;
-        (drawer.querySelector(FOCUSABLE) || drawer).focus({ preventScroll:true });
-        document.addEventListener("keydown", handleFocusTrap);
+        (drawer.querySelector(FOCUSABLE) || drawer).focus({ preventScroll: true });
+        document.addEventListener('keydown', trap);
       } else {
-        (lastFocus instanceof HTMLElement ? lastFocus : burger).focus({ preventScroll:true });
-        document.removeEventListener("keydown", handleFocusTrap);
+        (lastFocus instanceof HTMLElement ? lastFocus : burger).focus({ preventScroll: true });
+        document.removeEventListener('keydown', trap);
       }
     };
 
-    // Startzustand
-    setDrawer(false);
-
-    // Events
-    burger.addEventListener("click", () => {
-      const open = burger.getAttribute("aria-expanded") === "true";
-      setDrawer(!open);
-    });
-    document.addEventListener("click", (e) => {
-      if (!drawer.classList.contains("is-open")) return;
+    // Startzustand & Events
+    openDrawer(false);
+    burger.addEventListener('click', () => openDrawer(burger.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('click', e => {
+      if (!drawer.classList.contains('is-open')) return;
       const t = e.target;
       if (!(t instanceof Node)) return;
-      if (!drawer.contains(t) && !burger.contains(t)) setDrawer(false);
+      if (!drawer.contains(t) && !burger.contains(t)) openDrawer(false);
     });
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape") setDrawer(false); });
-    drawer.addEventListener("click", (e) => {
-      const link = (e.target instanceof HTMLElement) ? e.target.closest("a") : null;
-      if (link) setDrawer(false); // Navigieren → schließen
-    });
-    window.addEventListener("resize", () => setDrawer(false));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') openDrawer(false); });
+    drawer.addEventListener('click', e => { if ((e.target instanceof HTMLElement) && e.target.closest('a')) openDrawer(false); });
+    window.addEventListener('resize', () => openDrawer(false));
   }
 
-  /* ---------------------------------------------------------------------------
-   * (4) Aktiven Menüpunkt markieren (Multi-Page)
-   * ------------------------------------------------------------------------- */
-  function markActiveMenuLink(){
-    const header = $("#site-header");
-    if (!header) return;
-    header.querySelectorAll('#navdrawer a[href]').forEach(a => {
-      const href = a.getAttribute("href") || "";
-      const isCurrent = href.endsWith(CURRENT_PAGE);
-      a.classList.toggle("is-active", isCurrent);
-      if (isCurrent) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  /* ---------------------------------------------------------
+   * (4) Aktiven Menüpunkt markieren
+   * --------------------------------------------------------- */
+  function markActiveLink(){
+    const current = location.pathname.split('/').pop() || 'index.html';
+    $$('#navdrawer a[href]').forEach(a => {
+      const onPage = (a.getAttribute('href') || '').endsWith(current);
+      a.classList.toggle('is-active', onPage);
+      if (onPage) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
   }
 
-  /* ---------------------------------------------------------------------------
-   * (5) Kleine Helfer: E-Mail & Jahr
-   * ------------------------------------------------------------------------- */
-  function initSafeMail(){
-    // Funktioniert für alle Links mit id=contactEmail und data-email-Attributen
-    $$("#contactEmail").forEach(link => {
-      const user   = link.dataset.emailUser   || link.dataset.emailuser   || "";
-      const domain = link.dataset.emailDomain || link.dataset.emaildomain || "";
-      if (!user || !domain) return;
-      const addr = `${user}@${domain}`;
-      link.href = `mailto:${addr}`;
-      link.textContent = addr;
+  /* ---------------------------------------------------------
+   * (5) Seite starten: Includes → Init → EIN Kontakt sicherstellen
+   * --------------------------------------------------------- */
+  document.addEventListener('DOMContentLoaded', () => {
+    Promise.all([
+      include('#site-header', 'includes/header.html'),
+      include('#site-footer', 'includes/footer.html'),
+    ]).then(() => {
+      // Nach dem Einfügen des Headers/Footers alles initialisieren:
+      initMenu();
+      setHeaderHeightVar();
+      markActiveLink();
+
+      // → und jetzt DOPPELTE Kontakte entfernen (falls Seite noch einen eigenen hat)
+      ensureSingleContact();
+      maybeObserveOnce(); // falls später erneut was injected wird
     });
-  }
-
-  function initYear(){
-    const yearEl = $("[data-year]");
-    if (yearEl) yearEl.textContent = String(new Date().getFullYear());
-  }
-
-  /* ---------------------------------------------------------------------------
-   * (6) Sicherheitsgurt gegen doppelte „Kontakt“-Blöcke
-   * -------------------------------------------------------------------------
-   * Ziel: Es soll genau EIN .contact-block pro Seite existieren.
-   * Vorgehen:
-   *  - Wenn im Footer-Container (#site-footer) ein Kontakt gefunden wird,
-   *    entfernen wir ALLE .contact-block außerhalb des Footers.
-   *  - Falls (außergewöhnlich) kein Footer-Kontakt vorhanden ist,
-   *    behalten wir nur den ERSTEN .contact-block und entfernen alle weiteren.
-   * ------------------------------------------------------------------------- */
-  function ensureSingleContact(){
-    const footerHost = $("#site-footer");
-    const footerContact = footerHost ? $(".contact-block", footerHost) : null;
-    const allContacts = $$(".contact-block", document);
-
-    if (footerContact) {
-      // Footer-Variante ist maßgeblich → alle anderen weg
-      allContacts.forEach(block => {
-        // steht der Block NICHT im Footer-Host? → entfernen
-        if (!footerHost.contains(block)) block.remove();
-      });
-      return;
-    }
-
-    // Kein Footer-Kontakt? → Behalte nur den ersten, rest löschen
-    if (allContacts.length > 1) {
-      allContacts.slice(1).forEach(b => b.remove());
-    }
-  }
-
-})(); // Ende IIFE
+  });
+})();
