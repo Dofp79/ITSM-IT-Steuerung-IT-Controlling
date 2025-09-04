@@ -3,74 +3,85 @@
 <head>
   <!-- =========================================================
        (0) DOKUMENT-SETUP & META
-       - SEO-freundlicher Titel & Beschreibung
-       - Viewport für Responsive Verhalten
-       - Beibehaltung der globalen Typografie/Designfarben
+       - SEO-Titel & Beschreibung
+       - Viewport für Responsive
+       - Beibehaltung des globalen Designs (global.css)
        ========================================================= -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Über mich – ITSM, IT-Steuerung & IT-Controlling</title>
   <meta name="description" content="Über mich: ITSM-Prozessadministrator (ITIL 4), KPI-Design, Reporting, Prozessautomatisierung, Power BI/DAX, BPMN/UML, Scrum." />
 
-  <!-- Optional: Canonical (falls GitHub Pages/mehrere Pfade) -->
+  <!-- Optional: Canonical-URL bei Mehrfach-Veröffentlichung (z. B. GitHub Pages) -->
   <!-- <link rel="canonical" href="https://dofp79.github.io/ITSM-IT-Steuerung-IT-Controlling/ueber-mich.html" /> -->
 
   <!-- =========================================================
-       (1) FONTS – SELF-HOSTED (schneller First Paint via preload)
-       - Pfade müssen in /assets/fonts/ existieren
+       (1) FONTS – self-hosted (schneller First Paint)
+       - Die Dateien liegen unter /assets/fonts/
        ========================================================= -->
   <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
 
   <!-- =========================================================
-       (2) GLOBAL CSS – dein zentrales Design
-       - Enthält: Tokens, Header/Drawer, Sektionen, CV-Styles etc.
+       (2) GLOBAL CSS – zentrales Stylesheet
+       - Enthält Header/Drawer/Hero/Cards/Kontakt/Footer usw.
+       - Logo-Größe, Drawer-Chips, Farben & Abstände sind dort vereinheitlicht
        ========================================================= -->
   <link rel="stylesheet" href="assets/css/global.css" />
 </head>
 
 <body id="top">
   <!-- =========================================================
-       (3) A11Y: SKIP-LINK
-       - Ermöglicht Tastaturnutzern den Direkt-Sprung zum Inhalt
-       - Ziel: #mainContent (siehe <main>)
+       (3) SKIP-LINK  (A11y)
+       - Tastatur-Nutzer springen direkt zum Inhalt (#mainContent)
        ========================================================= -->
   <a class="skip-link" href="#mainContent">Zum Inhalt springen</a>
 
   <!-- =========================================================
        (4) HEADER-CONTAINER
-       - Wird durch site.js via fetch() mit includes/header.html befüllt
-       - Enthält Burger/Drawer + globale Navigation
+       - WIRD durch site.js via fetch() mit includes/header.html befüllt
+       - Der include enthält:
+         • Burger (.burger) + Label „Themen“
+         • Offcanvas-Drawer #navdrawer mit Seiten-Links
+         • Markenlinie (.brand-bar) und Logo (rechts, konsistente Größe)
+       - Alle Events (Focus-Trap, ESC, Outside-Click, Resize) kommen aus site.js
        ========================================================= -->
   <header id="site-header" class="site-header" role="banner">
-    <!-- Fallback für No-JS: wird nur sichtbar, wenn JS fehlt/fehlschlägt -->
+    <!-- Fallback für Nutzer ohne JS (Noscript): simpler Header + Navigation -->
     <noscript>
       <div class="container header-bar">
+        <!-- Logo-Link zur Startseite; Größe kommt global aus .brand-right__logo -->
         <a class="brand-right" href="index.html" aria-label="Startseite">
-          <img src="assets/DoniLogo_1.0.0.png" width="150" height="40" alt="Logo Doniman F. Peña Parra" class="brand-right__logo">
+          <img src="assets/DoniLogo_1.0.0.png" width="150" height="40"
+               alt="Logo Doniman F. Peña Parra" class="brand-right__logo">
         </a>
       </div>
+
+      <!-- Einfache Hauptnavigation (gleiche Ziele wie im Drawer-Menü) -->
       <nav class="nav-drawer" aria-label="Hauptnavigation">
         <ul>
           <li><a href="index.html">Start</a></li>
           <li><a href="ueber-mich.html" aria-current="page">Über mich</a></li>
           <li><a href="projekte.html">Projekte</a></li>
+          <li><a href="rz-architektur.html">Rechenzentrumsstruktur</a></li>
           <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
         </ul>
       </nav>
+
+      <!-- Dünne Markenlinie im Header (globales Element) -->
       <div class="brand-bar" aria-hidden="true"></div>
     </noscript>
   </header>
 
   <!-- =========================================================
-       (5) HERO – Seitenkopf für "Über mich"
-       - Nutzt deine globalen Hero-Styles (blauer Bereich, typografisch)
+       (5) HERO – Seitenkopf (blauer Bereich)
+       - Typografie & Abstände kommen aus global.css (.hero, .hero__title, .hero__lead)
        ========================================================= -->
   <section class="hero" aria-label="Seitenkopf Über mich">
     <div class="container hero-inner">
       <h1 class="hero__title">Über mich</h1>
       <p class="hero__lead">
-        ITSM-Prozessadministrator mit Fokus auf <strong>ITIL® 4</strong>, <strong>KPI-Design</strong>,
+        ITSM-Prozessadministrator mit Fokus auf <strong>ITIL®&nbsp;4</strong>, <strong>KPI-Design</strong>,
         <strong>Reporting</strong> und <strong>Prozessautomatisierung</strong>. Ich verbinde Struktur und Pragmatismus –
         mit Power&nbsp;BI/DAX, BPMN/UML und agilen Methoden (Scrum).
       </p>
@@ -78,47 +89,45 @@
   </section>
 
   <!-- =========================================================
-       (6) MAIN – Seiteninhalt (vollständig eigenständig)
-       - ID #mainContent für Skip-Link, role="main" für A11y
-       - Enthält deinen gelieferten Block (Timeline/Skills/…)
-       - Klassen (sec-head, cv-card, cv-grid, …) kommen aus global.css
+       (6) MAIN – vollständiger Seiteninhalt
+       - ID #mainContent für den Skip-Link
+       - Styles für .sec-head/.cv-card/.cv-grid/.tags etc. kommen aus global.css
        ========================================================= -->
   <main id="mainContent" class="main" role="main">
     <!-- =========================================================
-         ÜBER MICH – ausführliche Sektion mit Timeline, Skills, etc.
-         (dein Originalblock, minimal angepasst: semantische H-Levels)
+         (6.1) ÜBER MICH – Timeline, Skills, Zertifikate, Sprachen
          ========================================================= -->
     <section id="ueber-mich" class="section">
       <div class="container">
 
-        <!-- Abschnittsüberschrift im einheitlichen Stil (.sec-head) -->
+        <!-- Abschnittsüberschrift im globalen Stil -->
         <div class="sec-head">
           <span class="sec-dot" aria-hidden="true"></span>
           <h2 class="sec-title">Über mich</h2>
         </div>
 
-        <!-- Kurz-Intro (Lead-Text): Blocksatz/Lesbarkeit via .lead in CSS -->
+        <!-- Kurzer Einführungs-/Leittext (Blocksatz via .lead) -->
         <p class="lead">
           ITSM-Prozessadministrator mit Schwerpunkt auf
-          <strong>ITIL® 4</strong>, <strong>KPI-Design</strong>, <strong>Reporting</strong>
+          <strong>ITIL®&nbsp;4</strong>, <strong>KPI-Design</strong>, <strong>Reporting</strong>
           und <strong>Prozessautomatisierung</strong>. Ich verbinde Struktur und
           Pragmatismus – mit Power&nbsp;BI/DAX, BPMN/UML und agilen Methoden (Scrum).
         </p>
 
         <!-- =====================================================
-             BERUFSERFAHRUNG – Timeline mit Karten
-             Markup nutzt .timeline + .cv-card (siehe global.css §CV)
+             (6.1.1) BERUFSERFAHRUNG – Timeline mit Karten
+             - .timeline steuert Raster & Abstände
+             - .cv-card gestaltet jede Station + linke Gradientenleiste
              ===================================================== -->
         <h3 class="cv-block-title">Berufserfahrung</h3>
 
-        <!-- Grid-Stack für Karten; Linie/Optik via .timeline/.cv-card -->
         <div class="timeline" aria-label="Berufserfahrung">
           <!-- Karte 1: aktuelle Rolle -->
           <article class="cv-card">
             <h4 class="cv-title">ITSM – Prozessadministrator</h4>
             <div class="cv-meta">Polizei Hamburg · 01/2024 – heute</div>
             <ul class="cv-list">
-              <li>ITSM-Prozesse nach ITIL® 4 steuern und optimieren.</li>
+              <li>ITSM-Prozesse nach ITIL®&nbsp;4 steuern und optimieren.</li>
               <li>Koordination mit Fachbereichen, Anforderungen aufnehmen und Lösungen ausarbeiten.</li>
               <li>KPI-Systeme mit Power&nbsp;BI/DAX entwickeln; Reporting-Richtlinien definieren.</li>
               <li>Cross-Team „Daten“ koordinieren; Kanban-Boards steuern und anpassen.</li>
@@ -138,10 +147,10 @@
               <li>Bearbeitung von Incidents im Lizenzmanagement.</li>
               <li>Hospitation in verschiedenen IT-Bereichen.</li>
               <li>Einblicke ins ITD5 (Amt für IT und Digitalisierung der Senatskanzlei).</li>
-              <li>Schulungen/Meetings zu „ITIL® 4 Management und Scrum“.</li>
+              <li>Schulungen/Meetings zu „ITIL®&nbsp;4 Management und Scrum“.</li>
               <li>BPMN-Prozessskizzen und Modellierung.</li>
               <li>Praxisprojekt: .NET Framework/C#, T-SQL, HTML/CSS/JS, PowerShell (Entwurf bis Doku).</li>
-              <li>Koordination &amp; Teilnahme an einer ITIL® 4-Simulation (Apollo&nbsp;13).</li>
+              <li>Koordination &amp; Teilnahme an einer ITIL®&nbsp;4-Simulation (Apollo&nbsp;13).</li>
             </ul>
           </article>
 
@@ -160,9 +169,9 @@
             </div>
           </article>
 
-          <!-- Karte 4: Querschnittserfahrung – Gastronomie -->
+          <!-- Karte 4: Querschnittserfahrung -->
           <article class="cv-card">
-            <h4 class="cv-title">Mehr als 20 Jahre Führungs- und Organisationserfahrung im Gastronomiebereich</h4>
+            <h4 class="cv-title">Mehr als 20 Jahre Führungs- &amp; Organisationserfahrung im Gastronomiebereich</h4>
             <div class="tags" aria-label="Schwerpunkte Gastronomie">
               <span class="tag">Teamführung &amp; Einsatzplanung</span>
               <span class="tag">Wareneinsatz/Budget</span>
@@ -177,8 +186,8 @@
         </div>
 
         <!-- =====================================================
-             SKILLS • ZERTIFIKATE • SPRACHEN – 3-Spalten-Grid
-             (auf Mobil 1 Spalte; CSS: .cv-grid/.cv-box)
+             (6.1.2) SKILLS • ZERTIFIKATE • SPRACHEN – 3-Spalten-Grid
+             - Mobil 1 Spalte; ab ~860px 3 Spalten (siehe global.css)
              ===================================================== -->
         <div class="cv-grid">
           <!-- Spalte 1: Skills -->
@@ -222,11 +231,11 @@
         </div>
 
         <!-- =====================================================
-             AKTIONEN – Buttons (PDF, LinkedIn)
-             Nutzen .btn / .btn--ghost aus global.css
+             (6.1.3) AKTIONEN – Buttons (PDF, LinkedIn)
+             - Buttons .btn / .btn--ghost stammen aus global.css
              ===================================================== -->
         <div class="cv-actions">
-          <!-- Prüfe bitte den PDF-Pfad lokal/GitHub-Pages -->
+          <!-- PDF-Pfad bitte auf deinen Build-/Pages-Pfad prüfen -->
           <a class="btn"
              href="assets/docs/LebenslaufDonimanPeña_052025_1.0.0.pdf"
              target="_blank" rel="noopener">
@@ -245,20 +254,19 @@
   </main>
 
   <!-- =========================================================
-       (7) FOOTER-CONTAINER (globaler Kontakt + Footer)
-       - Wird durch site.js via fetch() mit includes/footer.html befüllt
-       - Enthält Kontaktblock + Copyright
+       (7) FOOTER-CONTAINER
+       - WIRD per site.js mit includes/footer.html befüllt
+       - Der Include bringt den globalen Kontaktblock + kompakten Footer
        ========================================================= -->
   <div id="site-footer">
-    <!-- Fallback für No-JS -->
+    <!-- Fallback (ohne JS): reduzierter Kontakt + Footer -->
     <noscript>
       <section class="contact-block" aria-labelledby="kontaktTitle">
         <div class="contact-inner container">
           <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
           <p class="contact-name">Doniman F. Peña Parra</p>
-          <p class="contact-email">
-            <a href="mailto:dofp79@hotmail.com" rel="nofollow">dofp79@hotmail.com</a>
-          </p>
+          <!-- Ohne JS: direktes Mailto, sonst setzt site.js einen Spam-sicheren Link -->
+          <p class="contact-email"><a href="mailto:dofp79@hotmail.com" rel="nofollow">dofp79@hotmail.com</a></p>
         </div>
       </section>
       <footer class="site-footer" role="contentinfo">
@@ -272,30 +280,28 @@
 
   <!-- =========================================================
        (8) SCRIPTS
-       - site.js: enthält
-         • Drawer/Accordion/Scrollspy/Smooth Scroll
-         • E-Mail-Obfuskation
-         • Jahr im Footer
-         • fetch-Includes: #site-header & #site-footer
+       - assets/js/site.js:
+         • lädt Header/Footer via fetch()
+         • verdrahtet Burger/Drawer (A11y, ESC, Outside, Focus-Trap)
+         • markiert aktiven Menüpunkt (aria-current/.is-active)
+         • Accordion, Scrollspy (optional), „Nach oben“-Smooth-Scroll
+         • E-Mail-Obfuskation & Jahr im Footer
        ========================================================= -->
   <script src="assets/js/site.js" defer></script>
 
-  <!-- Optional: Mini-Inline-Guard – stellt sicher, dass Includes
-       auch ohne site.js (z. B. 404/Cache) nachgeladen werden.
-       Kann entfernt werden, wenn site.js stabil ausgeliefert wird. -->
+  <!-- =========================================================
+       (8b) MINI-FALLBACK: Falls site.js nicht lädt (z. B. 404/Cache),
+            werden Header/Footer dennoch nachgezogen.
+       - Kann entfernt werden, sobald site.js stabil verfügbar ist.
+       ========================================================= -->
   <script>
-    /* Fallback-Include nur, wenn site.js den Header/ Footer nicht gesetzt hat */
     document.addEventListener('DOMContentLoaded', () => {
       const ensureInclude = (sel, url) => {
         const host = document.querySelector(sel);
         if (!host) return;
         const hasContent = host.children.length > 0 && host.querySelector('noscript') === null;
         if (hasContent) return; // bereits durch site.js geladen
-
-        fetch(url)
-          .then(r => r.ok ? r.text() : '')
-          .then(html => { if (html) host.innerHTML = html; })
-          .catch(() => { /* schweigend scheitern – Noscript-Fallback bleibt */ });
+        fetch(url).then(r => r.ok ? r.text() : '').then(html => { if (html) host.innerHTML = html; });
       };
       ensureInclude('#site-header', 'includes/header.html');
       ensureInclude('#site-footer', 'includes/footer.html');
