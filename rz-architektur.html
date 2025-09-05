@@ -3,8 +3,6 @@
 <head>
   <!-- =========================================================
        (0) DOKUMENT-SETUP & META
-       - Einheitlicher Titel/Description für SEO
-       - Viewport für Responsive Layout
        ========================================================= -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,28 +10,26 @@
   <meta name="description" content="Systemmodellierung und Analyse der Rechenzentrumsstruktur (RZ) für ein ITSM-Tool – Komponenten, Funktionen und Incident-Ablauf." />
 
   <!-- =========================================================
-       (1) FONTS – self-hosted (Preload) wie auf allen Seiten
-       - Pfade müssen existieren (assets/fonts/*.woff)
+       (1) FONTS (Preload) – Pfade müssen existieren
        ========================================================= -->
   <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
 
   <!-- =========================================================
-       (2) GLOBAL CSS – beibehaltener Look & Feel
-       - Enthält Tokens, Komponenten (Hero, Cards, Grid, Drawer ...)
+       (2) GLOBAL CSS – enthält Tokens, Layout, Komponenten
        ========================================================= -->
   <link rel="stylesheet" href="assets/css/global.css" />
 
   <!-- =========================================================
        (3) SEITENSPEZIFISCHE MINI-STYLES
-       - Ergänzen nur minimal; globale Tokens werden respektiert
-       - Diagramm & Tabelle: zentriert/lesbar
+       - Kleines Tuning für Inhalt, Tabelle
+       - Zoom-/Modal-Styles liegen global in global.css (.rz-*)
        ========================================================= -->
   <style>
-    /* (3.1) Zentrierte, begrenzte Content-Breite für Diagramm/Karten */
+    /* (3.1) Zentrierung/Max-Breite für Diagramm & Karten */
     .center-wrap { max-width: 1100px; margin-inline: auto; }
 
-    /* (3.2) Diagramm-Bild: responsive, Seitenmitte */
+    /* (3.2) Diagramm-Bild: responsive, mittig */
     .diagram { display:block; margin-inline:auto; max-width:100%; height:auto; }
 
     /* (3.3) Lesbarer geordneter Ablauf in der Card */
@@ -43,7 +39,7 @@
     /* (3.4) Responsive Tabellenhülle */
     .table-wrap { overflow-x:auto; }
 
-    /* (3.5) ITSM-Tabelle – nutzt deine Design-Tokens aus :root */
+    /* (3.5) ITSM-Tabelle – Design-Tokens nutzen */
     .itsm-table {
       width: 100%;
       border-collapse: collapse;
@@ -68,33 +64,27 @@
 
 <body id="top">
   <!-- =========================================================
-       (4) A11Y: SKIP-LINK – Tastatur-Nutzer springen direkt zum Inhalt
-       - Ziel ist #mainContent (s.u.)
+       (4) A11Y: SKIP-LINK – Tastatur „zum Inhalt springen“
        ========================================================= -->
   <a class="skip-link" href="#mainContent">Zum Inhalt springen</a>
 
   <!-- =========================================================
-       (5) HEADER-CONTAINER – wird via site.js includiert
-       - includes/header.html: Burger, Drawer, Navigation
-       - Noscript-Fallback: einfache Navi (funktioniert ohne JS)
-       - WICHTIG: Diese Seite ist im Fallback-Menü gelistet & aktiv
+       (5) HEADER-CONTAINER – via site.js (includes/header.html)
+       - Noscript = minimaler Fallback ohne JS
        ========================================================= -->
   <header id="site-header" class="site-header" role="banner">
     <noscript>
-      <!-- Fallback-Header (nur sichtbar ohne JS) -->
+      <!-- Fallback-Header (nur ohne JS sichtbar) -->
       <div class="container header-bar">
-        <!-- Logo führt zur Startseite -->
         <a class="brand-right" href="index.html" aria-label="Startseite">
           <img src="assets/DoniLogo_1.0.0.png" width="150" height="40" alt="Logo Doniman F. Peña Parra" class="brand-right__logo">
         </a>
       </div>
-      <!-- Einfache Navigation als Fallback -->
       <nav class="nav-drawer" aria-label="Hauptnavigation">
         <ul>
           <li><a href="index.html">Start</a></li>
           <li><a href="ueber-mich.html">Über mich</a></li>
           <li><a href="projekte.html">Projekte</a></li>
-          <!-- AKTUELLER SEITENLINK: aktiv markiert -->
           <li><a href="rz-architektur.html" aria-current="page" class="is-active">Rechenzentrumsstruktur</a></li>
           <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
         </ul>
@@ -104,7 +94,7 @@
   </header>
 
   <!-- =========================================================
-       (6) HERO – nutzt globale Klassen (.hero__title / .hero__lead)
+       (6) HERO – Seitentitel & Untertitel (global gestylt)
        ========================================================= -->
   <section class="hero" aria-label="Seitenkopf RZ">
     <div class="container hero-inner">
@@ -114,25 +104,18 @@
   </section>
 
   <!-- =========================================================
-       (7) MAIN – Seiteninhalt
-       - Semantische Struktur mit <section> und einheitlichen
-         Abschnittsköpfen (.sec-head / .sec-dot / .sec-title)
+       (7) MAIN – Inhaltlich gegliedert in Sektionen
        ========================================================= -->
   <main id="mainContent" class="main" role="main">
 
-    <!-- (7.1) AUFGABENBESCHREIBUNG / EINORDNUNG -->
+    <!-- (7.1) Einordnung -->
     <section class="section container" id="aufgabe">
-      <!-- Einheitlicher Abschnitts-Kopf -->
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
-        <h2 class="sec-title">
-          Systemmodellierung &amp; Analyse der Rechenzentrumsstruktur (RZ) für ein ITSM-Tool
-        </h2>
+        <h2 class="sec-title">Systemmodellierung &amp; Analyse der Rechenzentrumsstruktur (RZ) für ein ITSM-Tool</h2>
       </div>
 
-      <!-- 2-Spalten-Layout: Fließtext + komakte Faktenkarte -->
       <div class="grid-2">
-        <!-- Fließtext (linke Spalte) -->
         <div>
           <h3 class="cv-title">Kontext &amp; Ziel</h3>
           <p class="lead">
@@ -147,7 +130,6 @@
           </p>
         </div>
 
-        <!-- Kompakte Faktenkarte (rechte Spalte) -->
         <aside class="card">
           <h3>Schwerpunkte</h3>
           <ul class="checklist">
@@ -160,26 +142,45 @@
       </div>
     </section>
 
-    <!-- (7.2) ARCHITEKTUR / DIAGRAMM -->
+    <!-- (7.2) ARCHITEKTUR / DIAGRAMM mit Lupe + Vollbild -->
     <section class="section container" id="rz-diagramm">
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
         <h2 class="sec-title">ITSM-RZ-Diagramm</h2>
       </div>
 
-      <!-- Zentrierte Karte mit Diagramm + Ablaufbeschreibung -->
       <div class="center-wrap">
         <article class="card">
-          <!-- HINWEIS: Pfad ggf. an deine Ordnerstruktur anpassen -->
-          <img
-            class="diagram"
-            src="assets/images/rz/ITSM_RZ_1.0.0.png"
-            alt="Diagramm: Rechenzentrumsstruktur für ein ITSM-System"
-            loading="lazy"
-            decoding="async"
-            data-full="assets/images/rz/ITSM_RZ_1.0.0.png" />
+          <!--
+            WICHTIG:
+            - figure.rz-zoom enthält das Vorschaubild, die Lupe (Overlay) und den „Groß ansehen“-Button
+            - Das echte Vollbild anzeigen wir weiter unten im Modal (.rz-modal)
+          -->
+          <figure class="rz-zoom" aria-labelledby="rz-caption">
+            <!-- (A) Vorschau-Bild (klein) -->
+            <img
+              class="diagram"
+              src="assets/images/rz/ITSM_RZ_1.0.0.png"
+              alt="Diagramm: Rechenzentrumsstruktur für ein ITSM-System"
+              loading="lazy"
+              decoding="async"
+              data-full="assets/images/rz/ITSM_RZ_1.0.0.png" />
 
-          <!-- Ablauf in geordneter Liste (lesbar aufbereitet) -->
+            <!-- (B) Lupe-Overlay (per JS bewegt/ein- und ausgeblendet) -->
+            <span class="rz-zoom__lens" aria-hidden="true"></span>
+
+            <!-- (C) Vollbild öffnen -->
+            <button type="button" class="rz-zoom__open" aria-haspopup="dialog" aria-controls="rzModal">
+              Groß ansehen
+            </button>
+
+            <!-- (D) Bildunterschrift (nur für Screenreader) -->
+            <figcaption id="rz-caption" class="visually-hidden">
+              ITSM-RZ-Diagramm – für Details mit der Lupe über das Bild fahren oder „Groß ansehen“ öffnen.
+            </figcaption>
+          </figure>
+
+          <!-- (E) erläuternder Ablauftext -->
           <div class="card-body">
             <div class="text-block">
               <h3>Incident-Management – Standardablauf</h3>
@@ -227,14 +228,38 @@
       </div>
     </section>
 
-    <!-- (7.3) VERGLEICHSTABELLE ITSM-KOMPONENTEN -->
+    <!-- (7.2b) MODAL – Vollbild mit Pan & Zoom (wird per Button geöffnet) -->
+    <!--  A11y: role="dialog", aria-modal, ESC schließt, Fokus-Management im JS -->
+    <div class="rz-modal" id="rzModal" role="dialog" aria-modal="true" aria-labelledby="rzTitle" hidden>
+      <div class="rz-modal__backdrop" data-close></div>
+      <div class="rz-modal__dialog" role="document">
+        <header class="rz-modal__head">
+          <h3 id="rzTitle">Diagramm – Detailansicht</h3>
+          <button type="button" class="rz-modal__close" aria-label="Schließen" data-close>×</button>
+        </header>
+
+        <!-- Pan-&-Zoom-Bühne -->
+        <div class="rz-stage" tabindex="0"
+             aria-label="Zoombereich. Mausrad/Pinch zum Zoomen, Ziehen zum Verschieben. ESC schließt.">
+          <img class="rz-stage__img" alt="" />
+        </div>
+
+        <!-- Toolleiste -->
+        <div class="rz-tools">
+          <button type="button" class="rz-btn" data-zoom="out"  aria-label="Herauszoomen">−</button>
+          <button type="button" class="rz-btn" data-zoom="in"   aria-label="Hineinzoomen">+</button>
+          <button type="button" class="rz-btn" data-zoom="reset" aria-label="Ansicht zurücksetzen">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- (7.3) Vergleichstabelle -->
     <section class="section container" id="vergleich">
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
         <h2 class="sec-title">ITSM-Komponenten im Vergleich</h2>
       </div>
 
-      <!-- Tabellenhülle sorgt für horizontales Scrollen auf Mobil -->
       <div class="table-wrap">
         <article class="card">
           <table class="itsm-table">
@@ -247,106 +272,33 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>User (Self-Service-Portal)</td>
-                <td>Endanwender:innen melden Incidents oder prüfen den Status.</td>
-                <td>Zugriff via HTTPS</td>
-                <td>Erstellt Tickets, prüft Status, empfängt Updates.</td>
-              </tr>
-              <tr>
-                <td>Load Balancer (HA)</td>
-                <td>Verteilt eingehenden Traffic auf Web-Gateways.</td>
-                <td>Hochverfügbarkeit (Active/Passive)</td>
-                <td>Gewährleistet Erreichbarkeit des Portals.</td>
-              </tr>
-              <tr>
-                <td>Web-Gateway / Reverse Proxy</td>
-                <td>Sicherheits- und Zugriffsebene in der DMZ.</td>
-                <td>TLS-Terminierung, Routing, Schutz interner Systeme</td>
-                <td>Filtert Anfragen, schützt interne Systeme.</td>
-              </tr>
-              <tr>
-                <td>Portal-Frontend (HTML/JS/CSS)</td>
-                <td>UI im Browser</td>
-                <td>Darstellung der ITSM-Oberfläche</td>
-                <td>Erfassung &amp; Anzeige von Incident-Daten</td>
-              </tr>
-              <tr>
-                <td>ITSM-App-Cluster</td>
-                <td>Applikationsschicht mit mehreren Servern</td>
-                <td>Workflows, Ticketmanagement</td>
-                <td>Validierung, Ticketanlage, Eskalation</td>
-              </tr>
-              <tr>
-                <td>DB-Cluster (Primary/Replica)</td>
-                <td>Zentrale Datenbank mit Redundanz</td>
-                <td>Tickets, User, CMDB, Knowledge</td>
-                <td>Herzstück: Speicherung und Verfügbarkeit</td>
-              </tr>
-              <tr>
-                <td>File/Blob-Storage</td>
-                <td>Ablage großer Dateien (z. B. Anhänge)</td>
-                <td>Speicherung von Attachments</td>
-                <td>Beweise/Anhänge zum Incident</td>
-              </tr>
-              <tr>
-                <td>Mail-Gateway</td>
-                <td>Anbindung an Mailsystem</td>
-                <td>Versand von Benachrichtigungen</td>
-                <td>Automatische Mails an User &amp; Support</td>
-              </tr>
-              <tr>
-                <td>Directory Services (AD/LDAP/SSO/MFA)</td>
-                <td>Authentifizierungssysteme</td>
-                <td>SSO, MFA</td>
-                <td>Verifiziert Identitäten beim Login</td>
-              </tr>
-              <tr>
-                <td>Monitoring &amp; Logging</td>
-                <td>Protokollierung &amp; Überwachung</td>
-                <td>SLA-Tracking, Dashboards, Alarmierung</td>
-                <td>Überwacht Ticketlaufzeit &amp; Systemzustand</td>
-              </tr>
-              <tr>
-                <td>Backup-Server</td>
-                <td>Lokales Backup-System</td>
-                <td>Snapshots &amp; Recovery</td>
-                <td>Wiederherstellung nach Fehler/Datenverlust</td>
-              </tr>
-              <tr>
-                <td>DR-Standort (optional)</td>
-                <td>Externes Disaster-Recovery-System</td>
-                <td>Georedundante Sicherung</td>
-                <td>Resilienz, Wiederaufnahme im Notfall</td>
-              </tr>
+              <tr><td>User (Self-Service-Portal)</td><td>Endanwender:innen melden Incidents oder prüfen den Status.</td><td>Zugriff via HTTPS</td><td>Erstellt Tickets, prüft Status, empfängt Updates.</td></tr>
+              <tr><td>Load Balancer (HA)</td><td>Verteilt eingehenden Traffic auf Web-Gateways.</td><td>Hochverfügbarkeit (Active/Passive)</td><td>Gewährleistet Erreichbarkeit des Portals.</td></tr>
+              <tr><td>Web-Gateway / Reverse Proxy</td><td>Sicherheits- und Zugriffsebene in der DMZ.</td><td>TLS-Terminierung, Routing, Schutz interner Systeme</td><td>Filtert Anfragen, schützt interne Systeme.</td></tr>
+              <tr><td>Portal-Frontend (HTML/JS/CSS)</td><td>UI im Browser</td><td>Darstellung der ITSM-Oberfläche</td><td>Erfassung &amp; Anzeige von Incident-Daten</td></tr>
+              <tr><td>ITSM-App-Cluster</td><td>Applikationsschicht mit mehreren Servern</td><td>Workflows, Ticketmanagement</td><td>Validierung, Ticketanlage, Eskalation</td></tr>
+              <tr><td>DB-Cluster (Primary/Replica)</td><td>Zentrale Datenbank mit Redundanz</td><td>Tickets, User, CMDB, Knowledge</td><td>Herzstück: Speicherung und Verfügbarkeit</td></tr>
+              <tr><td>File/Blob-Storage</td><td>Ablage großer Dateien (z. B. Anhänge)</td><td>Speicherung von Attachments</td><td>Beweise/Anhänge zum Incident</td></tr>
+              <tr><td>Mail-Gateway</td><td>Anbindung an Mailsystem</td><td>Versand von Benachrichtigungen</td><td>Automatische Mails an User &amp; Support</td></tr>
+              <tr><td>Directory Services (AD/LDAP/SSO/MFA)</td><td>Authentifizierungssysteme</td><td>SSO, MFA</td><td>Verifiziert Identitäten beim Login</td></tr>
+              <tr><td>Monitoring &amp; Logging</td><td>Protokollierung &amp; Überwachung</td><td>SLA-Tracking, Dashboards, Alarmierung</td><td>Überwacht Ticketlaufzeit &amp; Systemzustand</td></tr>
+              <tr><td>Backup-Server</td><td>Lokales Backup-System</td><td>Snapshots &amp; Recovery</td><td>Wiederherstellung nach Fehler/Datenverlust</td></tr>
+              <tr><td>DR-Standort (optional)</td><td>Externes Disaster-Recovery-System</td><td>Georedundante Sicherung</td><td>Resilienz, Wiederaufnahme im Notfall</td></tr>
             </tbody>
           </table>
         </article>
       </div>
     </section>
 
-    <!-- (7.4) KONTAKT – globaler Block (immer vor dem Footer) -->
-    <section class="contact-block" aria-labelledby="kontaktTitle">
-      <div class="contact-inner container">
-        <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
-        <p class="contact-name">Doniman F. Peña Parra</p>
-
-        <!-- Spam-sicher: Text + href werden per site.js gesetzt -->
-        <p class="contact-email">
-          <a id="contactEmail"
-             data-email-user="dofp79"
-             data-email-domain="hotmail.com"
-             href="#"
-             rel="nofollow">E-Mail anzeigen</a>
-          <noscript>(dofp79&nbsp;[at]&nbsp;hotmail&nbsp;[dot]&nbsp;com)</noscript>
-        </p>
-      </div>
-    </section>
+    <!-- (7.4) KONTAKT – LOKALER BLOCK entfernt, um Doppelung zu vermeiden.
+         HINWEIS: Der globale Kontaktblock kommt aus includes/footer.html.
+         Falls du den Kontakt lieber hier lokal haben möchtest, sag Bescheid,
+         dann entfernen wir ihn stattdessen aus dem Footer-Include. -->
   </main>
 
   <!-- =========================================================
-       (8) FOOTER-CONTAINER – wird via site.js includiert
-       - Noscript liefert Minimal-Footer ohne JS
+       (8) FOOTER-CONTAINER – via site.js (includes/footer.html)
+       - Noscript = minimaler Fallback ohne JS
        ========================================================= -->
   <div id="site-footer">
     <noscript>
@@ -360,35 +312,16 @@
   </div>
 
   <!-- =========================================================
-       (9) SCRIPTS – global + Active-Nav-Sicherheitsgurt
-       - assets/js/site.js:
-         • lädt Header/Footer (fetch includes)
-         • initialisiert Burger/Drawer (A11y, Focus-Trap, Close)
-         • setzt Jahr, E-Mail, Smooth-Scroll, Accordion, Scrollspy
-       - Inline: markiert zur Sicherheit den aktiven Link, falls
-         site.js minimal verzögert lädt
+       (9) SCRIPTS – genau EINMAL laden (defer)
+       - site.js lädt Header/Footer, initialisiert Drawer,
+         setzt --header-h, markiert aktive Navigation,
+         setzt Jahr & E-Mail und entfernt doppelte Kontakte.
        ========================================================= -->
   <script src="assets/js/site.js" defer></script>
-  <script>
-    // (9.1) Optionaler Sicherheitsgurt: aktiven Menüpunkt markieren
-    (function () {
-      const markActiveNav = () => {
-        const header = document.getElementById('site-header');
-        if (!header) return;
-        const current = location.pathname.split('/').pop() || 'index.html';
-        header.querySelectorAll('a[href]').forEach(a => {
-          const href = a.getAttribute('href') || '';
-          const isCurrent = href.endsWith(current);
-          a.classList.toggle('is-active', isCurrent);
-          if (isCurrent) a.setAttribute('aria-current', 'page');
-          else a.removeAttribute('aria-current');
-        });
-      };
-      document.addEventListener('DOMContentLoaded', () => { markActiveNav(); setTimeout(markActiveNav, 200); });
-    })();
 
-    // (9.2) Fallback-Include: lädt Header/Footer, falls site.js einmal fehlen sollte
-    document.addEventListener('DOMContentLoaded', () => {
+  <!-- Optionaler „Sicherheitsgurt“: wenn site.js ausfällt, Fallback-Includes laden -->
+  <script>
+    (function(){
       const include = (sel, url) => {
         const host = document.querySelector(sel);
         if (!host) return;
@@ -396,9 +329,11 @@
         if (already) return; // bereits durch site.js gefüllt
         fetch(url).then(r => r.ok ? r.text() : '').then(html => { if (html) host.innerHTML = html; });
       };
-      include('#site-header', 'includes/header.html');
-      include('#site-footer', 'includes/footer.html');
-    });
+      document.addEventListener('DOMContentLoaded', () => {
+        include('#site-header', 'includes/header.html');
+        include('#site-footer', 'includes/footer.html');
+      });
+    })();
   </script>
 </body>
 </html>
