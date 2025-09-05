@@ -1,21 +1,41 @@
 <!-- includes/header.html -->
-<!-- =========================================================
-     GLOBALER HEADER (einheitlich auf allen Seiten)
-     - Burger (.burger) öffnet Offcanvas-Drawer (#navdrawer)
-     - Logo rechts (immer konsistente Höhe via global.css)
-     - Navigation: echte Seitenlinks (keine #hashes)
-     - Interaktionen (A11y/Focus-Trap/ESC) kommen aus site.js
-     ========================================================= -->
+<!-- =========================================================================
+     GLOBALER HEADER (Inhalt für #site-header)
+     -------------------------------------------------------------------------
+     Enthält:
+     - (A) Kopfzeile (.header-bar) mit Burger links + Logo rechts
+     - (B) Dünne Markenlinie (.brand-bar) unter der Kopfzeile
+     - (C) Offcanvas-Drawer (#navdrawer) = "Themen"-Menü
+     -------------------------------------------------------------------------
+     WICHTIG:
+     - IDs/Selektoren passen exakt zu site.js  (navdrawer, .burger, .brand-bar)
+     - Keine doppelten brand-bar/navdrawer-Elemente → sonst Layout/JS-Konflikte
+     - Logo-Größe wird NUR über CSS (global.css → --logo-h) gesteuert
+     ========================================================================= -->
 
+<!-- (A) Kopfzeile: Burger + Logo -->
 <div class="container header-bar">
-  <!-- Burger-Button: site.js toggelt aria-expanded & Drawer-State -->
-  <button class="burger" aria-expanded="false" aria-controls="navdrawer">
+  <!-- Burger-Button 
+       - site.js hängt hier die komplette Drawer-Logik dran:
+         * aria-expanded auf true/false
+         * Focus-Trap im Drawer
+         * ESC/Outside-Click schließt
+       - aria-controls → verweist auf den Drawer (#navdrawer)
+  -->
+  <button class="burger"
+          type="button"
+          aria-label="Menü öffnen"
+          aria-controls="navdrawer"
+          aria-expanded="false">
     <span class="burger__icon" aria-hidden="true"></span>
-    <span class="burger__label">Themen</span> <!-- site.js ändert zu „Menü schließen“ -->
+    <!-- Die Beschriftung wechselt in site.js zwischen
+         "Themen" und "Menü schließen" -->
+    <span class="burger__label">Themen</span>
   </button>
 
-  <!-- Logo: KEINE width/height-Attribute im HTML
-       → Größe wird ausschließlich über CSS gesteuert (brand-right__logo) -->
+  <!-- Logo: KEINE width/height-Attribute!
+       - Größe = global.css → .brand-right__logo (Token: --logo-h)
+       - Der Link führt zur Startseite -->
   <a class="brand-right" href="index.html" aria-label="Startseite">
     <img src="assets/DoniLogo_1.0.0.png"
          alt="Logo Doniman F. Peña Parra"
@@ -23,12 +43,20 @@
   </a>
 </div>
 
-<!-- dünne Markenlinie (Brand-Bar) -->
+<!-- (B) Dünne Markenlinie unter der Kopfzeile 
+     - Nur EINMAL vorhanden (früher doppelt → entfernt) -->
 <div class="brand-bar" aria-hidden="true"></div>
 
-<!-- Offcanvas-Drawer (Themen-Menü) -->
-<nav id="navdrawer" class="nav-drawer" aria-label="Hauptnavigation">
+<!-- (C) Offcanvas-Drawer: „Themen“-Menü 
+     - Wird von site.js ein-/ausgeblendet (.is-open)
+     - A11y: Focus-Trap bei geöffnetem Zustand
+     - Links sind echte Seiten (keine #hashes), damit Active-State greift -->
+<nav id="navdrawer" class="nav-drawer" role="navigation" aria-label="Hauptnavigation">
   <ul>
+    <!-- HINWEIS:
+         * Der Active-State (rote Hervorhebung) wird von site.js gesetzt
+           anhand der aktuellen Datei (…/index.html etc.)
+         * Reihenfolge/Themen kannst du frei anpassen -->
     <li><a href="index.html">Start</a></li>
     <li><a href="ueber-mich.html">Über mich</a></li>
     <li><a href="projekte.html">Projekte</a></li>
