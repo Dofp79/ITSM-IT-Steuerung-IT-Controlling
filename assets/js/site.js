@@ -1,15 +1,34 @@
 /* =============================================================================
-   assets/js/site.js  –  NEUE VERSION für horizontales Sticky-Menü (ohne Drawer)
+   assets/js/site.js
    -----------------------------------------------------------------------------
-   Inhalt (alles streng gekapselt, keine Globals):
-   - (0) Utilities ($, $$, include)
-   - (1) Schutzmaßnahme: genau EIN .contact-block im gesamten DOM
-   - (2) Headerhöhe → CSS-Var --header-h (z. B. für Sticky-Offset)
-   - (3) Navigation (OHNE Drawer): aktiven Menüpunkt markieren (aria-current, .is-active)
-   - (3b) Responsive Navigation (Burger/Collapsible) – A11y, ESC, Link-Klick, Resize
-   - (4) Footer: Jahr setzen & E-Mail sicher hydratisieren
-   - (5) Boot: Header/Footer includen → Initialisierungen → Kontakt-Schutz
-   - (6) RZ-Diagramm (optional): Lupe + Vollbild (Pan & Zoom) – nur wenn Hooks existieren
+   Zweck:
+   - Globalen Header/Footer laden (horizontales Sticky-Menü auf allen Seiten)
+   - Responsive Collapsible-Navigation (Burger) inkl. A11y
+   - aktiven Menüpunkt markieren (aria-current, .is-active)
+   - Footer-Jahr & E-Mail sicher einsetzen
+   - Kontaktblock-Deduplizierung
+   - (optional) RZ-Lupe + Vollbild (Pan & Zoom), nur wenn Hooks vorhanden sind
+
+   Abhängigkeiten im HTML (MINDESTENS):
+   ---------------------------------------------------------------------------
+   <header id="site-header" class="site-header" role="banner"></header>
+   <div id="site-footer"></div>
+   <script src="assets/js/site.js" defer></script>
+
+   Abhängigkeiten im Header-Include (includes/header.html) für Mobile:
+   ---------------------------------------------------------------------------
+   - Button:  <button class="nav-toggle" aria-controls="primary-nav">Menü</button>
+   - Nav:     <nav id="primary-nav" class="nav-main" data-collapsible>…</nav>
+              (Links darin haben Klasse .nav-list a[…])
+
+   Abhängigkeiten für RZ-Lupe/Vollbild (nur auf RZ-Seite nötig):
+   ---------------------------------------------------------------------------
+   figure.rz-zoom > img.diagram[data-full] + .rz-zoom__lens + .rz-zoom__open
+   #rzModal .rz-stage > .rz-stage__img   (+ Schließen/Zoom-Buttons optional)
+
+   Hinweise:
+   - Alles ist in eine IIFE gekapselt (keine Globals).
+   - Kommentare zeigen exakte Aufgaben & Stolpersteine.
    ============================================================================= */
 
 (() => {
@@ -17,17 +36,17 @@
 
   /* ---------------------------------------------------------------------------
    * (0) Utilities
-   * - $  : querySelector Kurzform
-   * - $$ : querySelectorAll als Array
-   * - include(sel, url): lädt HTML-Include in ein Host-Element (Progressive Enhancement)
    * ------------------------------------------------------------------------ */
   const $  = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
+  /**
+   * HTML-Snippet (Header/Footer) per fetch() laden und in Host einsetzen.
+   * Progressive Enhancement: wird NICHT geladen, wenn bereits Content (ohne <noscript>) vorhanden ist.
+   */
   const include = (sel, url) => {
     const host = $(sel);
     if (!host) return Promise.resolve(false);
-    // Bereits gefüllt? (z. B. durch SSR/CMS/anderen Loader) → nichts tun
     const alreadyFilled = host.children.length > 0 && !host.querySelector('noscript');
     if (alreadyFilled) return Promise.resolve(true);
     return fetch(url)
@@ -37,10 +56,10 @@
   };
 
   /* ---------------------------------------------------------------------------
-   * (1) Nur EIN Kontaktblock auf der Seite lassen
-   *  - Bevorzugt den im Footer (#site-footer .contact-block), sonst den zuletzt
-   *    vorhandenen. Entfernt Duplikate.
-   *  - Läuft initial & via MutationObserver (falls später erneut injected wird).
+   * (1) Kontaktblock-Deduplizierung
+   *  - Behalte den im Footer (#site-footer .contact-block) oder den zuletzt
+   *    vorhandenen. Entferne alle anderen Vorkommen.
+   *  - Läuft initial + via MutationObserver (falls später noch Inhalt injected wird).
    * ------------------------------------------------------------------------ */
   function ensureSingleContact() {
     const all = $$('.contact-block');
@@ -49,6 +68,7 @@
     const keep = footerOne || all[all.length - 1];
     all.forEach(el => { if (el !== keep) el.remove(); });
   }
+
   const observeOnceForContacts = (() => {
     let started = false;
     return () => {
@@ -60,12 +80,13 @@
   })();
 
   /* ---------------------------------------------------------------------------
-   * (2) Headerhöhe messen → --header-h setzen
-   *  - Nützlich, wenn Layout unterhalb des Sticky-Headers mit Abstand starten soll.
+   * (2) Headerhöhe → CSS-Var --header-h
+   *  - Nützlich als Sticky-Offset oder wenn etwas „unter dem Header“ starten soll.
+   *  - Robust, falls .brand-bar (alte Variante) noch existiert.
    * ------------------------------------------------------------------------ */
   function setHeaderHeightVar() {
-    const header   = $('.site-header'); // aus includes/header.html
-    const brandBar = $('.brand-bar');   // optional (ältere Variante)
+    const header   = $('.site-header');
+    const brandBar = $('.brand-bar'); // optional
     if (!header) return;
     const compute = () => {
       const h = header.offsetHeight + (brandBar ? brandBar.offsetHeight : 0);
@@ -76,18 +97,16 @@
   }
 
   /* ---------------------------------------------------------------------------
-   * (3) Navigation (OHNE Drawer) – aktiven Menüpunkt markieren
-   *  - Vergleicht den aktuellen Dateinamen (…/seite.html) mit den href-Endungen
-   *  - Setzt a[aria-current="page"] (A11y) und .is-active (für CSS)
+   * (3) Aktiven Menüpunkt markieren (OHNE Drawer)
+   *  - Vergleich auf Dateinamebene, Query/Hash werden ignoriert.
+   *  - Setzt a[aria-current="page"] + .is-active (für CSS).
    * ------------------------------------------------------------------------ */
   function markActiveLink() {
-    // Liefert bei / oder leeren Pfaden "index.html"
     const current = location.pathname.split('/').pop() || 'index.html';
-    // Links im globalen Horizontalmenü (kommt aus includes/header.html)
-    const links = $$('.nav-list a[href]');
+    const links = $$('.nav-list a[href]'); // kommt aus includes/header.html
     links.forEach(a => {
-      // Vergleich nur auf Dateinamebene (ohne Ordner, Query, Hash)
-      const href = (a.getAttribute('href') || '').split('/').pop().split('#')[0].split('?')[0];
+      const href = (a.getAttribute('href') || '')
+        .split('/').pop().split('#')[0].split('?')[0];
       const onPage = href === current;
       a.classList.toggle('is-active', onPage);
       if (onPage) a.setAttribute('aria-current', 'page');
@@ -96,30 +115,28 @@
   }
 
   /* ---------------------------------------------------------------------------
-   * (3b) Responsive Navigation (Burger für Mobile)
-   *  - Button .nav-toggle steuert das Collapsible #primary-nav[data-collapsible]
-   *  - A11y: aria-expanded wird gepflegt; ESC & Link-Klick schließen
-   *  - Zusätzlich: .is-open auch am Button (für Icon-Animationen via CSS)
+   * (3b) Responsive Navigation (Burger / Collapsible)
+   *  - Button .nav-toggle toggelt #primary-nav[data-collapsible]
+   *  - A11y: aria-expanded, ESC schließt, Klick auf Link schließt
+   *  - Resize: beim Wechsel auf Desktop schließen
    * ------------------------------------------------------------------------ */
-  function initResponsiveNav(){
-    // WICHTIG: Nach dem Include ausführen, damit der Header im DOM ist
+  function initResponsiveNav() {
     const header = document.getElementById('site-header');
     if (!header) return;
 
     const toggle = header.querySelector('.nav-toggle');
     const nav    = header.querySelector('#primary-nav[data-collapsible]');
-    if (!toggle || !nav) return; // Falls Markup fehlt, sauber aussteigen
+    if (!toggle || !nav) return; // Header-Markup fehlt → ruhig aussteigen
 
-    // Initialzustand (geschlossen)
+    // Startzustand
     toggle.setAttribute('aria-expanded', 'false');
     toggle.classList.remove('is-open');
     nav.classList.remove('is-open');
 
     const setOpen = (open) => {
       toggle.setAttribute('aria-expanded', String(open));
-      toggle.classList.toggle('is-open', open); // ermöglicht „X“-Icon per CSS
-      nav.classList.toggle('is-open', open);    // triggert Collapsible (max-height)
-      // Hinweis: Da kein Offcanvas, kein Body-Scroll-Lock nötig
+      toggle.classList.toggle('is-open', open); // ermöglicht Icon-Animation via CSS
+      nav.classList.toggle('is-open', open);    // triggert Collapsible (z. B. max-height)
     };
 
     // Toggle per Klick
@@ -133,28 +150,25 @@
       if (e.key === 'Escape') setOpen(false);
     });
 
-    // Klick auf Navigationslink schließt (Mobile-Komfort)
+    // Klick auf Link schließt (Mobile-Usability)
     nav.addEventListener('click', (e) => {
       const link = (e.target instanceof HTMLElement) ? e.target.closest('a[href]') : null;
       if (link) setOpen(false);
     });
 
-    // Bei Resize von mobil → desktop: sicherheitshalber schließen
+    // Bei Resize von klein → groß: sicherheitshalber schließen
     let lastW = window.innerWidth;
     window.addEventListener('resize', () => {
       const w = window.innerWidth;
-      if (w !== lastW){
-        if (w > 960) setOpen(false); // Breakpoint muss zu deinem CSS passen
+      if (w !== lastW) {
+        if (w > 960) setOpen(false); // Breakpoint zum CSS passend halten
         lastW = w;
       }
     });
   }
 
   /* ---------------------------------------------------------------------------
-   * (4) Footer-Jahr & Kontakt-Mail (Spam-sicher)
-   *  - Jahr:  <span data-year>…</span>  → wird dynamisch ersetzt
-   *  - E-Mail: <a id="contactEmail" data-email-user="..." data-email-domain="...">
-   *            → wird zu "mailto:user@domain" und ersetzt Platzhaltertext
+   * (4) Footer-Jahr & E-Mail hydratisieren (Spam-sicher)
    * ------------------------------------------------------------------------ */
   function setYear() {
     const y = new Date().getFullYear();
@@ -169,46 +183,45 @@
     if (!user || !dom) return;
     const addr = `${user}@${dom}`;
     link.href = `mailto:${addr}`;
-    // Nur Platzhalter wie „E-Mail anzeigen“ überschreiben
+    // Ersetze nur Platzhalter wie „E-Mail anzeigen“
     if (/anzeigen/i.test(link.textContent || '')) link.textContent = addr;
-    // rel="nofollow" kann bleiben oder entfernt werden – je nach SEO-Vorgabe
+    // rel="nofollow" kann bleiben oder entfernt werden (SEO-Policy)
     // link.removeAttribute('rel');
   }
 
   /* ---------------------------------------------------------------------------
    * (5) Bootstrapping
-   *  - Lädt Header/Footer-Includes und initialisiert anschließend alle Features
-   *  - WICHTIG: nur EIN zentraler DOMContentLoaded-Listener (keine Duplikate)
+   *  - Includes laden → dann Initialisierungen → dann Schutz/Optionals
+   *  - Nur EIN zentraler DOMContentLoaded-Listener (keine Duplikate!)
    * ------------------------------------------------------------------------ */
   document.addEventListener('DOMContentLoaded', () => {
     Promise.all([
-      include('#site-header', 'includes/header.html'), // globales horizontales Menü
-      include('#site-footer', 'includes/footer.html'), // globaler Kontakt + Footer
+      include('#site-header', 'includes/header.html'),
+      include('#site-footer', 'includes/footer.html'),
     ]).then(() => {
-      // Initialisierungen NACH dem Laden der Includes:
+      // Alles da → Features aktivieren
       setHeaderHeightVar();   // CSS-Var für Sticky-Offset
-      initResponsiveNav();    // ← NEU: Burger/Collapsible aktivieren
-      markActiveLink();       // aktives Menü-Item markieren
-      setYear();              // Copyright-Jahr aktualisieren
-      hydrateContactEmail();  // E-Mail-Link sicher aktivieren
+      initResponsiveNav();    // Burger/Collapsible
+      markActiveLink();       // aktives Menü
+      setYear();              // Jahr im Footer
+      hydrateContactEmail();  // E-Mail-Link
 
-      // Kontakt-Blöcke deduplizieren (falls Seiten noch lokale Kontaktteile haben)
+      // Schutz: doppelte Kontaktblöcke vermeiden
       ensureSingleContact();
       observeOnceForContacts();
 
-      // Optional: RZ-Lupe/Modal initialisieren (no-op, falls Hooks fehlen)
+      // Optionales Feature (tut nichts, wenn Hooks fehlen):
       initRZZoom();
     });
   });
 
   /* ---------------------------------------------------------------------------
-   * (6) RZ-Diagramm: Lupe + Vollbild (Pan & Zoom) – robuste, kommentierte Version
-   *  Voraussetzungen im Markup (siehe rz-architektur.html):
-   *    figure.rz-zoom > img.diagram[data-full] + .rz-zoom__lens + .rz-zoom__open
-   *    #rzModal .rz-stage > .rz-stage__img, Buttons [data-close], [data-zoom]
+   * (6) RZ-Diagramm: Lupe + Vollbild (Pan & Zoom)
+   *  - Aktiv nur, wenn alle DOM-Hooks vorhanden sind.
+   *  - Starker Linsen-Zoom (400% Standard, ALT → 600% Turbo).
    * ------------------------------------------------------------------------ */
   function initRZZoom() {
-    // ---------- (A) DOM-Hooks einsammeln ------------------------------------
+    // (A) DOM-Hooks
     const fig   = $('.rz-zoom');
     const img   = fig?.querySelector('img.diagram');
     const lens  = fig?.querySelector('.rz-zoom__lens');
@@ -219,67 +232,60 @@
     const full  = modal?.querySelector('.rz-stage__img');
     const closers = modal?.querySelectorAll('[data-close], .rz-modal__backdrop, .rz-modal__close') || [];
 
-    // Fehlende Hooks? → ruhig aussteigen (kein Fehler, nur kein Feature)
-    if (!fig || !img || !lens || !openB || !modal || !stage || !full) return;
+    if (!fig || !img || !lens || !openB || !modal || !stage || !full) return; // sauber aussteigen
 
-    // ---------- (B) Config an EINER Stelle ----------------------------------
+    // (B) Konfiguration – zentrale Stellschrauben
     const CFG = {
-      lensSize: 130,          // Durchmesser der Lupe in px (CSS spiegelt das)
-      lensBgScale: 2.0,       // 2.0 = 200% (Vergrößerungsfaktor der Lupe)
-      wheelStep: 1.15,        // Zoom-Schritt pro Wheel-Tick
-      zoomMin: 0.5,           // untere Zoom-Grenze im Modal
-      zoomMax: 6.0,           // obere Zoom-Grenze im Modal
+      lensSize: 160,          // Linsendurchmesser in px (sichtbarer „Spot“)
+      lensBgScale: 4.0,       // 400 % (Standard-Vergrößerung der Linse)
+      lensBgScaleTurbo: 6.0,  // 600 % (bei gedrückter ALT-Taste)
+      wheelStep: 1.15,        // Zoom-Schritt im Vollbild bei Wheel
+      zoomMin: 0.5,           // Vollbild: zulässige Grenzen
+      zoomMax: 6.0,
     };
 
-    // ---------- (C) State ----------------------------------------------------
-    // Vollbild-Zoomzustand
-    const Z = { scale: 1, min: CFG.zoomMin, max: CFG.zoomMax, x: 0, y: 0 };
-    // Für Event-Cleanup (wichtig bei Hot-Reload/SPA)
-    const destroy = [];
-
-    // ---------- (D) Helpers --------------------------------------------------
+    // (C) State & Helfer
+    const destroy = []; // für sauberes Unhooken (falls benötigt)
     const on = (el, ev, fn, opts) => { el.addEventListener(ev, fn, opts); destroy.push(() => el.removeEventListener(ev, fn, opts)); };
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
-    // Bildquelle für Lupe/Vollbild bestimmen
     const fullSrc = img.getAttribute('data-full') || img.currentSrc || img.src;
 
-    // Wendet transform auf das Vollbild an
-    const apply = () => { full.style.transform = `translate(${Z.x}px, ${Z.y}px) scale(${Z.scale})`; };
+    // Vollbild-Zoomzustand
+    const Z = { scale: 1, min: CFG.zoomMin, max: CFG.zoomMax, x: 0, y: 0 };
 
-    const center = () => {
-      // Vollbild stets aus der hochauflösenden Quelle laden
-      full.src = fullSrc;
-      Z.scale = 1; Z.x = 0; Z.y = 0;
-      apply();
-    };
+    const apply  = () => { full.style.transform = `translate(${Z.x}px, ${Z.y}px) scale(${Z.scale})`; };
+    const center = () => { full.src = fullSrc; Z.scale = 1; Z.x = Z.y = 0; apply(); };
 
-    // Zoomen um einen Bezugspunkt (cx, cy) innerhalb der Bühne
     function setZoom(factor, cx, cy) {
       const prev = Z.scale;
       const next = clamp(prev * factor, Z.min, Z.max);
       if (next === prev) return;
 
       const r = stage.getBoundingClientRect();
-      const px = (cx ?? r.width / 2);
+      const px = (cx ?? r.width  / 2);
       const py = (cy ?? r.height / 2);
 
-      // Zoom zum Cursorpunkt: versetze das Bild proportional
+      // zum Cursorpunkt zoomen
       Z.x = px - (next / prev) * (px - Z.x);
       Z.y = py - (next / prev) * (py - Z.y);
       Z.scale = next;
       apply();
     }
 
-    // ---------- (E) Lupe auf dem Vorschaubild -------------------------------
-    function initLens() {
-      // CSS-Größe auch inline für sichere Berechnung (optional, CSS hat es bereits)
-      lens.style.width = `${CFG.lensSize}px`;
-      lens.style.height = `${CFG.lensSize}px`;
+    // (E) Lupe auf dem Vorschaubild
+    let turbo = false; // ALT-Taste = Turbo-Zoom
 
-      // Hintergrundbild für Lens (die hochauflösende Variante)
+    function setLensZoom(scale) {
+      lens.style.backgroundSize = `${scale * 100}%`;
+    }
+
+    function initLens() {
+      // Größe & Hintergrund der Linse
+      lens.style.width  = `${CFG.lensSize}px`;
+      lens.style.height = `${CFG.lensSize}px`;
       lens.style.backgroundImage = `url("${fullSrc}")`;
-      lens.style.backgroundSize  = `${CFG.lensBgScale * 100}%`; // z. B. 200%
+      setLensZoom(CFG.lensBgScale); // Start: 400 %
 
       const showLens = (show) => { lens.style.display = show ? 'block' : 'none'; };
 
@@ -288,67 +294,59 @@
         const lensW = lens.offsetWidth;
         const lensH = lens.offsetHeight;
 
-        // Cursorposition (Maus ODER Touch)
         const cx = (ev.touches?.[0]?.clientX) ?? ev.clientX;
         const cy = (ev.touches?.[0]?.clientY) ?? ev.clientY;
 
-        // Position relativ zum Bildmitte der Lupe
         let x = cx - rect.left - lensW / 2;
         let y = cy - rect.top  - lensH / 2;
 
-        // An Bildränder klemmen (Lupe ragt nicht heraus)
         x = clamp(x, 0, rect.width  - lensW);
         y = clamp(y, 0, rect.height - lensH);
 
-        // Lens positionieren
         lens.style.left = `${x}px`;
         lens.style.top  = `${y}px`;
 
-        // Hintergrundposition prozentual (0–100)
         const fx = (rect.width  - lensW) > 0 ? x / (rect.width  - lensW) : 0;
         const fy = (rect.height - lensH) > 0 ? y / (rect.height - lensH) : 0;
         lens.style.backgroundPosition = `${fx * 100}% ${fy * 100}%`;
       }
 
-      // Nur starten, wenn das Bild Maße hat (LCP-sicher)
-      const ensureReady = () => {
-        const ready = img.complete && img.naturalWidth > 0;
-        if (!ready) return false;
-        return true;
-      };
-
-      if (!ensureReady()) {
-        const onLoad = () => {
-          showLens(false);
-          img.removeEventListener('load', onLoad);
-        };
-        on(img, 'load', onLoad, { once: true });
+      // Nur wenn Bild Maße hat
+      if (!(img.complete && img.naturalWidth > 0)) {
+        on(img, 'load', () => { /* ready */ }, { once: true });
       }
 
-      // Maus-Interaktion
+      // Maus
       on(img, 'mouseenter', () => showLens(true));
       on(img, 'mouseleave', () => showLens(false));
       on(img, 'mousemove',  moveLens);
 
-      // Touch-Interaktion (passive für Scroll-Performance)
+      // Touch
       on(img, 'touchstart', (e) => { showLens(true);  moveLens(e); }, { passive: true });
       on(img, 'touchmove',  (e) => { moveLens(e); }, { passive: true });
       on(img, 'touchend',   ()  => { showLens(false); });
     }
 
-    // ---------- (F) Modal mit Pan & Zoom ------------------------------------
+    // Turbo-Zoom (ALT gedrückt halten)
+    on(document, 'keydown', (e) => {
+      if (e.altKey && !turbo) { turbo = true; setLensZoom(CFG.lensBgScaleTurbo); }
+    });
+    on(document, 'keyup', () => {
+      if (turbo) { turbo = false; setLensZoom(CFG.lensBgScale); }
+    });
+
+    // (F) Vollbild-Modal mit Pan & Zoom
     function initModal() {
-      // Öffnen/Schließen
       function openModal() {
         modal.hidden = false;
-        center(); // Bild und Zoom zurücksetzen
+        center();
         stage.focus?.({ preventScroll: true });
-        document.body.style.overflow = 'hidden'; // Scroll der Seite verhindern
+        document.body.style.overflow = 'hidden';
       }
       function closeModal() {
         modal.hidden = true;
         document.body.style.overflow = '';
-        openB.focus?.(); // Fokus zurück zum Auslöser
+        openB.focus?.();
       }
 
       on(openB, 'click', openModal);
@@ -368,7 +366,8 @@
 
       // Pan (Touch)
       on(stage, 'touchstart', (e) => {
-        const t = e.touches[0]; drag = { sx: t.clientX, sy: t.clientY, x: Z.x, y: Z.y };
+        const t = e.touches[0];
+        drag = { sx: t.clientX, sy: t.clientY, x: Z.x, y: Z.y };
       }, { passive: true });
       on(stage, 'touchmove', (e) => {
         if (!drag) return;
@@ -379,33 +378,27 @@
       }, { passive: true });
       on(stage, 'touchend', () => { drag = null; });
 
-      // Wheel-Zoom (zum Cursor) – NICHT passive, da wir preventDefault nutzen
+      // Wheel-Zoom (zum Cursor) – nicht passive, da preventDefault
       on(stage, 'wheel', (e) => {
         e.preventDefault();
         const r = stage.getBoundingClientRect();
         const cx = e.clientX - r.left;
         const cy = e.clientY - r.top;
-        setZoom((e.deltaY < 0) ? 1.15 : 1 / 1.15, cx, cy);
+        setZoom((e.deltaY < 0) ? CFG.wheelStep : 1 / CFG.wheelStep, cx, cy);
       }, { passive: false });
 
       // Tool-Buttons (optional vorhanden)
-      modal.querySelector('[data-zoom="in"]')    ?.addEventListener('click', () => setZoom(1.2));
-      modal.querySelector('[data-zoom="out"]')   ?.addEventListener('click', () => setZoom(1 / 1.2));
-      modal.querySelector('[data-zoom="reset"]') ?.addEventListener('click', () => { Z.scale = 1; Z.x = 0; Z.y = 0; apply(); });
+      modal.querySelector('[data-zoom="in"]')   ?.addEventListener('click', () => setZoom(1.2));
+      modal.querySelector('[data-zoom="out"]')  ?.addEventListener('click', () => setZoom(1 / 1.2));
+      modal.querySelector('[data-zoom="reset"]')?.addEventListener('click', () => { Z.scale = 1; Z.x = Z.y = 0; apply(); });
     }
 
-    // ---------- (G) Resize-Anpassungen --------------------------------------
-    function onResize() {
-      // Bei Größenwechsel des Vorschaubildes bleibt die Lupe stimmig —
-      // der Hintergrund skaliert prozentual (z. B. 200%), daher kein Recalc nötig.
-      // Optional: lensSize/lensBgScale dynamisch anpassen.
-    }
-    window.addEventListener('resize', onResize);
-
-    // ---------- (H) Boot -----------------------------------------------------
+    // (G) Boot
     initLens();
     initModal();
+
+    // (H) Optionales Cleanup (falls SPA/Hot-Reload): destroy.forEach(fn => fn());
   }
 
-  // Hinweis: KEINE alte Drawer-Initialisierung mehr! (Früher: initMenu() mit .burger/#navdrawer)
-})(); // Ende IIFE
+  // Ende Modul
+})();
