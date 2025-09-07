@@ -3,20 +3,23 @@
 <head>
   <!-- =========================================================
        (0) DOKUMENT-SETUP / META
-       - Sauberes Encoding + Responsive Viewport
-       - Seitentitel + Description für SEO
+       - KORREKT: Im <head> sind NUR Metadaten, Links/Styles erlaubt.
+       - WICHTIG: KEIN <header> oder #site-footer hier platzieren!
        ========================================================= -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>IT-Steuerung &amp; IT-Controlling mit Hilfe von ITSM</title>
-  <meta name="description" content="IT-Steuerung & IT-Controlling mit Hilfe von ITSM – Über mich, Projekte und ITSM Konzept." />
+  <meta name="description"
+        content="IT-Steuerung & IT-Controlling mit Hilfe von ITSM – Über mich, Projekte und ITSM Konzept." />
 
   <!-- =========================================================
        (1) FONTS (SELF-HOSTED) – Preload für schnelleren First Paint
        - Stelle sicher, dass die Pfade existieren: /assets/fonts/*.woff
        ========================================================= -->
-  <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
-  <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff"
+        as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"
+        as="font" type="font/woff" crossorigin>
 
   <!-- =========================================================
        (2) GLOBAL CSS – zentrales Stylesheet (Tokens, Layout, Komponenten)
@@ -29,12 +32,13 @@
   <!-- =========================================================
        (3) SKIP-LINK – Tastaturnutzern schnellen Zugang geben
        - Verweist auf #hauptinhalt (siehe <main>)
+       - Position: direkt nach <body> ideal für A11y.
        ========================================================= -->
   <a class="skip-link" href="#hauptinhalt">Zum Inhalt springen</a>
 
   <!-- =========================================================
        (4) GLOBALER HEADER-PLATZHALTER
-       WICHTIG: In JEDER HTML-Seite muss dieses Host-Element existieren!
+       WICHTIG: In JEDER HTML-Seite exakt EIN Host-Element!
        - site.js lädt hier dynamisch: includes/header.html
        - Bitte KEINEN statischen Header mehr in Seiten duplizieren.
        ========================================================= -->
@@ -109,9 +113,9 @@
 
   <!-- =========================================================
        (7) MAIN – drei Abschnitte: Über mich / Projekte / ITSM
-       - ID #hauptinhalt ist Ziel des Skip-Links
-       - Hinweis: Bitte KEINEN lokalen Kontaktblock hier einfügen!
-                  → Der globale Kontakt kommt vor dem Footer-Include.
+       - ID #hauptinhalt ist Ziel des Skip-Links (siehe oben)
+       - Hinweis: KEINE lokale Kontakt-Sektion mit .contact-block hier einfügen!
+                  → Der globale Kontakt kommt über includes/footer.html.
        ========================================================= -->
   <main id="hauptinhalt" class="main" role="main">
     <!-- ---------- (7.1) Über mich ---------- -->
@@ -135,7 +139,9 @@
           </ul>
         </div>
 
-        <!-- Kontaktkarte (rechte Spalte) -->
+        <!-- Kontaktkarte (rechte Spalte)
+             Hinweis: Diese Box ist KEIN .contact-block → beeinträchtigt den
+             globalen Kontaktbereich im Footer NICHT und bleibt daher bestehen. -->
         <aside class="card">
           <h3>Kontakt</h3>
           <p>
@@ -238,10 +244,9 @@
 
   <!-- =========================================================
        (8) GLOBALER FOOTER-PLATZHALTER
-       WICHTIG: Keine lokale Kontakt-/Footer-Duplikate in Seiten!
        - site.js lädt hier dynamisch: includes/footer.html
-       - Bitte Container als neutrales Element belassen (kein <footer>),
-         da das Include selbst ein <footer> enthält.
+       - Container als neutrales Element belassen (kein <footer>),
+         da das Include selbst <footer> enthält.
        ========================================================= -->
   <div id="site-footer" class="site-footer-host"></div>
 
