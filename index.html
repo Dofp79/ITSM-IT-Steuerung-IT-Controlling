@@ -2,7 +2,9 @@
 <html lang="de" dir="ltr">
 <head>
   <!-- =========================================================
-       0) DOKUMENT-SETUP / META
+       (0) DOKUMENT-SETUP / META
+       - Sauberes Encoding + Responsive Viewport
+       - Seitentitel + Description für SEO
        ========================================================= -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,74 +12,42 @@
   <meta name="description" content="IT-Steuerung & IT-Controlling mit Hilfe von ITSM – Über mich, Projekte und ITSM Konzept." />
 
   <!-- =========================================================
-       1) FONTS (SELF-HOSTED) – Preload für besseren First Paint
-       Pfade zu /assets/fonts/*.woff müssen existieren.
+       (1) FONTS (SELF-HOSTED) – Preload für schnelleren First Paint
+       - Stelle sicher, dass die Pfade existieren: /assets/fonts/*.woff
        ========================================================= -->
   <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
 
   <!-- =========================================================
-       2) GLOBAL CSS – Tokens, Layout, Komponenten
-       Pfad: /assets/css/global.css
+       (2) GLOBAL CSS – zentrales Stylesheet (Tokens, Layout, Komponenten)
+       - Pfad MUSS existieren: /assets/css/global.css
        ========================================================= -->
   <link rel="stylesheet" href="assets/css/global.css" />
 </head>
 
 <body id="top">
   <!-- =========================================================
-       3) SKIP-LINK – Tastaturnutzern schnellen Zugang geben
-       Verweist auf #hauptinhalt (s.u.).
+       (3) SKIP-LINK – Tastaturnutzern schnellen Zugang geben
+       - Verweist auf #hauptinhalt (siehe <main>)
        ========================================================= -->
   <a class="skip-link" href="#hauptinhalt">Zum Inhalt springen</a>
 
   <!-- =========================================================
-       4) HEADER (STICKY) – Burger links, Logo rechts
-       Darunter die rote Brand-Bar und der Offcanvas-Drawer.
+       (4) GLOBALER HEADER-PLATZHALTER
+       WICHTIG: In JEDER HTML-Seite muss dieses Host-Element existieren!
+       - site.js lädt hier dynamisch: includes/header.html
+       - Bitte KEINEN statischen Header mehr in Seiten duplizieren.
        ========================================================= -->
-  <header class="site-header" role="banner">
-    <div class="container header-bar">
-      <!-- Burger-Knopf; JS (site.js) toggelt aria-expanded & Drawer -->
-      <button class="burger" aria-expanded="false" aria-controls="navdrawer">
-        <span class="burger__icon" aria-hidden="true"></span>
-        <span class="burger__label">Themen</span>
-      </button>
-
-      <!-- Logo → zurück zum Seitenanfang (#top) -->
-      <a class="brand-right" href="#top" aria-label="Startseite">
-        <img src="assets/DoniLogo_1.0.0.png"
-             width="150" height="40"
-             alt="Logo Doniman F. Peña Parra"
-             class="brand-right__logo">
-      </a>
-    </div>
-
-    <!-- Hauptnavigation (ausfahrender Drawer) -->
-    <nav id="navdrawer" class="nav-drawer" aria-label="Hauptnavigation">
-      <ul>
-        <!-- 3 interne Ziele + 1 externes: Vorgabe umgesetzt -->
-        <li><a href="ueber-mich.html">Über mich</a></li>
-        <li><a href="projekte.html">Projekte</a></li>
-        <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
-        <li><a href="rz-architektur.html">Rechenzentrumsstruktur</a></li>
-      </ul>
-    </nav>
-
-    <!-- Dünne rote Linie unter dem Header (Markenfarbe) -->
-    <div class="brand-bar" aria-hidden="true"></div>
-  </header>
-
-  <!-- direkt vor </body> -->
-  <script src="assets/js/site.js" defer></script>
+  <header id="site-header" class="site-header" role="banner"></header>
 
   <!-- =========================================================
-       5) HERO – Titel + Lead-Text (Blocksatz via CSS)
-       Typografie/Farben sind in global.css geregelt.
+       (5) HERO – Titel + Lead-Text (Typografie in global.css)
        ========================================================= -->
   <section class="hero">
     <div class="container hero-inner">
       <h1 class="hero__title">IT-Steuerung &amp; IT-Controlling mit Hilfe von ITSM</h1>
 
-      <!-- Lead-Absatz: reiner Fließtext (keine Listen/Brakes) -->
+      <!-- Lead-Absatz: Fließtext ohne zusätzliche Zeilenumbrüche -->
       <p class="hero__lead">
         Eine effiziente IT-Steuerung und ein verlässliches Controlling sind die Grundlage moderner IT-Organisationen.
         Mithilfe eines strukturierten IT-Service-Managements (ITSM) auf Basis von ITIL&nbsp;4 lassen sich Prozesse, KPIs
@@ -89,9 +59,9 @@
   </section>
 
   <!-- =========================================================
-       6) KACHELN (2×2) – vier Haupteinstiege
-       CLS-Fix: width/height auf <img> gesetzt.
-       Bilder liegen unter /assets/images/tiles/.
+       (6) KACHELN (2×2) – vier Haupteinstiege
+       - CLS-Fix: width/height auf <img> gesetzt.
+       - Bilder liegen unter /assets/images/tiles/.
        ========================================================= -->
   <section class="section section--tiles">
     <div class="container tiles">
@@ -138,7 +108,10 @@
   </section>
 
   <!-- =========================================================
-       7) MAIN – drei Abschnitte: Über mich / Projekte / ITSM
+       (7) MAIN – drei Abschnitte: Über mich / Projekte / ITSM
+       - ID #hauptinhalt ist Ziel des Skip-Links
+       - Hinweis: Bitte KEINEN lokalen Kontaktblock hier einfügen!
+                  → Der globale Kontakt kommt vor dem Footer-Include.
        ========================================================= -->
   <main id="hauptinhalt" class="main" role="main">
     <!-- ---------- (7.1) Über mich ---------- -->
@@ -210,7 +183,8 @@
             <h2 class="sec-title">ITSM Konzept</h2>
           </div>
 
-          <!-- WAI-ARIA-Light Accordion; JS setzt aria-expanded/hidden -->
+          <!-- WAI-ARIA-Light Accordion; (Hinweis: Falls JS für Toggling fehlt,
+               bleiben die Panels geschlossen – progressive Enhancement) -->
           <div class="accordion" data-accordion>
             <!-- Panel 1 -->
             <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-1">
@@ -263,40 +237,18 @@
   </main>
 
   <!-- =========================================================
-       8) KONTAKTBLOCK (GLOBAL) – immer vor dem Footer
-       site.js setzt E-Mail-Text + mailto: aus data-Attributen.
+       (8) GLOBALER FOOTER-PLATZHALTER
+       WICHTIG: Keine lokale Kontakt-/Footer-Duplikate in Seiten!
+       - site.js lädt hier dynamisch: includes/footer.html
+       - Bitte Container als neutrales Element belassen (kein <footer>),
+         da das Include selbst ein <footer> enthält.
        ========================================================= -->
-  <section class="contact-block" aria-labelledby="kontaktTitle">
-    <div class="contact-inner container">
-      <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
-      <p class="contact-name">Doniman F. Peña Parra</p>
-
-      <!-- Spam-sicher: Text + href werden per JS generiert -->
-      <p class="contact-email">
-        <a id="contactEmail"
-           data-email-user="dofp79"
-           data-email-domain="hotmail.com"
-           href="#"
-           rel="nofollow">E-Mail anzeigen</a>
-        <noscript>(dofp79&nbsp;[at]&nbsp;hotmail&nbsp;[dot]&nbsp;com)</noscript>
-      </p>
-    </div>
-  </section>
+  <div id="site-footer" class="site-footer-host"></div>
 
   <!-- =========================================================
-       9) FOOTER – kompakt + „Nach oben“
-       site.js setzt das aktuelle Jahr in [data-year].
-       ========================================================= -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="container subfooter__inner">
-      <p>&copy; <span data-year></span> IT-Steuerung &amp; IT-Controlling</p>
-      <a class="to-top" href="#top">Nach oben ↑</a>
-    </div>
-  </footer>
-
-  <!-- =========================================================
-       10) GLOBAL SCRIPT
-       Pfad MUSS existieren: /assets/js/site.js
+       (9) GLOBAL SCRIPT
+       - Pfad MUSS existieren: /assets/js/site.js
+       - Defer → Ausführung nach Parsing, kein Render-Block
        ========================================================= -->
   <script src="assets/js/site.js" defer></script>
 </body>
