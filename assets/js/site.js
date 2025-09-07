@@ -10,19 +10,19 @@
    - (optional) RZ-Lupe + Vollbild (Pan & Zoom), nur wenn Hooks vorhanden sind
 
    Abhängigkeiten im HTML (MINDESTENS):
-   ---------------------------------------------------------------------------
+   -----------------------------------------------------------------------------
    <header id="site-header" class="site-header" role="banner"></header>
    <div id="site-footer"></div>
    <script src="assets/js/site.js" defer></script>
 
    Abhängigkeiten im Header-Include (includes/header.html) für Mobile:
-   ---------------------------------------------------------------------------
+   -----------------------------------------------------------------------------
    - Button:  <button class="nav-toggle" aria-controls="primary-nav">Menü</button>
    - Nav:     <nav id="primary-nav" class="nav-main" data-collapsible>…</nav>
               (Links darin haben Klasse .nav-list a[…])
 
    Abhängigkeiten für RZ-Lupe/Vollbild (nur auf RZ-Seite nötig):
-   ---------------------------------------------------------------------------
+   -----------------------------------------------------------------------------
    figure.rz-zoom > img.diagram[data-full] + .rz-zoom__lens + .rz-zoom__open
    #rzModal .rz-stage > .rz-stage__img   (+ Schließen/Zoom-Buttons optional)
 
@@ -218,7 +218,8 @@
   /* ---------------------------------------------------------------------------
    * (6) RZ-Diagramm: Lupe + Vollbild (Pan & Zoom)
    *  - Aktiv nur, wenn alle DOM-Hooks vorhanden sind.
-   *  - Starker Linsen-Zoom (400% Standard, ALT → 600% Turbo).
+   *  - Starker Linsen-Zoom (400 % Standard, ALT → 600 % Turbo).
+   *  - NEU: Linsen-Zoom per Mausrad (konfigurierbar, mit Min/Max).
    * ------------------------------------------------------------------------ */
   function initRZZoom() {
     // (A) DOM-Hooks
@@ -236,16 +237,22 @@
 
     // (B) Konfiguration – zentrale Stellschrauben
     const CFG = {
-      lensSize: 160,          // Linsendurchmesser in px (sichtbarer „Spot“)
-      lensBgScale: 4.0,       // 400 % (Standard-Vergrößerung der Linse)
-      lensBgScaleTurbo: 6.0,  // 600 % (bei gedrückter ALT-Taste)
-      wheelStep: 1.15,        // Zoom-Schritt im Vollbild bei Wheel
-      zoomMin: 0.5,           // Vollbild: zulässige Grenzen
-      zoomMax: 6.0,
+      /* L U P E  (Overlay auf dem Vorschaubild) */
+      lensSize: 180,         // Durchmesser der Lupe in px
+      lensBgScale: 4.0,      // Standard-Vergrößerung der Lupe   → 4.0 = 400 %
+      lensBgMin:   1.5,      // Untere Grenze für Lupe            (150 %)
+      lensBgMax:  10.0,      // Obere Grenze für Lupe             (1000 %)
+      wheelStepLens: 1.25,   // Mausrad-Schrittweite für Linse
+      wheelTurbo:   1.10,    // Zusatzfaktor wenn ALT gehalten
+
+      /* M O D A L  (Vollbild mit Pan & Zoom) */
+      wheelStep: 1.15,
+      zoomMin:   0.5,
+      zoomMax:   6.0,
     };
 
     // (C) State & Helfer
-    const destroy = []; // für sauberes Unhooken (falls benötigt)
+    const destroy = []; // falls später Cleanup nötig
     const on = (el, ev, fn, opts) => { el.addEventListener(ev, fn, opts); destroy.push(() => el.removeEventListener(ev, fn, opts)); };
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
@@ -274,10 +281,11 @@
     }
 
     // (E) Lupe auf dem Vorschaubild
-    let turbo = false; // ALT-Taste = Turbo-Zoom
+    let turbo = false;            // ALT-Taste = Turbo-Zoom
+    let lensScale = CFG.lensBgScale; // aktueller Linsen-Zoom (in „Faktoren“)
 
-    function setLensZoom(scale) {
-      lens.style.backgroundSize = `${scale * 100}%`;
+    function applyLensZoom() {
+      lens.style.backgroundSize = `${lensScale * 100}%`;
     }
 
     function initLens() {
@@ -285,7 +293,7 @@
       lens.style.width  = `${CFG.lensSize}px`;
       lens.style.height = `${CFG.lensSize}px`;
       lens.style.backgroundImage = `url("${fullSrc}")`;
-      setLensZoom(CFG.lensBgScale); // Start: 400 %
+      applyLensZoom(); // Start: 400 %
 
       const showLens = (show) => { lens.style.display = show ? 'block' : 'none'; };
 
@@ -311,11 +319,6 @@
         lens.style.backgroundPosition = `${fx * 100}% ${fy * 100}%`;
       }
 
-      // Nur wenn Bild Maße hat
-      if (!(img.complete && img.naturalWidth > 0)) {
-        on(img, 'load', () => { /* ready */ }, { once: true });
-      }
-
       // Maus
       on(img, 'mouseenter', () => showLens(true));
       on(img, 'mouseleave', () => showLens(false));
@@ -325,14 +328,24 @@
       on(img, 'touchstart', (e) => { showLens(true);  moveLens(e); }, { passive: true });
       on(img, 'touchmove',  (e) => { moveLens(e); }, { passive: true });
       on(img, 'touchend',   ()  => { showLens(false); });
+
+      // **NEU:** Mausrad auf dem Vorschaubild ändert Linsen-Zoom (mit Min/Max)
+      on(img, 'wheel', (e) => {
+        // Kein Scrollen der Seite, wir zoomen in der Linse
+        e.preventDefault();
+        const step = e.deltaY < 0 ? CFG.wheelStepLens : (1 / CFG.wheelStepLens);
+        const turboFactor = e.altKey ? CFG.wheelTurbo : 1;
+        lensScale = clamp(lensScale * step * turboFactor, CFG.lensBgMin, CFG.lensBgMax);
+        applyLensZoom();
+      }, { passive: false });
     }
 
-    // Turbo-Zoom (ALT gedrückt halten)
+    // Turbo-Zoom (ALT gedrückt halten) – setzt fix auf Turbo, loslassen = Standard
     on(document, 'keydown', (e) => {
-      if (e.altKey && !turbo) { turbo = true; setLensZoom(CFG.lensBgScaleTurbo); }
+      if (e.altKey && !turbo) { turbo = true; lensScale = clamp(CFG.lensBgScale * 1.5, CFG.lensBgMin, CFG.lensBgMax); applyLensZoom(); }
     });
     on(document, 'keyup', () => {
-      if (turbo) { turbo = false; setLensZoom(CFG.lensBgScale); }
+      if (turbo) { turbo = false; lensScale = CFG.lensBgScale; applyLensZoom(); }
     });
 
     // (F) Vollbild-Modal mit Pan & Zoom
@@ -390,7 +403,7 @@
       // Tool-Buttons (optional vorhanden)
       modal.querySelector('[data-zoom="in"]')   ?.addEventListener('click', () => setZoom(1.2));
       modal.querySelector('[data-zoom="out"]')  ?.addEventListener('click', () => setZoom(1 / 1.2));
-      modal.querySelector('[data-zoom="reset"]')?.addEventListener('click', () => { Z.scale = 1; Z.x = Z.y = 0; apply(); });
+      modal.querySelector('[data-zoom="reset"]')?.addEventListener('click', () => { Z.scale = 1; Z.x = 0; Z.y = 0; apply(); });
     }
 
     // (G) Boot
