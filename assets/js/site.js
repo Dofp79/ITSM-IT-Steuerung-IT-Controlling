@@ -6,6 +6,7 @@
    - (1) Schutzmaßnahme: genau EIN .contact-block im gesamten DOM
    - (2) Headerhöhe → CSS-Var --header-h (z. B. für Sticky-Offset)
    - (3) Navigation (OHNE Drawer): aktiven Menüpunkt markieren (aria-current, .is-active)
+   - (3b) Responsive Navigation (Burger/Collapsible) – A11y, ESC, Link-Klick, Resize
    - (4) Footer: Jahr setzen & E-Mail sicher hydratisieren
    - (5) Boot: Header/Footer includen → Initialisierungen → Kontakt-Schutz
    - (6) RZ-Diagramm (optional): Lupe + Vollbild (Pan & Zoom) – nur wenn Hooks existieren
@@ -80,14 +81,72 @@
    *  - Setzt a[aria-current="page"] (A11y) und .is-active (für CSS)
    * ------------------------------------------------------------------------ */
   function markActiveLink() {
+    // Liefert bei / oder leeren Pfaden "index.html"
     const current = location.pathname.split('/').pop() || 'index.html';
-    const links = $$('.nav-list a[href]'); // Links im globalen Horizontalmenü
+    // Links im globalen Horizontalmenü (kommt aus includes/header.html)
+    const links = $$('.nav-list a[href]');
     links.forEach(a => {
-      const href = (a.getAttribute('href') || '').split('/').pop();
+      // Vergleich nur auf Dateinamebene (ohne Ordner, Query, Hash)
+      const href = (a.getAttribute('href') || '').split('/').pop().split('#')[0].split('?')[0];
       const onPage = href === current;
       a.classList.toggle('is-active', onPage);
       if (onPage) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
+    });
+  }
+
+  /* ---------------------------------------------------------------------------
+   * (3b) Responsive Navigation (Burger für Mobile)
+   *  - Button .nav-toggle steuert das Collapsible #primary-nav[data-collapsible]
+   *  - A11y: aria-expanded wird gepflegt; ESC & Link-Klick schließen
+   *  - Zusätzlich: .is-open auch am Button (für Icon-Animationen via CSS)
+   * ------------------------------------------------------------------------ */
+  function initResponsiveNav(){
+    // WICHTIG: Nach dem Include ausführen, damit der Header im DOM ist
+    const header = document.getElementById('site-header');
+    if (!header) return;
+
+    const toggle = header.querySelector('.nav-toggle');
+    const nav    = header.querySelector('#primary-nav[data-collapsible]');
+    if (!toggle || !nav) return; // Falls Markup fehlt, sauber aussteigen
+
+    // Initialzustand (geschlossen)
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.classList.remove('is-open');
+    nav.classList.remove('is-open');
+
+    const setOpen = (open) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.classList.toggle('is-open', open); // ermöglicht „X“-Icon per CSS
+      nav.classList.toggle('is-open', open);    // triggert Collapsible (max-height)
+      // Hinweis: Da kein Offcanvas, kein Body-Scroll-Lock nötig
+    };
+
+    // Toggle per Klick
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      setOpen(!open);
+    });
+
+    // ESC schließt
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    });
+
+    // Klick auf Navigationslink schließt (Mobile-Komfort)
+    nav.addEventListener('click', (e) => {
+      const link = (e.target instanceof HTMLElement) ? e.target.closest('a[href]') : null;
+      if (link) setOpen(false);
+    });
+
+    // Bei Resize von mobil → desktop: sicherheitshalber schließen
+    let lastW = window.innerWidth;
+    window.addEventListener('resize', () => {
+      const w = window.innerWidth;
+      if (w !== lastW){
+        if (w > 960) setOpen(false); // Breakpoint muss zu deinem CSS passen
+        lastW = w;
+      }
     });
   }
 
@@ -128,6 +187,7 @@
     ]).then(() => {
       // Initialisierungen NACH dem Laden der Includes:
       setHeaderHeightVar();   // CSS-Var für Sticky-Offset
+      initResponsiveNav();    // ← NEU: Burger/Collapsible aktivieren
       markActiveLink();       // aktives Menü-Item markieren
       setYear();              // Copyright-Jahr aktualisieren
       hydrateContactEmail();  // E-Mail-Link sicher aktivieren
@@ -279,5 +339,5 @@
     modal.querySelector('[data-zoom="reset"]')?.addEventListener('click', () => { Z.scale = 1; Z.x = Z.y = 0; apply(); });
   }
 
-  // Hinweis: KEINE Drawer-Initialisierung mehr! (Früher: initMenu() mit .burger/#navdrawer)
+  // Hinweis: KEINE alte Drawer-Initialisierung mehr! (Früher: initMenu() mit .burger/#navdrawer)
 })(); // Ende IIFE
