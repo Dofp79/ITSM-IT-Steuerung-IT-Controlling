@@ -3,68 +3,66 @@
 <head>
   <!-- =========================================================
        (0) DOKUMENT-SETUP & META
+       - Korrektes Encoding + Responsive Viewport
+       - SEO: Titel & Description
        ========================================================= -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Projekte – ITSM · KPIs · Datenmodelle · Dashboards</title>
   <meta name="description" content="Projekte: Measurement & Reporting nach ITIL 4, KPI-Design, Power BI Dashboards, Datenmodelle/ETL, Prozessmanagement." />
 
-  <!-- (1) FONTS (self-hosted) -->
+  <!-- =========================================================
+       (1) FONTS (self-hosted)
+       - Preload beschleunigt den First Paint
+       - Stelle sicher, dass die Pfade existieren
+       ========================================================= -->
   <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
 
-  <!-- (2) GLOBAL CSS -->
+  <!-- =========================================================
+       (2) GLOBAL CSS
+       - Hier liegen die globalen Klassen:
+         .container, .section, .hero, .sec-head, .sec-dot, .sec-title,
+         .grid, .card, .card-body, .stack, .main, .skip-link, etc.
+       - Bitte NICHT in dieser Seite neu definieren.
+       ========================================================= -->
   <link rel="stylesheet" href="assets/css/global.css" />
 
-  <!-- (2b) Seiten-CSS: nur Ergänzung für das 2er-Grid -->
+  <!-- =========================================================
+       (2b) SEITEN-CSS (LEICHTE ERGÄNZUNG)
+       - Nur wirklich seiten-spezifisches Styling hinzufügen.
+       - Globale Klassen bleiben unberührt (Single Source of Truth).
+       ========================================================= -->
   <style>
     /* Exaktes 2er-Grid ab 900px (für ITIL + Kapazität nebeneinander) */
     .grid--two{
       display:grid; gap:1.2rem; grid-template-columns:1fr; align-items:stretch;
     }
     @media (min-width:900px){ .grid--two{ grid-template-columns:1fr 1fr; } }
+
     /* Hilfsklasse zum Zentrieren einzelner Bilder (falls benötigt) */
     .centered-img{ display:block; margin-inline:auto; }
   </style>
 </head>
 
-  <!-- direkt vor </body> -->
-<script src="assets/js/site.js" defer></script>
-
 <body id="top">
   <!-- =========================================================
        (3) SKIP-LINK – Tastaturzugang
+       - Verweist auf #mainContent (siehe <main>)
        ========================================================= -->
   <a class="skip-link" href="#mainContent">Zum Inhalt springen</a>
 
   <!-- =========================================================
-       (4) HEADER-CONTAINER – wird via site.js geladen
-       HINWEIS:
-       - includes/header.html enthält das Themen-Menü (siehe oben)
-       - Noscript liefert Fallback (funktioniert ohne JS)
+       (4) GLOBALER HEADER-PLATZHALTER
+       - WICHTIG: In jeder HTML-Seite exakt EIN Host-Element.
+       - site.js lädt hier dynamisch: includes/header.html
+       - KEIN statischer Header in der Seite → keine Duplikate.
        ========================================================= -->
-  <header id="site-header" class="site-header" role="banner">
-    <noscript>
-      <div class="container header-bar">
-        <a class="brand-right" href="index.html" aria-label="Startseite">
-          <img src="assets/DoniLogo_1.0.0.png" width="150" height="40" alt="Logo Doniman F. Peña Parra" class="brand-right__logo">
-        </a>
-      </div>
-      <nav class="nav-drawer" aria-label="Hauptnavigation">
-        <ul>
-          <li><a href="index.html">Start</a></li>
-          <li><a href="ueber-mich.html">Über mich</a></li>
-          <li><a href="projekte.html" aria-current="page" class="is-active">Projekte</a></li>
-          <li><a href="rz-architektur.html">Rechenzentrumsstruktur</a></li>
-          <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
-        </ul>
-      </nav>
-      <div class="brand-bar" aria-hidden="true"></div>
-    </noscript>
-  </header>
+  <header id="site-header" class="site-header" role="banner"></header>
 
   <!-- =========================================================
-       (5) HERO – nutzt globalen Stil (.hero__title / .hero__lead)
+       (5) HERO – nutzt globale Klassen (.hero, .hero-inner, .hero__title, .hero__lead)
+       - Keine Redefinition der Typo hier; global.css regelt Look & Spacing.
        ========================================================= -->
   <section class="hero" aria-label="Seitenkopf Projekte">
     <div class="container hero-inner">
@@ -76,19 +74,23 @@
 
   <!-- =========================================================
        (6) MAIN – Seiteninhalt
+       - Nutzt globale Layout-Klassen: .main, .section, .container, .grid, .card
+       - Seiten-spezifische Ergänzung: .grid--two
        ========================================================= -->
   <main id="mainContent" class="main" role="main">
 
     <!-- (6.1) PROJEKTE – A: ZWEI KARTEN NEBENEINANDER -->
     <section id="projekte" class="section container" aria-labelledby="projTitle">
+      <!-- Sektions-Header: globale Pattern .sec-head / .sec-dot / .sec-title -->
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
         <h2 id="projTitle" class="sec-title">Measurement &amp; Reporting nach ITIL®&nbsp;4 Framework</h2>
       </div>
 
-      <!-- Diese beiden Karten bleiben zusammen (grid--two) -->
+      <!-- Gruppe A zusammenhalten: 2 Karten im seiten-spezifischen Grid -->
       <div class="grid--two">
         <article class="card">
+          <!-- Bilder nutzen globales Card-Design; LCP/CLS durch feste Größe in CSS global -->
           <img src="assets/images/projekte/ITIL_Monitoring.png"
                alt="ITIL Monitoring – Continual Improvement Dashboard"
                loading="lazy" decoding="async"
@@ -111,7 +113,7 @@
         </article>
       </div>
 
-      <!-- Gruppe B separat, damit A1 + A2 zusammen bleiben -->
+      <!-- Gruppe B separat, damit A1 + A2 semantisch & visuell zusammenbleiben -->
       <div class="grid">
         <article class="card">
           <img src="assets/images/projekte/KPIs_Dashboard.png"
@@ -156,6 +158,7 @@
 
       <div class="grid">
         <article class="card">
+          <!-- Externe Links: sicher mit rel="noopener" (und optional noreferrer) -->
           <a href="https://chatgpt.com/g/g-UYiBEofKD-itsm-standards-consultant" target="_blank" rel="noopener">
             <img src="assets/images/projekte/GPT_ITSM_StandardsConsultant.png" alt="KI-Agent: ITSM-Standards Consultant" loading="lazy" decoding="async">
             <div class="card-body"><h4>ITSM-Standards Consultant</h4><p>ITIL® 4, ISO/IEC 20000, COBIT – Implementierung &amp; Optimierung.</p></div>
@@ -180,62 +183,20 @@
   </main>
 
   <!-- =========================================================
-       (7) FOOTER-CONTAINER – wird via site.js geladen
+       (7) GLOBALER FOOTER-PLATZHALTER
+       - site.js lädt hier dynamisch: includes/footer.html
+       - KEINE lokalen Kontakt-/Footer-Duplikate in Seiten!
+       - Neutrales Host-Element verwenden (kein <footer>),
+         weil das Include selbst <footer> enthält.
        ========================================================= -->
-  <div id="site-footer">
-    <noscript>
-      <section class="contact-block" aria-labelledby="kontaktTitle">
-        <div class="contact-inner container">
-          <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
-          <p class="contact-name">Doniman F. Peña Parra</p>
-          <p class="contact-email"><a href="mailto:dofp79@hotmail.com" rel="nofollow">dofp79@hotmail.com</a></p>
-        </div>
-      </section>
-      <footer class="site-footer" role="contentinfo">
-        <div class="container subfooter__inner">
-          <p>&copy; <span data-year>2025</span> IT-Steuerung &amp; IT-Controlling</p>
-          <a class="to-top" href="#top">Nach oben ↑</a>
-        </div>
-      </footer>
-    </noscript>
-  </div>
+  <div id="site-footer" class="site-footer-host"></div>
 
   <!-- =========================================================
        (8) SCRIPTS
-       - assets/js/site.js lädt Header/Footer UND initialisiert Menü
-       - Kleiner Zusatz: markiert zur Sicherheit den aktiven Link
+       - assets/js/site.js lädt Header & Footer, markiert Active-Link,
+         setzt Jahr & E-Mail (Spam-sicher) und initialisiert ggf. RZ-Zoom.
+       - defer: blockiert Rendering nicht; läuft nach dem Parsen.
        ========================================================= -->
   <script src="assets/js/site.js" defer></script>
-  <script>
-    // (Optionaler Sicherheitsgurt) – markiert aktiven Menüpunkt,
-    // falls site.js durch Caching/Delay minimal später initialisiert.
-    (function(){
-      const mark = () => {
-        const header = document.getElementById('site-header');
-        if (!header) return;
-        const path = location.pathname.split('/').pop() || 'index.html';
-        header.querySelectorAll('a[href]').forEach(a => {
-          const href = a.getAttribute('href') || '';
-          const isCurrent = href.endsWith(path);
-          a.classList.toggle('is-active', isCurrent);
-          if (isCurrent) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
-        });
-      };
-      document.addEventListener('DOMContentLoaded', () => { mark(); setTimeout(mark, 200); });
-    })();
-
-    // Fallback: lädt Includes, falls site.js (ausnahmsweise) nicht greift
-    document.addEventListener('DOMContentLoaded', () => {
-      const include = (sel, url) => {
-        const host = document.querySelector(sel);
-        if (!host) return;
-        const has = host.children.length > 0 && !host.querySelector('noscript');
-        if (has) return; // bereits per site.js gefüllt
-        fetch(url).then(r => r.ok ? r.text() : '').then(html => { if (html) host.innerHTML = html; });
-      };
-      include('#site-header', 'includes/header.html');
-      include('#site-footer', 'includes/footer.html');
-    });
-  </script>
 </body>
 </html>
