@@ -3,29 +3,30 @@
 <head>
   <!-- =========================================================
        (0) DOKUMENT-SETUP & META
-       - SEO-Titel & Beschreibung
-       - Viewport für Responsive
-       - Beibehaltung des globalen Designs (global.css)
+       - SEO: Titel & Beschreibung
+       - Responsiver Viewport
+       - WICHTIG: Im <head> nur Meta/Links/Styles (kein Header/Footer-Markup!)
        ========================================================= -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Über mich – ITSM, IT-Steuerung & IT-Controlling</title>
   <meta name="description" content="Über mich: ITSM-Prozessadministrator (ITIL 4), KPI-Design, Reporting, Prozessautomatisierung, Power BI/DAX, BPMN/UML, Scrum." />
 
-  <!-- Optional: Canonical-URL bei Mehrfach-Veröffentlichung (z. B. GitHub Pages) -->
-  <!-- <link rel="canonical" href="https://dofp79.github.io/ITSM-IT-Steuerung-IT-Controlling/ueber-mich.html" /> -->
+  <!-- Optional: Canonical-URL bei Mehrfach-Veröffentlichung -->
+  <!-- <link rel="canonical" href="https://example.com/ueber-mich.html" /> -->
 
   <!-- =========================================================
        (1) FONTS – self-hosted (schneller First Paint)
-       - Die Dateien liegen unter /assets/fonts/
+       - Dateien liegen unter /assets/fonts/
        ========================================================= -->
   <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
   <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
 
   <!-- =========================================================
-       (2) GLOBAL CSS – zentrales Stylesheet
-       - Enthält Header/Drawer/Hero/Cards/Kontakt/Footer usw.
-       - Logo-Größe, Drawer-Chips, Farben & Abstände sind dort vereinheitlicht
+       (2) GLOBAL CSS – zentrale Styles, Design Tokens & Komponenten
+       - Enthält u. a. .container, .section, .hero, .sec-head, .grid, .card,
+         .cv-* (Timeline/Boxen), .btn, .tags, .skip-link, .nav-*, .site-footer
+       - Diese Datei ist die Single Source of Truth → hier nichts überschreiben.
        ========================================================= -->
   <link rel="stylesheet" href="assets/css/global.css" />
 </head>
@@ -38,46 +39,33 @@
   <a class="skip-link" href="#mainContent">Zum Inhalt springen</a>
 
   <!-- =========================================================
-       (4) HEADER-CONTAINER
-       - WIRD durch site.js via fetch() mit includes/header.html befüllt
-       - Der include enthält:
-         • Burger (.burger) + Label „Themen“
-         • Offcanvas-Drawer #navdrawer mit Seiten-Links
-         • Markenlinie (.brand-bar) und Logo (rechts, konsistente Größe)
-       - Alle Events (Focus-Trap, ESC, Outside-Click, Resize) kommen aus site.js
+       (4) GLOBALER HEADER-PLATZHALTER
+       - Wird durch assets/js/site.js via include('#site-header','includes/header.html') gefüllt
+       - KEIN statischer Header in dieser Seite → keine Duplikate, 1 Wartungsstelle
+       - Noscript: schlanker, horizontaler Fallback mit .nav-list (Optik konsistent)
        ========================================================= -->
   <header id="site-header" class="site-header" role="banner">
-    <!-- Fallback für Nutzer ohne JS (Noscript): simpler Header + Navigation -->
     <noscript>
-      <div class="container header-bar">
-        <!-- Logo-Link zur Startseite; Größe kommt global aus .brand-right__logo -->
-        <a class="brand-right" href="index.html" aria-label="Startseite">
+      <div class="container nav-container">
+        <a class="nav-logo" href="index.html" aria-label="Startseite">
           <img src="assets/DoniLogo_1.0.0.png" width="150" height="40"
-               alt="Logo Doniman F. Peña Parra" class="brand-right__logo">
+               alt="Logo Doniman F. Peña Parra">
         </a>
+        <nav class="nav-main" aria-label="Hauptnavigation">
+          <ul class="nav-list">
+            <li><a href="index.html">Start</a></li>
+            <li><a href="projekte.html">Projekte</a></li>
+            <li><a href="rz-architektur.html">Rechenzentrumsstruktur</a></li>
+            <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
+            <li><a href="ueber-mich.html" aria-current="page" class="is-active">Über mich</a></li>
+          </ul>
+        </nav>
       </div>
-
-      <!-- Einfache Hauptnavigation (gleiche Ziele wie im Drawer-Menü) -->
-      <nav class="nav-drawer" aria-label="Hauptnavigation">
-        <ul>
-          <li><a href="index.html">Start</a></li>
-          <li><a href="projekte.html">Projekte</a></li>
-          <li><a href="rz-architektur.html">Rechenzentrumsstruktur</a></li>
-          <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
-        </ul>
-      </nav>
-
-      <!-- Dünne Markenlinie im Header (globales Element) -->
-      <div class="brand-bar" aria-hidden="true"></div>
     </noscript>
   </header>
 
-  <!-- direkt vor </body> -->
-  <script src="assets/js/site.js" defer></script>
-
   <!-- =========================================================
-       (5) HERO – Seitenkopf (blauer Bereich)
-       - Typografie & Abstände kommen aus global.css (.hero, .hero__title, .hero__lead)
+       (5) HERO – Seitenkopf (Typografie/Spacing in global.css)
        ========================================================= -->
   <section class="hero" aria-label="Seitenkopf Über mich">
     <div class="container hero-inner">
@@ -93,7 +81,7 @@
   <!-- =========================================================
        (6) MAIN – vollständiger Seiteninhalt
        - ID #mainContent für den Skip-Link
-       - Styles für .sec-head/.cv-card/.cv-grid/.tags etc. kommen aus global.css
+       - Verwendet globale Klassen (cv-*, grid, card, tags, btn, ...)
        ========================================================= -->
   <main id="mainContent" class="main" role="main">
     <!-- =========================================================
@@ -108,7 +96,7 @@
           <h2 class="sec-title">Über mich</h2>
         </div>
 
-        <!-- Kurzer Einführungs-/Leittext (Blocksatz via .lead) -->
+        <!-- Einführungs-/Leittext (Typo via .lead) -->
         <p class="lead">
           ITSM-Prozessadministrator mit Schwerpunkt auf
           <strong>ITIL®&nbsp;4</strong>, <strong>KPI-Design</strong>, <strong>Reporting</strong>
@@ -141,7 +129,7 @@
             </ul>
           </article>
 
-          <!-- Karte 2: Praktikum/Station -->
+          <!-- Karte 2 -->
           <article class="cv-card">
             <h4 class="cv-title">Praktikum IT&nbsp;322 – ITIL Management</h4>
             <div class="cv-meta">Polizei Hamburg · 11/2022 – 01/2024</div>
@@ -156,7 +144,7 @@
             </ul>
           </article>
 
-          <!-- Karte 3: Ausbildung – als Tag-Wolke -->
+          <!-- Karte 3 -->
           <article class="cv-card">
             <h4 class="cv-title">Fachinformatiker Anwendungsentwicklung</h4>
             <div class="tags" aria-label="Ausbildungsinhalte">
@@ -171,7 +159,7 @@
             </div>
           </article>
 
-          <!-- Karte 4: Querschnittserfahrung -->
+          <!-- Karte 4 -->
           <article class="cv-card">
             <h4 class="cv-title">Mehr als 20 Jahre Führungs- &amp; Organisationserfahrung im Gastronomiebereich</h4>
             <div class="tags" aria-label="Schwerpunkte Gastronomie">
@@ -189,7 +177,7 @@
 
         <!-- =====================================================
              (6.1.2) SKILLS • ZERTIFIKATE • SPRACHEN – 3-Spalten-Grid
-             - Mobil 1 Spalte; ab ~860px 3 Spalten (siehe global.css)
+             - Mobil 1 Spalte; ab ~860px 3 Spalten (global.css)
              ===================================================== -->
         <div class="cv-grid">
           <!-- Spalte 1: Skills -->
@@ -234,10 +222,10 @@
 
         <!-- =====================================================
              (6.1.3) AKTIONEN – Buttons (PDF, LinkedIn)
-             - Buttons .btn / .btn--ghost stammen aus global.css
+             - .btn / .btn--ghost kommen aus global.css
              ===================================================== -->
         <div class="cv-actions">
-          <!-- PDF-Pfad bitte auf deinen Build-/Pages-Pfad prüfen -->
+          <!-- PDF-Pfad ggf. an Build/Hosting anpassen -->
           <a class="btn"
              href="assets/docs/LebenslaufDonimanPeña_052025_1.0.0.pdf"
              target="_blank" rel="noopener">
@@ -256,18 +244,18 @@
   </main>
 
   <!-- =========================================================
-       (7) FOOTER-CONTAINER
-       - WIRD per site.js mit includes/footer.html befüllt
-       - Der Include bringt den globalen Kontaktblock + kompakten Footer
+       (7) GLOBALER FOOTER-PLATZHALTER
+       - Wird per site.js mit includes/footer.html befüllt
+       - Der Include bringt globalen Kontaktblock + kompakten Footer
+       - Hier bewusst KEIN <footer>, da das Include selbst <footer> enthält.
        ========================================================= -->
   <div id="site-footer">
-    <!-- Fallback (ohne JS): reduzierter Kontakt + Footer -->
     <noscript>
+      <!-- Minimaler Fallback ohne JS -->
       <section class="contact-block" aria-labelledby="kontaktTitle">
         <div class="contact-inner container">
           <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
           <p class="contact-name">Doniman F. Peña Parra</p>
-          <!-- Ohne JS: direktes Mailto, sonst setzt site.js einen Spam-sicheren Link -->
           <p class="contact-email"><a href="mailto:dofp79@hotmail.com" rel="nofollow">dofp79@hotmail.com</a></p>
         </div>
       </section>
@@ -281,33 +269,31 @@
   </div>
 
   <!-- =========================================================
-       (8) SCRIPTS
+       (8) SCRIPTS (genau EINMAL, mit defer)
        - assets/js/site.js:
-         • lädt Header/Footer via fetch()
-         • verdrahtet Burger/Drawer (A11y, ESC, Outside, Focus-Trap)
-         • markiert aktiven Menüpunkt (aria-current/.is-active)
-         • Accordion, Scrollspy (optional), „Nach oben“-Smooth-Scroll
-         • E-Mail-Obfuskation & Jahr im Footer
+         • lädt Header/Footer via include()
+         • markiert aktiven Menüpunkt (aria-current/.is-active) in .nav-list
+         • setzt Jahr & E-Mail (Spam-sicher)
+         • initialisiert optional RZ-Zoom/Modal (falls Hooks vorhanden)
        ========================================================= -->
   <script src="assets/js/site.js" defer></script>
 
-  <!-- =========================================================
-       (8b) MINI-FALLBACK: Falls site.js nicht lädt (z. B. 404/Cache),
-            werden Header/Footer dennoch nachgezogen.
-       - Kann entfernt werden, sobald site.js stabil verfügbar ist.
-       ========================================================= -->
+  <!-- (Optional) Mini-Fallback: Wenn site.js ausfällt, Includes nachziehen.
+       → Kann entfernt werden, sobald site.js stabil bereitsteht. -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const ensureInclude = (sel, url) => {
+    (function(){
+      const include = (sel, url) => {
         const host = document.querySelector(sel);
         if (!host) return;
-        const hasContent = host.children.length > 0 && host.querySelector('noscript') === null;
-        if (hasContent) return; // bereits durch site.js geladen
+        const has = host.children.length > 0 && !host.querySelector('noscript');
+        if (has) return; // bereits durch site.js gefüllt
         fetch(url).then(r => r.ok ? r.text() : '').then(html => { if (html) host.innerHTML = html; });
       };
-      ensureInclude('#site-header', 'includes/header.html');
-      ensureInclude('#site-footer', 'includes/footer.html');
-    });
+      document.addEventListener('DOMContentLoaded', () => {
+        include('#site-header', 'includes/header.html');
+        include('#site-footer', 'includes/footer.html');
+      });
+    })();
   </script>
 </body>
 </html>
