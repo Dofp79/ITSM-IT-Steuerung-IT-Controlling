@@ -1,34 +1,33 @@
 <!-- includes/header.html -->
 <!-- ============================================================================
-     GLOBALER HEADER mit HORIZONTALEM MENÜ (Sticky)
-     - Wird dynamisch via site.js in <div id="site-header"> eingebunden
-     - Ersetzt die frühere Version mit Burger-Menü und Offcanvas-Drawer
-     - Mobile-kompatibel (flex-wrap)
+     GLOBALER HEADER – Sticky, horizontal; mit Burger-Menü für kleine Screens
+     - Wird via site.js in #site-header geladen
+     - Desktop: Logo links, Navigation rechts (horizontal)
+     - Mobile: Burger-Button klappt Navigation unter dem Header ein
+     - A11y: aria-controls/aria-expanded, klare Rollen & Labels
      ============================================================================ -->
 
 <header class="site-header sticky" role="banner">
-  <!-- ==========================================
-       HAUPTCONTAINER (zentriert + max-width)
-       Enthält Logo + Navigation nebeneinander
-       ========================================== -->
   <div class="container nav-container">
-
-    <!-- ==========================================
-         (A) LOGO (LINK ZUR STARTSEITE)
-         - aria-label für Screenreader
-         - Logo-Grafik → kontrollierte Höhe via CSS
-         ========================================== -->
+    <!-- (A) LOGO – Link zur Startseite; Bildhöhe skaliert per CSS automatisch -->
     <a class="nav-logo" href="index.html" aria-label="Startseite">
       <img src="assets/DoniLogo_1.0.0.png" alt="Logo Doniman F. Peña Parra">
     </a>
 
-    <!-- ==========================================
-         (B) NAVIGATION
-         - ul > li > a Struktur: semantisch korrekt
-         - aria-label: Zugänglichkeit für Screenreader
-         - Alle Links zeigen auf Unterseiten
-         ========================================== -->
-    <nav class="nav-main" role="navigation" aria-label="Hauptnavigation">
+    <!-- (B) BURGER-BUTTON (nur < 960px sichtbar)
+         - aria-controls zeigt auf die Navigation (id="primary-nav")
+         - aria-expanded wird durch JS auf true/false gesetzt -->
+    <button class="nav-toggle" type="button"
+            aria-controls="primary-nav" aria-expanded="false">
+      <span class="nav-toggle__bars" aria-hidden="true"></span>
+      <span class="nav-toggle__label">Menü</span>
+    </button>
+
+    <!-- (C) NAVIGATION
+         - data-collapsible ist ein JS-Hook (Collapsible wird über .is-open gesteuert)
+         - id muss mit aria-controls des Buttons übereinstimmen -->
+    <nav id="primary-nav" class="nav-main" role="navigation"
+         aria-label="Hauptnavigation" data-collapsible>
       <ul class="nav-list">
         <li><a href="index.html">Start</a></li>
         <li><a href="ueber-mich.html">Über mich</a></li>
@@ -41,83 +40,148 @@
 </header>
 
 <!-- ============================================================================
-     LOKALES STYLEBLOCK – KANN optional in global.css ausgelagert werden
-     ============================================================================
--->
+     STYLE-BLOCK (lokal)
+     HINWEIS: Für Produktivbetrieb gerne in assets/css/global.css verschieben.
+     ============================================================================ -->
 <style>
-  /* =============================
-     (1) STICKY HEADER
-     - bleibt am oberen Rand beim Scrollen
-     - z-index für Überlagerung über Content
-     ============================= */
-  .sticky {
+  /* ================================
+     (1) Sticky-Header (immer oben)
+     ================================ */
+  .site-header.sticky{
     position: sticky;
     top: 0;
     z-index: 1000;
     background: #fff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* weiche Schattenkante */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   }
 
-  /* =============================
-     (2) FLEX-CONTAINER für Logo + Navigation
-     ============================= */
-  .nav-container {
+  /* ================================
+     (2) Header-Innenlayout
+     ================================ */
+  .nav-container{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
     padding: 12px 24px;
-    max-width: 1200px;
-    margin-inline: auto; /* zentriert */
+    max-width: 1200px;      /* zentrierte Maximalbreite */
+    margin-inline: auto;
   }
 
-  /* =============================
-     (3) LOGO-GESTALTUNG
-     ============================= */
-  .nav-logo img {
-    height: 50px;
+  /* ================================
+     (3) Logo – auto-responsiv
+     - Höhe passt sich via clamp() an die Viewportbreite an
+     ================================ */
+  .nav-logo img{
+    height: clamp(32px, 6vw, 56px);
     width: auto;
+    display: block;
   }
 
-  /* =============================
-     (4) NAVIGATIONSLISTE (ul)
-     ============================= */
-  .nav-list {
+  /* ================================
+     (4) Navigation (Desktop: horizontal)
+     ================================ */
+  .nav-main {}
+  .nav-list{
     display: flex;
-    gap: 24px;         /* Abstand zwischen Menüpunkten */
-    list-style: none;  /* entfernt Bullet-Points */
+    align-items: center;
+    gap: 24px;
+    list-style: none;
     margin: 0;
     padding: 0;
   }
-
-  /* =============================
-     (5) LINKSTYLING
-     - Schrift, Hover-Effekt, aktive Seite
-     ============================= */
-  .nav-list a {
+  .nav-list a{
     text-decoration: none;
     font-weight: 600;
-    color: #0F4391; /* Markenfarbe */
+    color: #0F4391;
     padding: 8px 12px;
     border-radius: 6px;
-    transition: background-color 0.2s ease;
+    transition: background-color .2s ease, color .2s ease;
   }
-
-  /* Hover-Zustand & aktive Seite */
   .nav-list a:hover,
-  .nav-list a[aria-current="page"] {
-    background-color: #e7effc;
+  .nav-list a.is-active,
+  .nav-list a[aria-current="page"]{
+    background: #e7effc;
+    color: #0b3170;
   }
 
-  /* =============================
-     (6) RESPONSIVES VERHALTEN
-     - bei schmalen Displays (Tablet/Mobile)
-     - Wrap & kleinere Gaps
-     ============================= */
-  @media (max-width: 768px) {
-    .nav-list {
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
+  /* ================================
+     (5) Burger-Button
+     - Desktop: ausgeblendet
+     - Mobile: sichtbar (unter 960px)
+     ================================ */
+  .nav-toggle{
+    display: none;
+    border: 0;
+    background: transparent;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: #0F4391;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .nav-toggle:focus-visible{
+    outline: 2px solid #0F4391;
+    outline-offset: 2px;
+  }
+  /* Icon (3 Balken) */
+  .nav-toggle__bars,
+  .nav-toggle__bars::before,
+  .nav-toggle__bars::after{
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    position: relative;
+    content: "";
+    transition: transform .2s ease, opacity .2s ease;
+  }
+  .nav-toggle__bars::before{ position: absolute; top: -7px; left: 0; }
+  .nav-toggle__bars::after { position: absolute; top:  7px; left: 0; }
+
+  /* ================================
+     (6) Mobile-Layout < 960px
+     - Burger sichtbar
+     - Navigation als Collapsible unter der Headerzeile
+     ================================ */
+  @media (max-width: 960px){
+    .nav-toggle{ display: flex; align-items: center; gap: .5rem; }
+    .nav-toggle__label{ font-size: .95rem; }
+
+    /* Collapsible-Grundlage */
+    [data-collapsible]{
+      overflow: hidden;
+      max-height: 0;                /* eingeklappt */
+      transition: max-height .25s ease;
+      width: 100%;
     }
+    [data-collapsible].is-open{
+      max-height: 60vh;             /* ausreichend groß zum Einblenden */
+    }
+
+    /* Liste wird vertikal; Trennlinien zwischen Items */
+    .nav-list{
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding-block: .5rem;
+    }
+    .nav-list li{ border-top: 1px solid rgba(0,0,0,.06); }
+    .nav-list li:first-child{ border-top: none; }
+    .nav-list a{
+      padding: 14px 8px;
+      border-radius: 0;
+    }
+  }
+
+  /* ================================
+     (7) Bewegungsarme Nutzer respektieren
+     ================================ */
+  @media (prefers-reduced-motion: reduce){
+    [data-collapsible]{ transition: none; }
+    .nav-toggle__bars,
+    .nav-toggle__bars::before,
+    .nav-toggle__bars::after{ transition: none; }
   }
 </style>
