@@ -1,36 +1,121 @@
 <!-- includes/footer.html -->
-<!-- =========================================================
-     (A) GLOBALER KONTAKT + FOOTER (einzige Quelle!)
-     - Dieser Include wird auf JEDER Seite in #site-footer geladen.
-     - site.js setzt:
-       • E-Mail-Spam-Schutz (#contactEmail via data-* Attribute)
-       • aktuelles Jahr in [data-year]
-     - WICHTIG: Keine zweite Kontakt-Sektion mehr auf den Seiten selbst.
-     ========================================================= -->
+<!-- ========================================================================
+     GLOBALER FOOTER mit Kontaktbereich
+     Diese Datei wird via site.js automatisch in #site-footer geladen.
+     - Enthält:
+       (1) Kontakt-Sektion (immer gleich)
+       (2) Copyright/Footer
+     - site.js:
+       • setzt E-Mail dynamisch (Spam-Schutz)
+       • ergänzt das Jahr automatisch per JS
+       • entfernt doppelte .contact-blocks im DOM
+     ======================================================================== -->
 
-<!-- (A.1) Kontaktblock – überall gleich -->
+<!-- ===============================
+     (1) KONTAKTBLOCK
+     =============================== -->
 <section class="contact-block" aria-labelledby="kontaktTitle">
   <div class="contact-inner container">
+    <!-- Sektionstitel: per aria-labelledby referenziert -->
     <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
+
+    <!-- Name (optional mit <address> ersetzbar, wenn Adresse folgt) -->
     <p class="contact-name">Doniman F. Peña Parra</p>
 
-    <!-- E-Mail wird durch site.js sicher gesetzt (Spam-Schutz).
-         Bitte NICHT in Seiten duplizieren. -->
+    <!-- Dynamische E-Mail: site.js setzt echte Mailadresse 
+         Die "href" bleibt "#" bis sie ersetzt wird.
+         "rel=nofollow" schützt SEO-Spam.
+    -->
     <p class="contact-email">
       <a id="contactEmail"
          data-email-user="dofp79"
          data-email-domain="hotmail.com"
          href="#"
          rel="nofollow">E-Mail anzeigen</a>
-      <noscript>(dofp79&nbsp;[at]&nbsp;hotmail&nbsp;[dot]&nbsp;com)</noscript>
+
+      <!-- Fallback für JS-Deaktivierung – stilistisch hervorgehoben -->
+      <noscript>
+        <span style="display:inline-block; margin-top:8px; color:#555;">
+          (dofp79&nbsp;[at]&nbsp;hotmail&nbsp;[dot]&nbsp;com)
+        </span>
+      </noscript>
     </p>
   </div>
 </section>
 
-<!-- (A.2) Kompakter Footer -->
+<!-- ===============================
+     (2) FUSSZEILE / COPYRIGHT
+     =============================== -->
 <footer class="site-footer" role="contentinfo">
   <div class="container subfooter__inner">
+    <!-- © Hinweis – Jahr wird durch site.js automatisch aktualisiert -->
     <p>&copy; <span data-year>2025</span> IT-Steuerung &amp; IT-Controlling</p>
+
+    <!-- Zurück-zum-Anfang-Link – A11Y-freundlich -->
     <a class="to-top" href="#top">Nach oben ↑</a>
   </div>
 </footer>
+
+<!-- ===============================
+     OPTIONALE STYLES (global.css empfohlen)
+     Wenn du willst, kann ich dir SCSS/CSS Snippet dafür geben.
+     =============================== -->
+<style>
+  .contact-block {
+    padding: 32px 16px;
+    background-color: #f8f8f8;
+    border-top: 2px solid #ccc;
+    margin-top: 40px;
+  }
+
+  .contact-title {
+    font-size: 1.6rem;
+    margin-bottom: 0.5em;
+    color: #0F4391;
+  }
+
+  .contact-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 0.2em;
+  }
+
+  .contact-email a {
+    color: #0F4391;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+
+  .contact-email a:hover {
+    color: #0056b3;
+  }
+
+  .site-footer {
+    background: #0F4391;
+    color: white;
+    padding: 20px 16px;
+    font-size: 0.9rem;
+  }
+
+  .site-footer a.to-top {
+    float: right;
+    color: #e7effc;
+    font-weight: bold;
+  }
+
+  .site-footer a.to-top:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    .site-footer .to-top {
+      float: none;
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .contact-block {
+      text-align: center;
+    }
+  }
+</style>
