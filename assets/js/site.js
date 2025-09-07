@@ -202,141 +202,209 @@
   });
 
   /* ---------------------------------------------------------------------------
-   * (6) RZ-Diagramm: Lupe + Vollbild (Pan & Zoom) – OPTIONAL
-   *  - Aktiviert sich nur, wenn die erwarteten DOM-Hooks vorhanden sind:
-   *    figure.rz-zoom > img.diagram + .rz-zoom__lens + .rz-zoom__open
-   *    und #rzModal mit .rz-stage > .rz-stage__img (+ [data-close], [data-zoom])
+   * (6) RZ-Diagramm: Lupe + Vollbild (Pan & Zoom) – robuste, kommentierte Version
+   *  Voraussetzungen im Markup (siehe rz-architektur.html):
+   *    figure.rz-zoom > img.diagram[data-full] + .rz-zoom__lens + .rz-zoom__open
+   *    #rzModal .rz-stage > .rz-stage__img, Buttons [data-close], [data-zoom]
    * ------------------------------------------------------------------------ */
   function initRZZoom() {
+    // ---------- (A) DOM-Hooks einsammeln ------------------------------------
     const fig   = $('.rz-zoom');
     const img   = fig?.querySelector('img.diagram');
     const lens  = fig?.querySelector('.rz-zoom__lens');
     const openB = fig?.querySelector('.rz-zoom__open');
+
     const modal = $('#rzModal');
     const stage = modal?.querySelector('.rz-stage');
     const full  = modal?.querySelector('.rz-stage__img');
-    const closers = modal?.querySelectorAll('[data-close]') || [];
-    if (!fig || !img || !lens || !openB || !modal || !stage || !full) return; // Hooks fehlen → ruhig aussteigen
+    const closers = modal?.querySelectorAll('[data-close], .rz-modal__backdrop, .rz-modal__close') || [];
 
-    // ------ (A) Lupe über dem kleinen Bild ---------------------------------
-    const fullSrc = img.getAttribute('data-full') || img.currentSrc || img.src;
-    lens.style.backgroundImage = `url("${fullSrc}")`;
+    // Fehlende Hooks? → ruhig aussteigen (kein Fehler, nur kein Feature)
+    if (!fig || !img || !lens || !openB || !modal || !stage || !full) return;
 
-    const showLens = (show) => {
-      lens.style.display = show ? 'block' : 'none';
-      lens.style.backgroundSize = '200%'; // Vergrößerungsfaktor; ggf. feinjustieren
+    // ---------- (B) Config an EINER Stelle ----------------------------------
+    const CFG = {
+      lensSize: 130,          // Durchmesser der Lupe in px (CSS spiegelt das)
+      lensBgScale: 2.0,       // 2.0 = 200% (Vergrößerungsfaktor der Lupe)
+      wheelStep: 1.15,        // Zoom-Schritt pro Wheel-Tick
+      zoomMin: 0.5,           // untere Zoom-Grenze im Modal
+      zoomMax: 6.0,           // obere Zoom-Grenze im Modal
     };
 
-    function moveLens(ev) {
-      const rect  = img.getBoundingClientRect();
-      const lensW = lens.offsetWidth;
-      const lensH = lens.offsetHeight;
-      const cx = (ev.touches?.[0]?.clientX) ?? ev.clientX;
-      const cy = (ev.touches?.[0]?.clientY) ?? ev.clientY;
+    // ---------- (C) State ----------------------------------------------------
+    // Vollbild-Zoomzustand
+    const Z = { scale: 1, min: CFG.zoomMin, max: CFG.zoomMax, x: 0, y: 0 };
+    // Für Event-Cleanup (wichtig bei Hot-Reload/SPA)
+    const destroy = [];
 
-      // Position relativ zum Bild
-      let x = cx - rect.left - lensW / 2;
-      let y = cy - rect.top  - lensH / 2;
+    // ---------- (D) Helpers --------------------------------------------------
+    const on = (el, ev, fn, opts) => { el.addEventListener(ev, fn, opts); destroy.push(() => el.removeEventListener(ev, fn, opts)); };
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
-      // an Bildränder klemmen
-      x = Math.max(0, Math.min(x, rect.width  - lensW));
-      y = Math.max(0, Math.min(y, rect.height - lensH));
+    // Bildquelle für Lupe/Vollbild bestimmen
+    const fullSrc = img.getAttribute('data-full') || img.currentSrc || img.src;
 
-      lens.style.left = `${x}px`;
-      lens.style.top  = `${y}px`;
+    // Wendet transform auf das Vollbild an
+    const apply = () => { full.style.transform = `translate(${Z.x}px, ${Z.y}px) scale(${Z.scale})`; };
 
-      // Hintergrundposition (prozentual)
-      const fx = x / (rect.width  - lensW);
-      const fy = y / (rect.height - lensH);
-      lens.style.backgroundPosition = `${fx * 100}% ${fy * 100}%`;
-    }
+    const center = () => {
+      // Vollbild stets aus der hochauflösenden Quelle laden
+      full.src = fullSrc;
+      Z.scale = 1; Z.x = 0; Z.y = 0;
+      apply();
+    };
 
-    // Maus
-    img.addEventListener('mouseenter', () => showLens(true));
-    img.addEventListener('mouseleave', () => showLens(false));
-    img.addEventListener('mousemove',  moveLens);
-    // Touch
-    img.addEventListener('touchstart', (e) => { showLens(true);  moveLens(e); }, { passive: true });
-    img.addEventListener('touchmove',  (e) => { moveLens(e); }, { passive: true });
-    img.addEventListener('touchend',   ()  => { showLens(false); });
-
-    // ------ (B) Vollbild-Modal mit Pan & Zoom -------------------------------
-    const Z = { scale: 1, min: 0.5, max: 6, x: 0, y: 0 }; // Zoom-Zustand
-
-    const apply  = () => { full.style.transform = `translate(${Z.x}px, ${Z.y}px) scale(${Z.scale})`; };
-    const center = () => { full.src = fullSrc; Z.scale = 1; Z.x = Z.y = 0; apply(); };
-
+    // Zoomen um einen Bezugspunkt (cx, cy) innerhalb der Bühne
     function setZoom(factor, cx, cy) {
-      const old = Z.scale;
-      const next = Math.max(Z.min, Math.min(Z.max, old * factor));
-      if (next === old) return;
+      const prev = Z.scale;
+      const next = clamp(prev * factor, Z.min, Z.max);
+      if (next === prev) return;
 
       const r = stage.getBoundingClientRect();
-      const px = (cx ?? r.width  / 2);
+      const px = (cx ?? r.width / 2);
       const py = (cy ?? r.height / 2);
 
-      // Zoome um den Cursorpunkt
-      Z.x = px - (next / old) * (px - Z.x);
-      Z.y = py - (next / old) * (py - Z.y);
-
+      // Zoom zum Cursorpunkt: versetze das Bild proportional
+      Z.x = px - (next / prev) * (px - Z.x);
+      Z.y = py - (next / prev) * (py - Z.y);
       Z.scale = next;
       apply();
     }
 
-    function openModal() {
-      modal.hidden = false;
-      center();
-      stage.focus?.({ preventScroll: true });
-      document.body.style.overflow = 'hidden'; // Seite nicht scrollen, solange Modal offen
+    // ---------- (E) Lupe auf dem Vorschaubild -------------------------------
+    function initLens() {
+      // CSS-Größe auch inline für sichere Berechnung (optional, CSS hat es bereits)
+      lens.style.width = `${CFG.lensSize}px`;
+      lens.style.height = `${CFG.lensSize}px`;
+
+      // Hintergrundbild für Lens (die hochauflösende Variante)
+      lens.style.backgroundImage = `url("${fullSrc}")`;
+      lens.style.backgroundSize  = `${CFG.lensBgScale * 100}%`; // z. B. 200%
+
+      const showLens = (show) => { lens.style.display = show ? 'block' : 'none'; };
+
+      function moveLens(ev) {
+        const rect  = img.getBoundingClientRect();
+        const lensW = lens.offsetWidth;
+        const lensH = lens.offsetHeight;
+
+        // Cursorposition (Maus ODER Touch)
+        const cx = (ev.touches?.[0]?.clientX) ?? ev.clientX;
+        const cy = (ev.touches?.[0]?.clientY) ?? ev.clientY;
+
+        // Position relativ zum Bildmitte der Lupe
+        let x = cx - rect.left - lensW / 2;
+        let y = cy - rect.top  - lensH / 2;
+
+        // An Bildränder klemmen (Lupe ragt nicht heraus)
+        x = clamp(x, 0, rect.width  - lensW);
+        y = clamp(y, 0, rect.height - lensH);
+
+        // Lens positionieren
+        lens.style.left = `${x}px`;
+        lens.style.top  = `${y}px`;
+
+        // Hintergrundposition prozentual (0–100)
+        const fx = (rect.width  - lensW) > 0 ? x / (rect.width  - lensW) : 0;
+        const fy = (rect.height - lensH) > 0 ? y / (rect.height - lensH) : 0;
+        lens.style.backgroundPosition = `${fx * 100}% ${fy * 100}%`;
+      }
+
+      // Nur starten, wenn das Bild Maße hat (LCP-sicher)
+      const ensureReady = () => {
+        const ready = img.complete && img.naturalWidth > 0;
+        if (!ready) return false;
+        return true;
+      };
+
+      if (!ensureReady()) {
+        const onLoad = () => {
+          showLens(false);
+          img.removeEventListener('load', onLoad);
+        };
+        on(img, 'load', onLoad, { once: true });
+      }
+
+      // Maus-Interaktion
+      on(img, 'mouseenter', () => showLens(true));
+      on(img, 'mouseleave', () => showLens(false));
+      on(img, 'mousemove',  moveLens);
+
+      // Touch-Interaktion (passive für Scroll-Performance)
+      on(img, 'touchstart', (e) => { showLens(true);  moveLens(e); }, { passive: true });
+      on(img, 'touchmove',  (e) => { moveLens(e); }, { passive: true });
+      on(img, 'touchend',   ()  => { showLens(false); });
     }
-    function closeModal() {
-      modal.hidden = true;
-      document.body.style.overflow = '';
-      openB.focus?.(); // Fokus zurück zum Auslöser
+
+    // ---------- (F) Modal mit Pan & Zoom ------------------------------------
+    function initModal() {
+      // Öffnen/Schließen
+      function openModal() {
+        modal.hidden = false;
+        center(); // Bild und Zoom zurücksetzen
+        stage.focus?.({ preventScroll: true });
+        document.body.style.overflow = 'hidden'; // Scroll der Seite verhindern
+      }
+      function closeModal() {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+        openB.focus?.(); // Fokus zurück zum Auslöser
+      }
+
+      on(openB, 'click', openModal);
+      closers.forEach(el => on(el, 'click', closeModal));
+      on(document, 'keydown', (e) => { if (!modal.hidden && e.key === 'Escape') closeModal(); });
+
+      // Pan (Maus)
+      let drag = null;
+      on(stage, 'mousedown', (e) => { drag = { sx: e.clientX, sy: e.clientY, x: Z.x, y: Z.y }; });
+      on(document, 'mousemove', (e) => {
+        if (!drag) return;
+        Z.x = drag.x + (e.clientX - drag.sx);
+        Z.y = drag.y + (e.clientY - drag.sy);
+        apply();
+      });
+      on(document, 'mouseup', () => { drag = null; });
+
+      // Pan (Touch)
+      on(stage, 'touchstart', (e) => {
+        const t = e.touches[0]; drag = { sx: t.clientX, sy: t.clientY, x: Z.x, y: Z.y };
+      }, { passive: true });
+      on(stage, 'touchmove', (e) => {
+        if (!drag) return;
+        const t = e.touches[0];
+        Z.x = drag.x + (t.clientX - drag.sx);
+        Z.y = drag.y + (t.clientY - drag.sy);
+        apply();
+      }, { passive: true });
+      on(stage, 'touchend', () => { drag = null; });
+
+      // Wheel-Zoom (zum Cursor) – NICHT passive, da wir preventDefault nutzen
+      on(stage, 'wheel', (e) => {
+        e.preventDefault();
+        const r = stage.getBoundingClientRect();
+        const cx = e.clientX - r.left;
+        const cy = e.clientY - r.top;
+        setZoom((e.deltaY < 0) ? 1.15 : 1 / 1.15, cx, cy);
+      }, { passive: false });
+
+      // Tool-Buttons (optional vorhanden)
+      modal.querySelector('[data-zoom="in"]')    ?.addEventListener('click', () => setZoom(1.2));
+      modal.querySelector('[data-zoom="out"]')   ?.addEventListener('click', () => setZoom(1 / 1.2));
+      modal.querySelector('[data-zoom="reset"]') ?.addEventListener('click', () => { Z.scale = 1; Z.x = 0; Z.y = 0; apply(); });
     }
 
-    openB.addEventListener('click', openModal);
-    closers.forEach(el => el.addEventListener('click', closeModal));
-    document.addEventListener('keydown', (e) => { if (!modal.hidden && e.key === 'Escape') closeModal(); });
+    // ---------- (G) Resize-Anpassungen --------------------------------------
+    function onResize() {
+      // Bei Größenwechsel des Vorschaubildes bleibt die Lupe stimmig —
+      // der Hintergrund skaliert prozentual (z. B. 200%), daher kein Recalc nötig.
+      // Optional: lensSize/lensBgScale dynamisch anpassen.
+    }
+    window.addEventListener('resize', onResize);
 
-    // Pan (Maus)
-    let drag = null;
-    stage.addEventListener('mousedown', (e) => { drag = { sx: e.clientX, sy: e.clientY, x: Z.x, y: Z.y }; });
-    document.addEventListener('mousemove', (e) => {
-      if (!drag) return;
-      Z.x = drag.x + (e.clientX - drag.sx);
-      Z.y = drag.y + (e.clientY - drag.sy);
-      apply();
-    });
-    document.addEventListener('mouseup', () => { drag = null; });
-
-    // Pan (Touch)
-    stage.addEventListener('touchstart', (e) => {
-      const t = e.touches[0];
-      drag = { sx: t.clientX, sy: t.clientY, x: Z.x, y: Z.y };
-    }, { passive: true });
-    stage.addEventListener('touchmove', (e) => {
-      if (!drag) return;
-      const t = e.touches[0];
-      Z.x = drag.x + (t.clientX - drag.sx);
-      Z.y = drag.y + (t.clientY - drag.sy);
-      apply();
-    }, { passive: true });
-    stage.addEventListener('touchend', () => { drag = null; });
-
-    // Zoom per Rad (zum Cursor)
-    stage.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      const r = stage.getBoundingClientRect();
-      const cx = e.clientX - r.left;
-      const cy = e.clientY - r.top;
-      setZoom((e.deltaY < 0) ? 1.15 : 1 / 1.15, cx, cy);
-    }, { passive: false });
-
-    // Tool-Buttons (optional vorhanden)
-    modal.querySelector('[data-zoom="in"]')   ?.addEventListener('click', () => setZoom(1.2));
-    modal.querySelector('[data-zoom="out"]')  ?.addEventListener('click', () => setZoom(1 / 1.2));
-    modal.querySelector('[data-zoom="reset"]')?.addEventListener('click', () => { Z.scale = 1; Z.x = Z.y = 0; apply(); });
+    // ---------- (H) Boot -----------------------------------------------------
+    initLens();
+    initModal();
   }
 
   // Hinweis: KEINE alte Drawer-Initialisierung mehr! (Früher: initMenu() mit .burger/#navdrawer)
