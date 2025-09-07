@@ -1,66 +1,123 @@
 <!-- includes/header.html -->
-<!-- =========================================================================
-     GLOBALER HEADER (Inhalt für #site-header)
-     -------------------------------------------------------------------------
-     Enthält:
-     - (A) Kopfzeile (.header-bar) mit Burger links + Logo rechts
-     - (B) Dünne Markenlinie (.brand-bar) unter der Kopfzeile
-     - (C) Offcanvas-Drawer (#navdrawer) = "Themen"-Menü
-     -------------------------------------------------------------------------
-     WICHTIG:
-     - IDs/Selektoren passen exakt zu site.js  (navdrawer, .burger, .brand-bar)
-     - Keine doppelten brand-bar/navdrawer-Elemente → sonst Layout/JS-Konflikte
-     - Logo-Größe wird NUR über CSS (global.css → --logo-h) gesteuert
-     ========================================================================= -->
+<!-- ============================================================================
+     GLOBALER HEADER mit HORIZONTALEM MENÜ (Sticky)
+     - Wird dynamisch via site.js in <div id="site-header"> eingebunden
+     - Ersetzt die frühere Version mit Burger-Menü und Offcanvas-Drawer
+     - Mobile-kompatibel (flex-wrap)
+     ============================================================================ -->
 
-<!-- (A) Kopfzeile: Burger + Logo -->
-<div class="container header-bar">
-  <!-- Burger-Button 
-       - site.js hängt hier die komplette Drawer-Logik dran:
-         * aria-expanded auf true/false
-         * Focus-Trap im Drawer
-         * ESC/Outside-Click schließt
-       - aria-controls → verweist auf den Drawer (#navdrawer)
-  -->
-  <button class="burger"
-          type="button"
-          aria-label="Menü öffnen"
-          aria-controls="navdrawer"
-          aria-expanded="false">
-    <span class="burger__icon" aria-hidden="true"></span>
-    <!-- Die Beschriftung wechselt in site.js zwischen
-         "Themen" und "Menü schließen" -->
-    <span class="burger__label">Themen</span>
-  </button>
+<header class="site-header sticky" role="banner">
+  <!-- ==========================================
+       HAUPTCONTAINER (zentriert + max-width)
+       Enthält Logo + Navigation nebeneinander
+       ========================================== -->
+  <div class="container nav-container">
 
-  <!-- Logo: KEINE width/height-Attribute!
-       - Größe = global.css → .brand-right__logo (Token: --logo-h)
-       - Der Link führt zur Startseite -->
-  <a class="brand-right" href="index.html" aria-label="Startseite">
-    <img src="assets/DoniLogo_1.0.0.png"
-         alt="Logo Doniman F. Peña Parra"
-         class="brand-right__logo">
-  </a>
-</div>
+    <!-- ==========================================
+         (A) LOGO (LINK ZUR STARTSEITE)
+         - aria-label für Screenreader
+         - Logo-Grafik → kontrollierte Höhe via CSS
+         ========================================== -->
+    <a class="nav-logo" href="index.html" aria-label="Startseite">
+      <img src="assets/DoniLogo_1.0.0.png" alt="Logo Doniman F. Peña Parra">
+    </a>
 
-<!-- (B) Dünne Markenlinie unter der Kopfzeile 
-     - Nur EINMAL vorhanden (früher doppelt → entfernt) -->
-<div class="brand-bar" aria-hidden="true"></div>
+    <!-- ==========================================
+         (B) NAVIGATION
+         - ul > li > a Struktur: semantisch korrekt
+         - aria-label: Zugänglichkeit für Screenreader
+         - Alle Links zeigen auf Unterseiten
+         ========================================== -->
+    <nav class="nav-main" role="navigation" aria-label="Hauptnavigation">
+      <ul class="nav-list">
+        <li><a href="index.html">Start</a></li>
+        <li><a href="ueber-mich.html">Über mich</a></li>
+        <li><a href="projekte.html">Projekte</a></li>
+        <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
+        <li><a href="rz-architektur.html">Rechenzentrumsstruktur</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
-<!-- (C) Offcanvas-Drawer: „Themen“-Menü 
-     - Wird von site.js ein-/ausgeblendet (.is-open)
-     - A11y: Focus-Trap bei geöffnetem Zustand
-     - Links sind echte Seiten (keine #hashes), damit Active-State greift -->
-<nav id="navdrawer" class="nav-drawer" role="navigation" aria-label="Hauptnavigation">
-  <ul>
-    <!-- HINWEIS:
-         * Der Active-State (rote Hervorhebung) wird von site.js gesetzt
-           anhand der aktuellen Datei (…/index.html etc.)
-         * Reihenfolge/Themen kannst du frei anpassen -->
-    <li><a href="index.html">Start</a></li>
-    <li><a href="ueber-mich.html">Über mich</a></li>
-    <li><a href="projekte.html">Projekte</a></li>
-    <li><a href="rz-architektur.html">Rechenzentrumsstruktur</a></li>
-    <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
-  </ul>
-</nav>
+<!-- ============================================================================
+     LOKALES STYLEBLOCK – KANN optional in global.css ausgelagert werden
+     ============================================================================
+-->
+<style>
+  /* =============================
+     (1) STICKY HEADER
+     - bleibt am oberen Rand beim Scrollen
+     - z-index für Überlagerung über Content
+     ============================= */
+  .sticky {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* weiche Schattenkante */
+  }
+
+  /* =============================
+     (2) FLEX-CONTAINER für Logo + Navigation
+     ============================= */
+  .nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    max-width: 1200px;
+    margin-inline: auto; /* zentriert */
+  }
+
+  /* =============================
+     (3) LOGO-GESTALTUNG
+     ============================= */
+  .nav-logo img {
+    height: 50px;
+    width: auto;
+  }
+
+  /* =============================
+     (4) NAVIGATIONSLISTE (ul)
+     ============================= */
+  .nav-list {
+    display: flex;
+    gap: 24px;         /* Abstand zwischen Menüpunkten */
+    list-style: none;  /* entfernt Bullet-Points */
+    margin: 0;
+    padding: 0;
+  }
+
+  /* =============================
+     (5) LINKSTYLING
+     - Schrift, Hover-Effekt, aktive Seite
+     ============================= */
+  .nav-list a {
+    text-decoration: none;
+    font-weight: 600;
+    color: #0F4391; /* Markenfarbe */
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+  }
+
+  /* Hover-Zustand & aktive Seite */
+  .nav-list a:hover,
+  .nav-list a[aria-current="page"] {
+    background-color: #e7effc;
+  }
+
+  /* =============================
+     (6) RESPONSIVES VERHALTEN
+     - bei schmalen Displays (Tablet/Mobile)
+     - Wrap & kleinere Gaps
+     ============================= */
+  @media (max-width: 768px) {
+    .nav-list {
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+  }
+</style>
