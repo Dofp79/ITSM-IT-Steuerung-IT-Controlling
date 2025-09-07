@@ -1,15 +1,15 @@
 /* =============================================================================
-   assets/js/site.js
+   assets/js/site.js  –  NEUE VERSION für horizontales Sticky-Menü (ohne Drawer)
    -----------------------------------------------------------------------------
    Inhalt (alles streng gekapselt, keine Globals):
    - (0) Utilities ($, $$, include)
-   - (1) Einmalige Schutzmaßnahme: genau EIN .contact-block auf der Seite
-   - (2) Headerhöhe messen → CSS-Var --header-h (Drawer-Start unter Header)
-   - (3) Menü/Drawer "Themen" (A11y: ESC, Focus-Trap, Outside-Click)
-   - (4) Aktiven Menüpunkt markieren
-   - (5) Footer-Jahr & Kontakt-Mail (Spam-sicher) setzen
-   - (6) Boot: Header/Footer laden → dann Initialisierungen → Kontakt-Schutz
-   - (7) RZ-Diagramm: Lupe + Vollbild (Pan & Zoom) – nur bei vorhandenen DOM-Hooks
+   - (1) Schutzmaßnahme: genau EIN .contact-block im gesamten DOM
+   - (2) Headerhöhe → CSS-Var --header-h (allgemein nützlich, z. B. für Sticky-Offset)
+   - (3) Navigation (OHNE Drawer):
+         • aktiven Menüpunkt markieren (aria-current, .is-active)
+   - (4) Footer: Jahr setzen & E-Mail sicher hydratisieren
+   - (5) Boot: Header/Footer includen → Initialisierungen → Kontakt-Schutz
+   - (6) RZ-Diagramm: Lupe + Vollbild (Pan & Zoom) – nur wenn Hooks existieren
    ============================================================================= */
 
 (() => {
@@ -17,15 +17,17 @@
 
   /* ---------------------------------------------------------------------------
    * (0) Utilities
+   * - $  : querySelector Kurzform
+   * - $$ : querySelectorAll als Array
+   * - include(sel, url): lädt HTML-Include in ein Host-Element (Progressive Enhancement)
    * ------------------------------------------------------------------------ */
   const $  = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
-  // HTML-Teil (header/footer) in Zielcontainer laden
   const include = (sel, url) => {
     const host = $(sel);
     if (!host) return Promise.resolve(false);
-    // Bereits gefüllt? (z.B. durch anderes Skript) → nichts tun
+    // Bereits gefüllt? (z. B. durch SSR, CMS oder anderen Loader) → nichts tun
     const alreadyFilled = host.children.length > 0 && !host.querySelector('noscript');
     if (alreadyFilled) return Promise.resolve(true);
     return fetch(url)
@@ -36,10 +38,10 @@
 
   /* ---------------------------------------------------------------------------
    * (1) Nur EIN Kontaktblock auf der Seite lassen
-   *  - Behalte bevorzugt den im Footer (#site-footer .contact-block),
-   *    sonst den zuletzt vorhandenen im DOM. Entferne Rest.
-   *  - Wird nach Includes ausgeführt und zusätzlich via MutationObserver
-   *    überwacht (falls später erneut etwas injected wird).
+   *  - Bevorzugt den im Footer (#site-footer .contact-block), sonst den zuletzt
+   *    vorhandenen. Entfernt Duplikate (z. B. wenn Seiten-Content zusätzlich
+   *    einen Kontaktabschnitt enthält).
+   *  - Läuft initial & via MutationObserver (falls später erneut injected wird).
    * ------------------------------------------------------------------------ */
   function ensureSingleContact() {
     const all = $$('.contact-block');
@@ -48,8 +50,6 @@
     const keep = footerOne || all[all.length - 1];
     all.forEach(el => { if (el !== keep) el.remove(); });
   }
-
-  // Watcher nur einmal aktivieren
   const observeOnceForContacts = (() => {
     let started = false;
     return () => {
@@ -62,12 +62,12 @@
 
   /* ---------------------------------------------------------------------------
    * (2) Headerhöhe messen → --header-h setzen
-   *  - Damit .nav-drawer mit "inset: var(--header-h) auto 0 0" unter dem
-   *    sichtbaren Header startet. Wird bei Resize aktualisiert.
+   *  - Allgemein nützlich (z. B. wenn Sticky-Header Flächen darunter beeinflusst)
+   *  - Robust: läuft auch ohne brand-bar
    * ------------------------------------------------------------------------ */
   function setHeaderHeightVar() {
-    const header   = $('.site-header');
-    const brandBar = $('.brand-bar');
+    const header   = $('.site-header');     // kommt aus includes/header.html
+    const brandBar = $('.brand-bar');       // optional (alt), heute meist nicht vorhanden
     if (!header) return;
     const compute = () => {
       const h = header.offsetHeight + (brandBar ? brandBar.offsetHeight : 0);
@@ -78,107 +78,41 @@
   }
 
   /* ---------------------------------------------------------------------------
-   * (3) Menü/Drawer "Themen" initialisieren (A11y vollständig)
-   *  - Voraussetzungen im HTML (im include/header.html):
-   *    • Button .burger mit .burger__label ("Themen")
-   *    • Drawer #navdrawer (role="navigation")
-   *  - Features:
-   *    • aria-expanded Umschaltung am Burger
-   *    • Focus-Trap im geöffneten Drawer
-   *    • ESC schließt / Outside-Click schließt / Resize schließt
-   *    • Label-Text wechselt zwischen "Themen" und "Menü schließen"
-   * ------------------------------------------------------------------------ */
-  function initMenu() {
-    const burger = $('.burger');
-    const drawer = $('#navdrawer');
-    if (!burger || !drawer) return;
-
-    // Statisch sicherstellen (hilft Readern und E2E-Tests)
-    burger.setAttribute('aria-controls', drawer.id);
-    burger.setAttribute('aria-expanded', 'false');
-
-    const FOCUSABLE =
-      'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
-    let lastFocus = null;
-
-    const setLabel = (open) => {
-      const label = burger.querySelector('.burger__label');
-      if (label) label.textContent = open ? 'Menü schließen' : 'Themen';
-    };
-
-    const applyOpenState = (open) => {
-      burger.setAttribute('aria-expanded', String(open));
-      drawer.classList.toggle('is-open', open);
-      document.body.style.overflow = open ? 'hidden' : '';
-      setLabel(open);
-      if (open) {
-        lastFocus = document.activeElement;
-        (drawer.querySelector(FOCUSABLE) || drawer).focus({ preventScroll: true });
-        document.addEventListener('keydown', trapTab);
-      } else {
-        (lastFocus instanceof HTMLElement ? lastFocus : burger).focus({ preventScroll: true });
-        document.removeEventListener('keydown', trapTab);
-      }
-    };
-
-    const trapTab = (e) => {
-      if (e.key !== 'Tab' || !drawer.classList.contains('is-open')) return;
-      const focusables = [...drawer.querySelectorAll(FOCUSABLE)]
-        .filter(el => !el.disabled && el.offsetParent !== null);
-      if (!focusables.length) return;
-      const first = focusables[0], last = focusables[focusables.length - 1];
-      if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
-      if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
-    };
-
-    // Startzustand
-    applyOpenState(false);
-
-    // Events
-    burger.addEventListener('click', () => {
-      const open = burger.getAttribute('aria-expanded') === 'true';
-      applyOpenState(!open);
-    });
-    // ESC
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') applyOpenState(false); });
-    // Outside-Click
-    document.addEventListener('click', (e) => {
-      if (!drawer.classList.contains('is-open')) return;
-      const t = e.target;
-      if (!(t instanceof Node)) return;
-      if (!drawer.contains(t) && !burger.contains(t)) applyOpenState(false);
-    });
-    // Beim Navigieren im Drawer schließen
-    drawer.addEventListener('click', (e) => {
-      const link = (e.target instanceof HTMLElement) ? e.target.closest('a') : null;
-      if (link) applyOpenState(false);
-    });
-    // Bei Resize schließen (z. B. beim Drehen des Geräts)
-    window.addEventListener('resize', () => applyOpenState(false));
-  }
-
-  /* ---------------------------------------------------------------------------
-   * (4) Aktiven Menüpunkt markieren
-   *  - Vergleicht den Dateinamen (…/foo.html) mit href-Endungen
+   * (3) Navigation (OHNE Drawer)
+   *  - Markiert aktuell aktive Seite im horizontalen Menü
+   *  - Erwartet Links in includes/header.html innerhalb .nav-list
+   *  - Setzt:
+   *      a[aria-current="page"] für A11y
+   *      .is-active für CSS-Selektoren (falls gewünscht)
    * ------------------------------------------------------------------------ */
   function markActiveLink() {
+    // Ermittelt den aktuellen Dateinamen (z. B. "projekte.html"); Fallback: index.html
     const current = location.pathname.split('/').pop() || 'index.html';
-    $$('#navdrawer a[href]').forEach(a => {
-      const onPage = (a.getAttribute('href') || '').endsWith(current);
+
+    // Suche NUR innerhalb der globalen Navigation aus dem Include
+    const links = $$('.nav-list a[href]');
+    if (!links.length) return;
+
+    links.forEach(a => {
+      const href = a.getAttribute('href') || '';
+      const onPage = href.split('/').pop() === current;
       a.classList.toggle('is-active', onPage);
-      if (onPage) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+      if (onPage) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
     });
   }
 
   /* ---------------------------------------------------------------------------
-   * (5) Footer-Jahr & Kontakt-Mail (Spam-sicher)
-   *  - Jahr <span data-year>…</span>
-   *  - Mail-Link: <a id="contactEmail" data-email-user="..." data-email-domain="...">
+   * (4) Footer-Jahr & Kontakt-Mail (Spam-sicher)
+   *  - Jahr:  <span data-year>2025</span>  → wird dynamisch ersetzt
+   *  - E-Mail: <a id="contactEmail" data-email-user="..." data-email-domain="...">
+   *            → wird zu "mailto:user@domain"
    * ------------------------------------------------------------------------ */
   function setYear() {
     const y = new Date().getFullYear();
     $$('[data-year]').forEach(n => { n.textContent = String(y); });
   }
+
   function hydrateContactEmail() {
     const link = $('#contactEmail');
     if (!link) return;
@@ -187,40 +121,42 @@
     if (!user || !dom) return;
     const addr = `${user}@${dom}`;
     link.href = `mailto:${addr}`;
-    // Nur Text ersetzen, wenn noch der Platzhalter steht
+    // Ersetze nur Platzhaltertext wie "E-Mail anzeigen"
     if (/anzeigen/i.test(link.textContent || '')) link.textContent = addr;
-    link.removeAttribute('rel'); // rel="nofollow" optional entfernen
+    // rel="nofollow" kann optional entfernt werden; belassen ist auch ok:
+    // link.removeAttribute('rel');
   }
 
   /* ---------------------------------------------------------------------------
-   * (6) Bootstrapping: Includes → Initialisierungen → Kontakt-Schutz
+   * (5) Bootstrapping
+   *  - Lädt Header/Footer-Includes und initialisiert anschließend alle Features
+   *  - Reihenfolge wichtig: erst Includes, dann Aktivierungslogik
    * ------------------------------------------------------------------------ */
   document.addEventListener('DOMContentLoaded', () => {
     Promise.all([
-      include('#site-header', 'includes/header.html'),
-      include('#site-footer', 'includes/footer.html'),
+      include('#site-header', 'includes/header.html'), // globales horizontales Menü
+      include('#site-footer', 'includes/footer.html'), // globaler Kontakt + Footer
     ]).then(() => {
-      // Alles da → initialisieren
-      initMenu();              // Themen-Menü
-      setHeaderHeightVar();    // Drawer-Start unter Header
-      markActiveLink();        // aktives Menü
-      setYear();               // Jahr im Footer
-      hydrateContactEmail();   // Kontakt-Mail
+      // Initialisierungen NACH dem Laden der Includes:
+      setHeaderHeightVar();   // CSS-Var für Sticky-Offset
+      markActiveLink();       // aktives Menü-Item markieren
+      setYear();              // Copyright-Jahr aktualisieren
+      hydrateContactEmail();  // E-Mail-Link sicher aktivieren
 
-      // Doppelte Kontaktblöcke vermeiden
+      // Kontakt-Blöcke deduplizieren (falls in Seiteninhalten vorhanden)
       ensureSingleContact();
       observeOnceForContacts();
 
-      // Danach: RZ-Lupe/Modal optional initialisieren
-      initRZZoom();            // macht nichts, wenn DOM-Hooks fehlen
+      // Optional: RZ-Lupe/Modal initialisieren (no-op, falls Hooks fehlen)
+      initRZZoom();
     });
   });
 
   /* ---------------------------------------------------------------------------
-   * (7) RZ-Diagramm: Lupe + Modal (Pan & Zoom)
-   *  - Aktiviert sich nur, wenn die erwarteten Elemente vorhanden sind:
+   * (6) RZ-Diagramm: Lupe + Vollbild (Pan & Zoom)
+   *  - Aktiviert sich nur, wenn die erwarteten DOM-Hooks vorhanden sind:
    *    figure.rz-zoom > img.diagram + .rz-zoom__lens + .rz-zoom__open
-   *    und #rzModal mit .rz-stage > .rz-stage__img vorhanden ist.
+   *    und #rzModal mit .rz-stage > .rz-stage__img (+ [data-close], [data-zoom])
    * ------------------------------------------------------------------------ */
   function initRZZoom() {
     const fig   = $('.rz-zoom');
@@ -231,7 +167,7 @@
     const stage = modal?.querySelector('.rz-stage');
     const full  = modal?.querySelector('.rz-stage__img');
     const closers = modal?.querySelectorAll('[data-close]') || [];
-    if (!fig || !img || !lens || !openB || !modal || !stage || !full) return; // keine RZ-Elemente → ruhig aussteigen
+    if (!fig || !img || !lens || !openB || !modal || !stage || !full) return; // Hooks fehlen → ruhig aussteigen
 
     // ------ (A) Lupe über dem kleinen Bild ---------------------------------
     const fullSrc = img.getAttribute('data-full') || img.currentSrc || img.src;
@@ -239,7 +175,7 @@
 
     const showLens = (show) => {
       lens.style.display = show ? 'block' : 'none';
-      lens.style.backgroundSize = '200%'; // Vergrößerungsfaktor; ggf. anpassen
+      lens.style.backgroundSize = '200%'; // Vergrößerungsfaktor; ggf. feinjustieren
     };
 
     function moveLens(ev) {
@@ -253,11 +189,10 @@
       let x = cx - rect.left - lensW / 2;
       let y = cy - rect.top  - lensH / 2;
 
-      // an den Bildrand klemmen
+      // an Bildränder klemmen
       x = Math.max(0, Math.min(x, rect.width  - lensW));
       y = Math.max(0, Math.min(y, rect.height - lensH));
 
-      // Lens positionieren
       lens.style.left = `${x}px`;
       lens.style.top  = `${y}px`;
 
@@ -279,7 +214,7 @@
     // ------ (B) Vollbild-Modal mit Pan & Zoom -------------------------------
     const Z = { scale: 1, min: 0.5, max: 6, x: 0, y: 0 }; // Zoom-Zustand
 
-    const apply = () => { full.style.transform = `translate(${Z.x}px, ${Z.y}px) scale(${Z.scale})`; };
+    const apply  = () => { full.style.transform = `translate(${Z.x}px, ${Z.y}px) scale(${Z.scale})`; };
     const center = () => { full.src = fullSrc; Z.scale = 1; Z.x = Z.y = 0; apply(); };
 
     function setZoom(factor, cx, cy) {
@@ -291,23 +226,24 @@
       const px = (cx ?? r.width  / 2);
       const py = (cy ?? r.height / 2);
 
-      // zoome zum Cursorpunkt
+      // Zoome um den Cursorpunkt
       Z.x = px - (next / old) * (px - Z.x);
       Z.y = py - (next / old) * (py - Z.y);
 
-      Z.scale = next; apply();
+      Z.scale = next;
+      apply();
     }
 
     function openModal() {
       modal.hidden = false;
       center();
-      stage.focus({ preventScroll: true });
+      stage.focus?.({ preventScroll: true });
       document.body.style.overflow = 'hidden'; // Seite nicht scrollen, solange Modal offen
     }
     function closeModal() {
       modal.hidden = true;
       document.body.style.overflow = '';
-      openB.focus?.(); // Fokus zurück
+      openB.focus?.(); // Fokus zurück zum Auslöser
     }
 
     openB.addEventListener('click', openModal);
@@ -348,9 +284,14 @@
       setZoom((e.deltaY < 0) ? 1.15 : 1 / 1.15, cx, cy);
     }, { passive: false });
 
-    // Tool-Buttons
+    // Tool-Buttons (optional vorhanden)
     modal.querySelector('[data-zoom="in"]')   ?.addEventListener('click', () => setZoom(1.2));
     modal.querySelector('[data-zoom="out"]')  ?.addEventListener('click', () => setZoom(1 / 1.2));
     modal.querySelector('[data-zoom="reset"]')?.addEventListener('click', () => { Z.scale = 1; Z.x = Z.y = 0; apply(); });
   }
-})();
+
+  // ---------------------------------------------------------------------------
+  // KEINE Drawer-Initialisierung mehr! (Früher: initMenu() mit .burger/#navdrawer)
+  // ---------------------------------------------------------------------------
+
+})(); // Ende IIFE
