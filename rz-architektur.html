@@ -3,6 +3,8 @@
 <head>
   <!-- =========================================================
        (0) DOKUMENT-SETUP & META
+       - Korrektes Encoding + Responsive Viewport
+       - SEO: Titel & Description
        ========================================================= -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,13 +19,15 @@
 
   <!-- =========================================================
        (2) GLOBAL CSS – enthält Tokens, Layout, Komponenten
+       - Nutzt globale Klassen wie .container, .section, .grid, .card, .hero
+       - WICHTIG: globale Styles hier nicht überschreiben!
        ========================================================= -->
   <link rel="stylesheet" href="assets/css/global.css" />
 
   <!-- =========================================================
        (3) SEITENSPEZIFISCHE MINI-STYLES
-       - Kleines Tuning für Inhalt, Tabelle
-       - Zoom-/Modal-Styles liegen global in global.css (.rz-*)
+       - Nur kleine Ergänzungen; alles andere bleibt global.
+       - Zoom-/Modal-Styles (rz-*) liegen global in global.css.
        ========================================================= -->
   <style>
     /* (3.1) Zentrierung/Max-Breite für Diagramm & Karten */
@@ -39,7 +43,7 @@
     /* (3.4) Responsive Tabellenhülle */
     .table-wrap { overflow-x:auto; }
 
-    /* (3.5) ITSM-Tabelle – Design-Tokens nutzen */
+    /* (3.5) ITSM-Tabelle – nutzt globale Design-Tokens */
     .itsm-table {
       width: 100%;
       border-collapse: collapse;
@@ -62,37 +66,35 @@
   </style>
 </head>
 
-  <!-- direkt vor </body> -->
-<script src="assets/js/site.js" defer></script>
-  
 <body id="top">
   <!-- =========================================================
        (4) A11Y: SKIP-LINK – Tastatur „zum Inhalt springen“
+       - Ziel ist #mainContent
        ========================================================= -->
   <a class="skip-link" href="#mainContent">Zum Inhalt springen</a>
 
   <!-- =========================================================
-       (5) HEADER-CONTAINER – via site.js (includes/header.html)
-       - Noscript = minimaler Fallback ohne JS
+       (5) GLOBALER HEADER-PLATZHALTER – via site.js (includes/header.html)
+       - WICHTIG: In jeder Seite genau EIN Host-Element.
+       - Noscript-Fallback: schlanker, aber stimmiger Header + horizontales Menü
+         (nutzt .nav-list wie der echte Header für konsistente Optik).
        ========================================================= -->
   <header id="site-header" class="site-header" role="banner">
     <noscript>
-      <!-- Fallback-Header (nur ohne JS sichtbar) -->
-      <div class="container header-bar">
-        <a class="brand-right" href="index.html" aria-label="Startseite">
-          <img src="assets/DoniLogo_1.0.0.png" width="150" height="40" alt="Logo Doniman F. Peña Parra" class="brand-right__logo">
+      <div class="container nav-container">
+        <a class="nav-logo" href="index.html" aria-label="Startseite">
+          <img src="assets/DoniLogo_1.0.0.png" width="150" height="40" alt="Logo Doniman F. Peña Parra">
         </a>
+        <nav class="nav-main" aria-label="Hauptnavigation">
+          <ul class="nav-list">
+            <li><a href="index.html">Start</a></li>
+            <li><a href="ueber-mich.html">Über mich</a></li>
+            <li><a href="projekte.html">Projekte</a></li>
+            <li><a href="rz-architektur.html" aria-current="page" class="is-active">Rechenzentrumsstruktur</a></li>
+            <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
+          </ul>
+        </nav>
       </div>
-      <nav class="nav-drawer" aria-label="Hauptnavigation">
-        <ul>
-          <li><a href="index.html">Start</a></li>
-          <li><a href="ueber-mich.html">Über mich</a></li>
-          <li><a href="projekte.html">Projekte</a></li>
-          <li><a href="rz-architektur.html" aria-current="page" class="is-active">Rechenzentrumsstruktur</a></li>
-          <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
-        </ul>
-      </nav>
-      <div class="brand-bar" aria-hidden="true"></div>
     </noscript>
   </header>
 
@@ -108,14 +110,15 @@
 
   <!-- =========================================================
        (7) MAIN – Inhaltlich gegliedert in Sektionen
+       - Nutzt globale Layout-Klassen: .section, .container, .grid, .card
        ========================================================= -->
   <main id="mainContent" class="main" role="main">
 
     <!-- (7.1) Einordnung -->
-    <section class="section container" id="aufgabe">
+    <section class="section container" id="aufgabe" aria-labelledby="rzIntro">
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
-        <h2 class="sec-title">Systemmodellierung &amp; Analyse der Rechenzentrumsstruktur (RZ) für ein ITSM-Tool</h2>
+        <h2 id="rzIntro" class="sec-title">Systemmodellierung &amp; Analyse der Rechenzentrumsstruktur (RZ) für ein ITSM-Tool</h2>
       </div>
 
       <div class="grid-2">
@@ -133,6 +136,7 @@
           </p>
         </div>
 
+        <!-- Hinweis: Das ist KEIN .contact-block (damit der globale Kontakt im Footer ungestört bleibt) -->
         <aside class="card">
           <h3>Schwerpunkte</h3>
           <ul class="checklist">
@@ -146,18 +150,20 @@
     </section>
 
     <!-- (7.2) ARCHITEKTUR / DIAGRAMM mit Lupe + Vollbild -->
-    <section class="section container" id="rz-diagramm">
+    <section class="section container" id="rz-diagramm" aria-labelledby="rzDiagTitle">
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
-        <h2 class="sec-title">ITSM-RZ-Diagramm</h2>
+        <h2 id="rzDiagTitle" class="sec-title">ITSM-RZ-Diagramm</h2>
       </div>
 
       <div class="center-wrap">
         <article class="card">
           <!--
-            WICHTIG:
-            - figure.rz-zoom enthält das Vorschaubild, die Lupe (Overlay) und den „Groß ansehen“-Button
-            - Das echte Vollbild anzeigen wir weiter unten im Modal (.rz-modal)
+            WICHTIG (Hooks für site.js):
+            - figure.rz-zoom → Container für Lupe + Button
+            - img.diagram[data-full] → Quelle für Vollbild
+            - .rz-zoom__lens → bewegtes Lupe-Overlay
+            - .rz-zoom__open → Button, der #rzModal öffnet
           -->
           <figure class="rz-zoom" aria-labelledby="rz-caption">
             <!-- (A) Vorschau-Bild (klein) -->
@@ -231,7 +237,7 @@
       </div>
     </section>
 
-    <!-- (7.2b) MODAL – Vollbild mit Pan & Zoom (wird per Button geöffnet) -->
+    <!-- (7.2b) MODAL – Vollbild mit Pan & Zoom (per Button geöffnet) -->
     <!--  A11y: role="dialog", aria-modal, ESC schließt, Fokus-Management im JS -->
     <div class="rz-modal" id="rzModal" role="dialog" aria-modal="true" aria-labelledby="rzTitle" hidden>
       <div class="rz-modal__backdrop" data-close></div>
@@ -241,13 +247,13 @@
           <button type="button" class="rz-modal__close" aria-label="Schließen" data-close>×</button>
         </header>
 
-        <!-- Pan-&-Zoom-Bühne -->
+        <!-- Pan-&-Zoom-Bühne (Hook: .rz-stage + .rz-stage__img) -->
         <div class="rz-stage" tabindex="0"
              aria-label="Zoombereich. Mausrad/Pinch zum Zoomen, Ziehen zum Verschieben. ESC schließt.">
           <img class="rz-stage__img" alt="" />
         </div>
 
-        <!-- Toolleiste -->
+        <!-- Toolleiste (Hooks: data-zoom="in|out|reset") -->
         <div class="rz-tools">
           <button type="button" class="rz-btn" data-zoom="out"  aria-label="Herauszoomen">−</button>
           <button type="button" class="rz-btn" data-zoom="in"   aria-label="Hineinzoomen">+</button>
@@ -257,10 +263,10 @@
     </div>
 
     <!-- (7.3) Vergleichstabelle -->
-    <section class="section container" id="vergleich">
+    <section class="section container" id="vergleich" aria-labelledby="rzTableTitle">
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
-        <h2 class="sec-title">ITSM-Komponenten im Vergleich</h2>
+        <h2 id="rzTableTitle" class="sec-title">ITSM-Komponenten im Vergleich</h2>
       </div>
 
       <div class="table-wrap">
@@ -293,15 +299,13 @@
       </div>
     </section>
 
-    <!-- (7.4) KONTAKT – LOKALER BLOCK entfernt, um Doppelung zu vermeiden.
-         HINWEIS: Der globale Kontaktblock kommt aus includes/footer.html.
-         Falls du den Kontakt lieber hier lokal haben möchtest, sag Bescheid,
-         dann entfernen wir ihn stattdessen aus dem Footer-Include. -->
+    <!-- (7.4) KEIN lokaler .contact-block (globale Version kommt über Footer-Include) -->
   </main>
 
   <!-- =========================================================
-       (8) FOOTER-CONTAINER – via site.js (includes/footer.html)
-       - Noscript = minimaler Fallback ohne JS
+       (8) GLOBALER FOOTER-PLATZHALTER – via site.js (includes/footer.html)
+       - WICHTIG: neutrales Host-Element, da Include selbst <footer> enthält.
+       - Noscript-Fallback: minimalistischer Footer (sichtbar ohne JS)
        ========================================================= -->
   <div id="site-footer">
     <noscript>
@@ -316,13 +320,13 @@
 
   <!-- =========================================================
        (9) SCRIPTS – genau EINMAL laden (defer)
-       - site.js lädt Header/Footer, initialisiert Drawer,
-         setzt --header-h, markiert aktive Navigation,
-         setzt Jahr & E-Mail und entfernt doppelte Kontakte.
+       - site.js lädt Header/Footer, setzt --header-h, markiert Navigation,
+         setzt Jahr & E-Mail (Spam-sicher) und initialisiert optional RZ-Zoom.
+       - Kein Script zwischen </head> und <body> platzieren!
        ========================================================= -->
   <script src="assets/js/site.js" defer></script>
 
-  <!-- Optionaler „Sicherheitsgurt“: wenn site.js ausfällt, Fallback-Includes laden -->
+  <!-- (Optionaler Fallback, wenn site.js mal ausfällt – kann entfernt werden) -->
   <script>
     (function(){
       const include = (sel, url) => {
