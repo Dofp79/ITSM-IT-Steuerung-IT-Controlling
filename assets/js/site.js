@@ -4,12 +4,11 @@
    Inhalt (alles streng gekapselt, keine Globals):
    - (0) Utilities ($, $$, include)
    - (1) Schutzmaßnahme: genau EIN .contact-block im gesamten DOM
-   - (2) Headerhöhe → CSS-Var --header-h (allgemein nützlich, z. B. für Sticky-Offset)
-   - (3) Navigation (OHNE Drawer):
-         • aktiven Menüpunkt markieren (aria-current, .is-active)
+   - (2) Headerhöhe → CSS-Var --header-h (z. B. für Sticky-Offset)
+   - (3) Navigation (OHNE Drawer): aktiven Menüpunkt markieren (aria-current, .is-active)
    - (4) Footer: Jahr setzen & E-Mail sicher hydratisieren
    - (5) Boot: Header/Footer includen → Initialisierungen → Kontakt-Schutz
-   - (6) RZ-Diagramm: Lupe + Vollbild (Pan & Zoom) – nur wenn Hooks existieren
+   - (6) RZ-Diagramm (optional): Lupe + Vollbild (Pan & Zoom) – nur wenn Hooks existieren
    ============================================================================= */
 
 (() => {
@@ -27,7 +26,7 @@
   const include = (sel, url) => {
     const host = $(sel);
     if (!host) return Promise.resolve(false);
-    // Bereits gefüllt? (z. B. durch SSR, CMS oder anderen Loader) → nichts tun
+    // Bereits gefüllt? (z. B. durch SSR/CMS/anderen Loader) → nichts tun
     const alreadyFilled = host.children.length > 0 && !host.querySelector('noscript');
     if (alreadyFilled) return Promise.resolve(true);
     return fetch(url)
@@ -39,8 +38,7 @@
   /* ---------------------------------------------------------------------------
    * (1) Nur EIN Kontaktblock auf der Seite lassen
    *  - Bevorzugt den im Footer (#site-footer .contact-block), sonst den zuletzt
-   *    vorhandenen. Entfernt Duplikate (z. B. wenn Seiten-Content zusätzlich
-   *    einen Kontaktabschnitt enthält).
+   *    vorhandenen. Entfernt Duplikate.
    *  - Läuft initial & via MutationObserver (falls später erneut injected wird).
    * ------------------------------------------------------------------------ */
   function ensureSingleContact() {
@@ -62,12 +60,11 @@
 
   /* ---------------------------------------------------------------------------
    * (2) Headerhöhe messen → --header-h setzen
-   *  - Allgemein nützlich (z. B. wenn Sticky-Header Flächen darunter beeinflusst)
-   *  - Robust: läuft auch ohne brand-bar
+   *  - Nützlich, wenn Layout unterhalb des Sticky-Headers mit Abstand starten soll.
    * ------------------------------------------------------------------------ */
   function setHeaderHeightVar() {
-    const header   = $('.site-header');     // kommt aus includes/header.html
-    const brandBar = $('.brand-bar');       // optional (alt), heute meist nicht vorhanden
+    const header   = $('.site-header'); // aus includes/header.html
+    const brandBar = $('.brand-bar');   // optional (ältere Variante)
     if (!header) return;
     const compute = () => {
       const h = header.offsetHeight + (brandBar ? brandBar.offsetHeight : 0);
@@ -78,24 +75,16 @@
   }
 
   /* ---------------------------------------------------------------------------
-   * (3) Navigation (OHNE Drawer)
-   *  - Markiert aktuell aktive Seite im horizontalen Menü
-   *  - Erwartet Links in includes/header.html innerhalb .nav-list
-   *  - Setzt:
-   *      a[aria-current="page"] für A11y
-   *      .is-active für CSS-Selektoren (falls gewünscht)
+   * (3) Navigation (OHNE Drawer) – aktiven Menüpunkt markieren
+   *  - Vergleicht den aktuellen Dateinamen (…/seite.html) mit den href-Endungen
+   *  - Setzt a[aria-current="page"] (A11y) und .is-active (für CSS)
    * ------------------------------------------------------------------------ */
   function markActiveLink() {
-    // Ermittelt den aktuellen Dateinamen (z. B. "projekte.html"); Fallback: index.html
     const current = location.pathname.split('/').pop() || 'index.html';
-
-    // Suche NUR innerhalb der globalen Navigation aus dem Include
-    const links = $$('.nav-list a[href]');
-    if (!links.length) return;
-
+    const links = $$('.nav-list a[href]'); // Links im globalen Horizontalmenü
     links.forEach(a => {
-      const href = a.getAttribute('href') || '';
-      const onPage = href.split('/').pop() === current;
+      const href = (a.getAttribute('href') || '').split('/').pop();
+      const onPage = href === current;
       a.classList.toggle('is-active', onPage);
       if (onPage) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
@@ -104,9 +93,9 @@
 
   /* ---------------------------------------------------------------------------
    * (4) Footer-Jahr & Kontakt-Mail (Spam-sicher)
-   *  - Jahr:  <span data-year>2025</span>  → wird dynamisch ersetzt
+   *  - Jahr:  <span data-year>…</span>  → wird dynamisch ersetzt
    *  - E-Mail: <a id="contactEmail" data-email-user="..." data-email-domain="...">
-   *            → wird zu "mailto:user@domain"
+   *            → wird zu "mailto:user@domain" und ersetzt Platzhaltertext
    * ------------------------------------------------------------------------ */
   function setYear() {
     const y = new Date().getFullYear();
@@ -121,16 +110,16 @@
     if (!user || !dom) return;
     const addr = `${user}@${dom}`;
     link.href = `mailto:${addr}`;
-    // Ersetze nur Platzhaltertext wie "E-Mail anzeigen"
+    // Nur Platzhalter wie „E-Mail anzeigen“ überschreiben
     if (/anzeigen/i.test(link.textContent || '')) link.textContent = addr;
-    // rel="nofollow" kann optional entfernt werden; belassen ist auch ok:
+    // rel="nofollow" kann bleiben oder entfernt werden – je nach SEO-Vorgabe
     // link.removeAttribute('rel');
   }
 
   /* ---------------------------------------------------------------------------
    * (5) Bootstrapping
    *  - Lädt Header/Footer-Includes und initialisiert anschließend alle Features
-   *  - Reihenfolge wichtig: erst Includes, dann Aktivierungslogik
+   *  - WICHTIG: nur EIN zentraler DOMContentLoaded-Listener (keine Duplikate)
    * ------------------------------------------------------------------------ */
   document.addEventListener('DOMContentLoaded', () => {
     Promise.all([
@@ -143,7 +132,7 @@
       setYear();              // Copyright-Jahr aktualisieren
       hydrateContactEmail();  // E-Mail-Link sicher aktivieren
 
-      // Kontakt-Blöcke deduplizieren (falls in Seiteninhalten vorhanden)
+      // Kontakt-Blöcke deduplizieren (falls Seiten noch lokale Kontaktteile haben)
       ensureSingleContact();
       observeOnceForContacts();
 
@@ -153,7 +142,7 @@
   });
 
   /* ---------------------------------------------------------------------------
-   * (6) RZ-Diagramm: Lupe + Vollbild (Pan & Zoom)
+   * (6) RZ-Diagramm: Lupe + Vollbild (Pan & Zoom) – OPTIONAL
    *  - Aktiviert sich nur, wenn die erwarteten DOM-Hooks vorhanden sind:
    *    figure.rz-zoom > img.diagram + .rz-zoom__lens + .rz-zoom__open
    *    und #rzModal mit .rz-stage > .rz-stage__img (+ [data-close], [data-zoom])
@@ -290,8 +279,5 @@
     modal.querySelector('[data-zoom="reset"]')?.addEventListener('click', () => { Z.scale = 1; Z.x = Z.y = 0; apply(); });
   }
 
-  // ---------------------------------------------------------------------------
-  // KEINE Drawer-Initialisierung mehr! (Früher: initMenu() mit .burger/#navdrawer)
-  // ---------------------------------------------------------------------------
-
+  // Hinweis: KEINE Drawer-Initialisierung mehr! (Früher: initMenu() mit .burger/#navdrawer)
 })(); // Ende IIFE
