@@ -1,13 +1,15 @@
 /* =============================================================================
-   assets/js/site.js
+   assets/js/site.js – KOMPLETT & KOMMENTIERT
    -----------------------------------------------------------------------------
    Zweck:
    - Globalen Header/Footer laden (horizontales Sticky-Menü auf allen Seiten)
    - Responsive Collapsible-Navigation (Burger) inkl. A11y
-   - aktiven Menüpunkt markieren (aria-current, .is-active)
+   - Aktiven Menüpunkt markieren (aria-current, .is-active)
    - Footer-Jahr & E-Mail sicher einsetzen
    - Kontaktblock-Deduplizierung
-   - (optional) RZ-Lupe + Vollbild (Pan & Zoom), nur wenn Hooks vorhanden sind
+   - (optional) RZ-Lupe + Vollbild (Pan & Zoom), nur wenn Hooks vorhanden
+   - (optional) Galerie (horizontales Scroll-Snap Karussell)
+   - (optional) Accordion (WAI-ARIA-light)
 
    Abhängigkeiten im HTML (MINDESTENS):
    -----------------------------------------------------------------------------
@@ -17,17 +19,26 @@
 
    Abhängigkeiten im Header-Include (includes/header.html) für Mobile:
    -----------------------------------------------------------------------------
-   - Button:  <button class="nav-toggle" aria-controls="primary-nav">Menü</button>
-   - Nav:     <nav id="primary-nav" class="nav-main" data-collapsible>…</nav>
-              (Links darin haben Klasse .nav-list a[…])
+   - Button:  <button class="nav-toggle" aria-controls="primary-nav">
+                <span class="nav-toggle__bars" aria-hidden="true"></span>
+                <span class="nav-toggle__label">Menü</span>
+              </button>
+   - Nav:     <nav id="primary-nav" class="nav-main" data-collapsible>
+                <ul class="nav-list">…</ul>
+              </nav>
 
-   Abhängigkeiten für RZ-Lupe/Vollbild (nur auf RZ-Seite nötig):
+   Abhängigkeiten für RZ-Lupe/Vollbild (nur auf RZ-Seiten nötig):
    -----------------------------------------------------------------------------
    figure.rz-zoom > img.diagram[data-full] + .rz-zoom__lens + .rz-zoom__open
    #rzModal .rz-stage > .rz-stage__img   (+ Schließen/Zoom-Buttons optional)
 
+   Abhängigkeiten für Galerie (optional, beliebig oft verwendbar):
+   -----------------------------------------------------------------------------
+   .gallery  > .gallery__toolbar (Prev/Next) + .gallery__viewport > .gallery__track > .gallery__slide*
+             + .gallery__dots > .gallery__dot*
+
    Hinweise:
-   - Alles ist in eine IIFE gekapselt (keine Globals).
+   - Alles ist in eine IIFE gekapselt (keine Globals in window).
    - Kommentare zeigen exakte Aufgaben & Stolpersteine.
    ============================================================================= */
 
@@ -35,14 +46,14 @@
   'use strict';
 
   /* ---------------------------------------------------------------------------
-   * (0) Utilities
+   * (0) Utilities – Mini-Helfer ohne Abhängigkeiten
    * ------------------------------------------------------------------------ */
   const $  = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
   /**
-   * HTML-Snippet (Header/Footer) per fetch() laden und in Host einsetzen.
-   * Progressive Enhancement: wird NICHT geladen, wenn bereits Content (ohne <noscript>) vorhanden ist.
+   * include(sel, url) – HTML-Snippet (Header/Footer) laden und in Host einsetzen.
+   * Progressive Enhancement: lädt NICHT, wenn bereits Content (ohne <noscript>) vorhanden.
    */
   const include = (sel, url) => {
     const host = $(sel);
@@ -190,8 +201,7 @@
   }
 
   /* ---------------------------------------------------------------------------
-   * (5) Bootstrapping
-   *  - Includes laden → dann Initialisierungen → dann Schutz/Optionals
+   * (5) Bootstrapping – Includes laden → Initialisierungen → Schutz/Optionals
    *  - Nur EIN zentraler DOMContentLoaded-Listener (keine Duplikate!)
    * ------------------------------------------------------------------------ */
   document.addEventListener('DOMContentLoaded', () => {
@@ -210,15 +220,86 @@
       ensureSingleContact();
       observeOnceForContacts();
 
-      // Optionales Feature (tut nichts, wenn Hooks fehlen):
+      // Optionale Features (no-op, falls Hooks fehlen)
       initRZZoom();
+      initGalleries();
+      initAccordion();
     });
   });
+
+  /* ============================================================================
+   * (G) Galerie: natives horizontales Karussell (Scroll-Snap)
+   *  - unterstützt mehrere .gallery-Instanzen pro Seite
+   *  - ARIA: Dots als Tabs, Viewport aria-live="polite"
+   * ======================================================================== */
+  function initGalleries(){
+    $$('.gallery').forEach(g => {
+      const viewport = g.querySelector('.gallery__viewport');
+      const track    = g.querySelector('.gallery__track');
+      const slides   = Array.from(g.querySelectorAll('.gallery__slide'));
+      const prevBtn  = g.querySelector('.gallery__btn--prev');
+      const nextBtn  = g.querySelector('.gallery__btn--next');
+      const dots     = Array.from(g.querySelectorAll('.gallery__dot'));
+      if (!viewport || !track || slides.length === 0) return;
+
+      let idx = 0; // aktueller Slide-Index
+      const slideWidth = () => viewport.getBoundingClientRect().width;
+
+      function goTo(i){
+        idx = Math.max(0, Math.min(i, slides.length - 1));
+        viewport.scrollTo({ left: idx * slideWidth(), behavior: 'smooth' });
+        updateUI();
+      }
+      function updateUI(){
+        dots.forEach((d, i) => d.setAttribute('aria-selected', String(i === idx)));
+        prevBtn?.toggleAttribute('disabled', idx === 0);
+        nextBtn?.toggleAttribute('disabled', idx === slides.length - 1);
+      }
+      function syncIndexFromScroll(){
+        const i = Math.round(viewport.scrollLeft / slideWidth());
+        if (i !== idx){ idx = i; updateUI(); }
+      }
+
+      prevBtn?.addEventListener('click', () => goTo(idx - 1));
+      nextBtn?.addEventListener('click', () => goTo(idx + 1));
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => goTo(i));
+        dot.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') { e.preventDefault(); (dots[i-1]||dots[0]).focus(); goTo(Math.max(0, i-1)); }
+          if (e.key === 'ArrowRight'){ e.preventDefault(); (dots[i+1]||dots[dots.length-1]).focus(); goTo(Math.min(dots.length-1, i+1)); }
+        });
+      });
+
+      viewport.addEventListener('scroll', () => { window.requestAnimationFrame(syncIndexFromScroll); });
+      window.addEventListener('resize', () => goTo(idx));
+      updateUI();
+    });
+  }
+
+  /* ============================================================================
+   * (H) Accordion (leichtgewichtig, A11y-safe)
+   * - Schaltet aria-expanded und hidden; progressive Enhancement
+   * ======================================================================== */
+  function initAccordion(){
+    const roots = $$('.accordion[data-accordion]');
+    roots.forEach(root => {
+      root.addEventListener('click', (e) => {
+        const btn = (e.target instanceof HTMLElement) ? e.target.closest('.accordion__trigger') : null;
+        if (!btn) return;
+        const panelId = btn.getAttribute('aria-controls');
+        const panel   = panelId ? document.getElementById(panelId) : null;
+        if (!panel) return;
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+        panel.hidden = open;
+      });
+    });
+  }
 
   /* ---------------------------------------------------------------------------
    * (6) RZ-Diagramm: Lupe + Vollbild (Pan & Zoom)
    *  - Aktiv nur, wenn alle DOM-Hooks vorhanden sind.
-   *  - Starker Linsen-Zoom (400 % Standard, ALT → 600 % Turbo).
+   *  - Starker Linsen-Zoom (Standard 400 %, ALT → 600 % Turbo).
    *  - NEU: Linsen-Zoom per Mausrad (konfigurierbar, mit Min/Max).
    * ------------------------------------------------------------------------ */
   function initRZZoom() {
@@ -239,9 +320,9 @@
     const CFG = {
       /* L U P E  (Overlay auf dem Vorschaubild) */
       lensSize: 180,         // Durchmesser der Lupe in px
-      lensBgScale: 4.0,      // Standard-Vergrößerung der Lupe   → 4.0 = 400 %
-      lensBgMin:   1.5,      // Untere Grenze für Lupe            (150 %)
-      lensBgMax:  10.0,      // Obere Grenze für Lupe             (1000 %)
+      lensBgScale: 4.0,      // Standard-Vergrößerung → 4.0 = 400 %
+      lensBgMin:   1.5,      // Untere Grenze für Lupe  (150 %)
+      lensBgMax:  10.0,      // Obere Grenze für Lupe   (1000 %)
       wheelStepLens: 1.25,   // Mausrad-Schrittweite für Linse
       wheelTurbo:   1.10,    // Zusatzfaktor wenn ALT gehalten
 
@@ -252,8 +333,7 @@
     };
 
     // (C) State & Helfer
-    const destroy = []; // falls später Cleanup nötig
-    const on = (el, ev, fn, opts) => { el.addEventListener(ev, fn, opts); destroy.push(() => el.removeEventListener(ev, fn, opts)); };
+    const on = (el, ev, fn, opts) => { el.addEventListener(ev, fn, opts); };
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
     const fullSrc = img.getAttribute('data-full') || img.currentSrc || img.src;
@@ -268,12 +348,10 @@
       const prev = Z.scale;
       const next = clamp(prev * factor, Z.min, Z.max);
       if (next === prev) return;
-
       const r = stage.getBoundingClientRect();
       const px = (cx ?? r.width  / 2);
       const py = (cy ?? r.height / 2);
-
-      // zum Cursorpunkt zoomen
+      // zum Cursorpunkt zoomen (stabiler UX)
       Z.x = px - (next / prev) * (px - Z.x);
       Z.y = py - (next / prev) * (py - Z.y);
       Z.scale = next;
@@ -281,8 +359,8 @@
     }
 
     // (E) Lupe auf dem Vorschaubild
-    let turbo = false;            // ALT-Taste = Turbo-Zoom
-    let lensScale = CFG.lensBgScale; // aktueller Linsen-Zoom (in „Faktoren“)
+    let turbo = false;                  // ALT-Taste = Turbo-Zoom
+    let lensScale = CFG.lensBgScale;    // aktueller Linsen-Zoom (Faktor)
 
     function applyLensZoom() {
       lens.style.backgroundSize = `${lensScale * 100}%`;
@@ -301,19 +379,14 @@
         const rect  = img.getBoundingClientRect();
         const lensW = lens.offsetWidth;
         const lensH = lens.offsetHeight;
-
         const cx = (ev.touches?.[0]?.clientX) ?? ev.clientX;
         const cy = (ev.touches?.[0]?.clientY) ?? ev.clientY;
-
         let x = cx - rect.left - lensW / 2;
         let y = cy - rect.top  - lensH / 2;
-
         x = clamp(x, 0, rect.width  - lensW);
         y = clamp(y, 0, rect.height - lensH);
-
         lens.style.left = `${x}px`;
         lens.style.top  = `${y}px`;
-
         const fx = (rect.width  - lensW) > 0 ? x / (rect.width  - lensW) : 0;
         const fy = (rect.height - lensH) > 0 ? y / (rect.height - lensH) : 0;
         lens.style.backgroundPosition = `${fx * 100}% ${fy * 100}%`;
@@ -331,7 +404,6 @@
 
       // **NEU:** Mausrad auf dem Vorschaubild ändert Linsen-Zoom (mit Min/Max)
       on(img, 'wheel', (e) => {
-        // Kein Scrollen der Seite, wir zoomen in der Linse
         e.preventDefault();
         const step = e.deltaY < 0 ? CFG.wheelStepLens : (1 / CFG.wheelStepLens);
         const turboFactor = e.altKey ? CFG.wheelTurbo : 1;
@@ -340,7 +412,7 @@
       }, { passive: false });
     }
 
-    // Turbo-Zoom (ALT gedrückt halten) – setzt fix auf Turbo, loslassen = Standard
+    // Turbo-Zoom (ALT gedrückt halten) – setzt kurzzeitig höher, loslassen = Standard
     on(document, 'keydown', (e) => {
       if (e.altKey && !turbo) { turbo = true; lensScale = clamp(CFG.lensBgScale * 1.5, CFG.lensBgMin, CFG.lensBgMax); applyLensZoom(); }
     });
@@ -363,7 +435,7 @@
       }
 
       on(openB, 'click', openModal);
-      closers.forEach(el => on(el, 'click', closeModal));
+      (closers || []).forEach(el => on(el, 'click', closeModal));
       on(document, 'keydown', (e) => { if (!modal.hidden && e.key === 'Escape') closeModal(); });
 
       // Pan (Maus)
@@ -409,8 +481,6 @@
     // (G) Boot
     initLens();
     initModal();
-
-    // (H) Optionales Cleanup (falls SPA/Hot-Reload): destroy.forEach(fn => fn());
   }
 
   // Ende Modul
