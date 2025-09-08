@@ -4,6 +4,7 @@
   <!-- =========================================================
        (0) DOKUMENT-SETUP / META
        - KORREKT: Im <head> sind NUR Metadaten, Links/Styles erlaubt.
+       - WICHTIG: KEIN <header> oder #site-footer hier platzieren!
        ========================================================= -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,131 +13,97 @@
         content="IT-Steuerung & IT-Controlling mit Hilfe von ITSM – Über mich, Projekte und ITSM Konzept." />
 
   <!-- =========================================================
-       (1) FONTS – Preload (Pfad prüfen)
+       (1) FONTS (SELF-HOSTED) – Preload für schnelleren First Paint
+       - Stelle sicher, dass die Pfade existieren: /assets/fonts/*.woff
        ========================================================= -->
-  <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
-  <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff"
+        as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"
+        as="font" type="font/woff" crossorigin>
 
   <!-- =========================================================
-       (2) GLOBAL CSS – zentrale Styles
+       (2) GLOBAL CSS – zentrales Stylesheet (Tokens, Layout, Komponenten)
+       - Pfad MUSS existieren: /assets/css/global.css
        ========================================================= -->
   <link rel="stylesheet" href="assets/css/global.css" />
 </head>
 
 <body id="top">
   <!-- =========================================================
-       (3) SKIP-LINK – Tastaturnutzer
+       (3) SKIP-LINK – Tastaturnutzern schnellen Zugang geben
+       - Verweist auf #hauptinhalt (siehe <main>)
+       - Position: direkt nach <body> ideal für A11y.
        ========================================================= -->
   <a class="skip-link" href="#hauptinhalt">Zum Inhalt springen</a>
 
   <!-- =========================================================
        (4) GLOBALER HEADER-PLATZHALTER
-       - Wird via site.js mit includes/header.html befüllt
+       WICHTIG: In JEDER HTML-Seite exakt EIN Host-Element!
+       - site.js lädt hier dynamisch: includes/header.html
+       - Bitte KEINEN statischen Header mehr in Seiten duplizieren.
        ========================================================= -->
-  <header id="site-header" class="site-header sticky" role="banner"></header>
+  <header id="site-header" class="site-header" role="banner"></header>
 
   <!-- =========================================================
-       (5) HERO – Seitentitel/Lead
+       (5) HERO – Titel + Lead-Text (Typografie in global.css)
        ========================================================= -->
   <section class="hero">
     <div class="container hero-inner">
       <h1 class="hero__title">IT-Steuerung &amp; IT-Controlling mit Hilfe von ITSM</h1>
+
+      <!-- Lead-Absatz: Fließtext ohne zusätzliche Zeilenumbrüche -->
       <p class="hero__lead">
         Eine effiziente IT-Steuerung und ein verlässliches Controlling sind die Grundlage moderner IT-Organisationen.
         Mithilfe eines strukturierten IT-Service-Managements (ITSM) auf Basis von ITIL&nbsp;4 lassen sich Prozesse, KPIs
-        und Entscheidungsstrukturen systematisch digitalisieren …
+        und Entscheidungsstrukturen systematisch digitalisieren. Mit ITSM wird die IT-Steuerung also nicht nur verwaltet,
+        sondern aktiv gestaltet. Durch die Kombination von ITIL-4-Standards, modernen Tools wie Power BI und agilen
+        Methoden wie Scrum wird Ihre IT-Abteilung zum Treiber der digitalen Transformation.
       </p>
     </div>
   </section>
 
   <!-- =========================================================
-       (5b) GALERIE – Horizontal scrollbare Bildleiste
-       - A11y: role="region" + live-Ansage, Buttons, Dots (Tabs)
-       ========================================================= -->
-  <section class="gallery container" role="region" aria-label="Bildgalerie Projekte">
-    <!-- Toolbar: Prev/Nächstes Bild -->
-    <div class="gallery__toolbar">
-      <button type="button" class="gallery__btn gallery__btn--prev" aria-label="Vorheriges Bild">‹</button>
-      <button type="button" class="gallery__btn gallery__btn--next" aria-label="Nächstes Bild">›</button>
-    </div>
-
-    <!-- Sichtfenster + Spur (nativer Scroll + Snap) -->
-    <div class="gallery__viewport" tabindex="0" aria-roledescription="Karussell" aria-live="polite">
-      <ul class="gallery__track" role="list">
-        <!-- Jede Folie bekommt eine ID -> für Dots/aria-controls -->
-        <li class="gallery__slide" id="slide-1" role="listitem" aria-label="Bild 1 von 4">
-          <figure class="gallery__figure">
-            <img src="assets/images/projekte/ITIL_Monitoring.png"
-                 alt="ITIL Monitoring – Continual Improvement Dashboard" loading="lazy" decoding="async">
-            <figcaption class="gallery__caption">ITIL® Monitoring – Continual Improvement</figcaption>
-          </figure>
-        </li>
-
-        <li class="gallery__slide" id="slide-2" role="listitem" aria-label="Bild 2 von 4">
-          <figure class="gallery__figure">
-            <img src="assets/images/projekte/IT32ReferatKapa.png"
-                 alt="Kapazitäts-Dashboard – Auslastung je Team" loading="lazy" decoding="async">
-            <figcaption class="gallery__caption">Kapazitäts-Dashboard (Power BI)</figcaption>
-          </figure>
-        </li>
-
-        <li class="gallery__slide" id="slide-3" role="listitem" aria-label="Bild 3 von 4">
-          <figure class="gallery__figure">
-            <img src="assets/images/projekte/KPIs_Dashboard.png"
-                 alt="KPI-Dashboard – Tickets/Changes/Assets/Verträge" loading="lazy" decoding="async">
-            <figcaption class="gallery__caption">KPI-Design & ITSM-Controlling</figcaption>
-          </figure>
-        </li>
-
-        <li class="gallery__slide" id="slide-4" role="listitem" aria-label="Bild 4 von 4">
-          <figure class="gallery__figure">
-            <img src="assets/images/projekte/Datenmodell_2.png"
-                 alt="Power BI Datenmodell – Fakten & Dimensionen" loading="lazy" decoding="async">
-            <figcaption class="gallery__caption">Datenmodell (Fakten & Dimensionen)</figcaption>
-          </figure>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Dots (Tabs): per JS aria-controls gesetzt -->
-    <div class="gallery__dots" role="tablist" aria-label="Bilderauswahl">
-      <button class="gallery__dot" role="tab" aria-selected="true"  aria-controls="slide-1" title="Bild 1 anzeigen">•</button>
-      <button class="gallery__dot" role="tab" aria-selected="false" aria-controls="slide-2" title="Bild 2 anzeigen">•</button>
-      <button class="gallery__dot" role="tab" aria-selected="false" aria-controls="slide-3" title="Bild 3 anzeigen">•</button>
-      <button class="gallery__dot" role="tab" aria-selected="false" aria-controls="slide-4" title="Bild 4 anzeigen">•</button>
-    </div>
-  </section>
-
-  <!-- =========================================================
-       (6) KACHELN – 2×2 Einstiege (dein Bestand)
+       (6) KACHELN (2×2) – vier Haupteinstiege
+       - CLS-Fix: width/height auf <img> gesetzt.
+       - Bilder liegen unter /assets/images/tiles/.
        ========================================================= -->
   <section class="section section--tiles">
     <div class="container tiles">
-      <!-- … (deine vier Tiles, unverändert) … -->
+      <!-- Kachel 1: In-Page „Über mich“ -->
       <a class="tile" href="#ueber-mich">
         <figure>
-          <img src="assets/images/tiles/UeberMich_1.0.0.png" alt="Vorschau: Über mich"
+          <img src="assets/images/tiles/UeberMich_1.0.0.png"
+               alt="Vorschau: Über mich"
                width="600" height="338" loading="lazy">
           <figcaption>Über mich</figcaption>
         </figure>
       </a>
+
+      <!-- Kachel 2: In-Page „Projekte“ -->
       <a class="tile" href="#projekte">
         <figure>
-          <img src="assets/images/tiles/Projekte_1.0.0.png" alt="Vorschau: Projekte"
+          <img src="assets/images/tiles/Projekte_1.0.0.png"
+               alt="Vorschau: Projekte"
                width="600" height="338" loading="lazy">
           <figcaption>Projekte</figcaption>
         </figure>
       </a>
+
+      <!-- Kachel 3: Extern (neuer Tab, sicher via noopener/noreferrer) -->
       <a class="tile" href="https://example.com/ki-agent" target="_blank" rel="noopener noreferrer">
         <figure>
-          <img src="assets/images/tiles/KI-Agent.png" alt="Externer Link: KI-Agent"
+          <img src="assets/images/tiles/KI-Agent.png"
+               alt="Externer Link: KI-Agent"
                width="600" height="338" loading="lazy">
           <figcaption>KI-Agent (extern)</figcaption>
         </figure>
       </a>
+
+      <!-- Kachel 4: In-Page „ITSM Konzept“ -->
       <a class="tile" href="#itsm-konzept">
         <figure>
-          <img src="assets/images/tiles/Die-sieben-Grundprinzipien-von-ITIL-4.png" alt="Vorschau: ITSM Konzept"
+          <img src="assets/images/tiles/Die-sieben-Grundprinzipien-von-ITIL-4.png"
+               alt="Vorschau: ITSM Konzept"
                width="600" height="338" loading="lazy">
           <figcaption>ITSM Konzept</figcaption>
         </figure>
@@ -145,19 +112,148 @@
   </section>
 
   <!-- =========================================================
-       (7) MAIN – Über mich / Projekte / ITSM (Bestand)
+       (7) MAIN – drei Abschnitte: Über mich / Projekte / ITSM
+       - ID #hauptinhalt ist Ziel des Skip-Links (siehe oben)
+       - Hinweis: KEINE lokale Kontakt-Sektion mit .contact-block hier einfügen!
+                  → Der globale Kontakt kommt über includes/footer.html.
        ========================================================= -->
   <main id="hauptinhalt" class="main" role="main">
-    <!-- … dein bestehender Inhalt (unverändert) … -->
+    <!-- ---------- (7.1) Über mich ---------- -->
+    <section id="ueber-mich" class="section">
+      <div class="container grid-2">
+        <div>
+          <!-- Einleitender Sektionskopf (roter Punkt + Titel) -->
+          <div class="sec-head">
+            <span class="sec-dot" aria-hidden="true"></span>
+            <h2 class="sec-title">Über mich</h2>
+          </div>
+
+          <!-- Kurzprofil + Checkliste -->
+          <p class="lead">
+            Kurzvorstellung, Kompetenzen und Fokus: IT-Steuerung, IT-Controlling, KPI-Design, Servicekatalog und Governance.
+          </p>
+          <ul class="checklist">
+            <li>Mehr als 20 Jahre Führungs- und Organisationserfahrung (Teams bis 25 MA; Recruiting, Onboarding, Einsatzplanung, Personalentwicklung).</li>
+            <li>Fundierte Expertise in ITSM nach ITIL®&nbsp;4 mit pragmatischen, messbaren Prozessoptimierungen; umfassende Kenntnisse im Lizenzmanagement.</li>
+            <li>Erfahrung im KPI-Design, Reporting-Standards und Power BI/DAX-Dashboards für datenbasierte Entscheidungen.</li>
+          </ul>
+        </div>
+
+        <!-- Kontaktkarte (rechte Spalte)
+             Hinweis: Diese Box ist KEIN .contact-block → beeinträchtigt den
+             globalen Kontaktbereich im Footer NICHT und bleibt daher bestehen. -->
+        <aside class="card">
+          <h3>Kontakt</h3>
+          <p>
+            <strong>E-Mail:</strong> kontakt@example.org<br>
+            <strong>Standort:</strong> Hamburg
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ---------- (7.2) Projekte ---------- -->
+    <section id="projekte" class="section section--alt">
+      <div class="container">
+        <div class="sec-head">
+          <span class="sec-dot" aria-hidden="true"></span>
+          <h2 class="sec-title">Projekte</h2>
+        </div>
+
+        <!-- 3-Spalten Kartenraster (responsiv per CSS) -->
+        <div class="cards">
+          <article class="card">
+            <h3>KPIs Dashboarding</h3>
+            <p>SLA/OLA, MTTR, FCR – verlässliche Kennzahlen &amp; Visualisierungen.</p>
+          </article>
+
+          <article class="card">
+            <h3>Prozessmodellierung</h3>
+            <p>Ist-/Soll-Prozesse, RACI, Schnittstellen, Automatisierung.</p>
+          </article>
+
+          <article class="card">
+            <h3>ITIL® 4 / Governance</h3>
+            <p>Guiding Principles, Rollenmodell, Gremien, KVP.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- (7.3) ITSM Konzept (Accordion) ---------- -->
+    <section id="itsm-konzept" class="section">
+      <div class="container grid-2">
+        <div>
+          <div class="sec-head">
+            <span class="sec-dot" aria-hidden="true"></span>
+            <h2 class="sec-title">ITSM Konzept</h2>
+          </div>
+
+          <!-- WAI-ARIA-Light Accordion; (Hinweis: Falls JS für Toggling fehlt,
+               bleiben die Panels geschlossen – progressive Enhancement) -->
+          <div class="accordion" data-accordion>
+            <!-- Panel 1 -->
+            <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-1">
+              Prozesslandschaft
+            </button>
+            <div id="acc-1" class="accordion__panel" hidden>
+              <ul>
+                <li>Incident / Request / Problem / Change</li>
+                <li>Servicekatalog &amp; CMDB</li>
+                <li>Capacity / Availability / Continuity</li>
+              </ul>
+            </div>
+
+            <!-- Panel 2 -->
+            <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-2">
+              KPIs &amp; Reporting
+            </button>
+            <div id="acc-2" class="accordion__panel" hidden>
+              <ul>
+                <li>SLAs/OLAs, First Contact Resolution</li>
+                <li>Mean Time to Restore/Resolve</li>
+                <li>Service-Kosten pro Einheit</li>
+              </ul>
+            </div>
+
+            <!-- Panel 3 -->
+            <button class="accordion__trigger" aria-expanded="false" aria-controls="acc-3">
+              Governance &amp; Rollen
+            </button>
+            <div id="acc-3" class="accordion__panel" hidden>
+              <ul>
+                <li>Service Owner, Process Owner</li>
+                <li>Change Advisory Board</li>
+                <li>Steuerungs- und Controllinggremien</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rechts: Downloads (Platzhalter) -->
+        <aside class="card">
+          <h3>Downloads</h3>
+          <ul class="link-list">
+            <li><a href="#" aria-disabled="true">Zielarchitektur (bald)</a></li>
+            <li><a href="#" aria-disabled="true">KPI-Katalog (bald)</a></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
   </main>
 
   <!-- =========================================================
-       (8) GLOBALER FOOTER-PLATZHALTER (wird includiert)
+       (8) GLOBALER FOOTER-PLATZHALTER
+       - site.js lädt hier dynamisch: includes/footer.html
+       - Container als neutrales Element belassen (kein <footer>),
+         da das Include selbst <footer> enthält.
        ========================================================= -->
   <div id="site-footer" class="site-footer-host"></div>
 
   <!-- =========================================================
-       (9) GLOBAL SCRIPT – lädt Header/Footer + init Galerie
+       (9) GLOBAL SCRIPT
+       - Pfad MUSS existieren: /assets/js/site.js
+       - Defer → Ausführung nach Parsing, kein Render-Block
        ========================================================= -->
   <script src="assets/js/site.js" defer></script>
 </body>
