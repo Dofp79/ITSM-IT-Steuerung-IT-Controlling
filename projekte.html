@@ -21,26 +21,95 @@
 
   <!-- =========================================================
        (2) GLOBAL CSS
-       - Hier liegen die globalen Klassen:
-         .container, .section, .hero, .sec-head, .sec-dot, .sec-title,
-         .grid, .card, .card-body, .stack, .main, .skip-link, etc.
-       - Bitte NICHT in dieser Seite neu definieren.
+       - Nutzt dein globales Stylesheet (Container, Header, Hero, Cards, ...)
+       - Bitte hier NICHT neu definieren, nur seiten-spezifisch ergänzen.
        ========================================================= -->
   <link rel="stylesheet" href="assets/css/global.css" />
 
   <!-- =========================================================
        (2b) SEITEN-CSS (LEICHTE ERGÄNZUNG)
-       - Nur wirklich seiten-spezifisches Styling hinzufügen.
-       - Globale Klassen bleiben unberührt (Single Source of Truth).
+       - Nur das, was ausschließlich diese Seite betrifft:
+         • grid--two  → 2 Karten nebeneinander (ab 900px)
+         • agents/agent-pair/agent-tile/agent-note → KI-Agenten-Bereich
+         • kleine Bild-/CLS-Verbesserungen für Kartenbilder
        ========================================================= -->
   <style>
-    /* Exaktes 2er-Grid ab 900px (für ITIL + Kapazität nebeneinander) */
+    /* ---------- A) 2er-Grid für die erste Projektgruppe ---------- */
     .grid--two{
-      display:grid; gap:1.2rem; grid-template-columns:1fr; align-items:stretch;
+      display:grid;
+      gap:1.2rem;
+      grid-template-columns:1fr;      /* mobil: untereinander */
+      align-items:stretch;
     }
-    @media (min-width:900px){ .grid--two{ grid-template-columns:1fr 1fr; } }
+    @media (min-width:900px){
+      .grid--two{ grid-template-columns:1fr 1fr; } /* ab 900px: nebeneinander */
+    }
 
-    /* Hilfsklasse zum Zentrieren einzelner Bilder (falls benötigt) */
+    /* Kartenbilder: ruhiges Laden (CLS), einheitliches Seitenverhältnis */
+    .card > img{
+      width:100%;
+      height:auto;
+      display:block;
+      aspect-ratio:16/9;         /* verhindert Layout-Sprünge */
+      object-fit:cover;
+    }
+
+    /* ---------- B) KI-AGENTEN: Bildkarte + Erklärungskarte ---------- */
+
+    /* Wrapper aller Paare – optional Abstand oberhalb */
+    .agents{ margin-top: .5rem; }
+
+    /* Das einzelne Paar (linke Agenten-Karte + rechte Erklärungskarte) */
+    .agent-pair{
+      display:grid;
+      gap:1.2rem;
+      grid-template-columns:1fr;          /* mobil: untereinander */
+      align-items:stretch;
+      margin-bottom:1.2rem;               /* Abstand zwischen den Paaren */
+    }
+    @media (min-width:900px){
+      .agent-pair{ grid-template-columns: 1fr 1fr; } /* ab 900px: nebeneinander */
+    }
+
+    /* Linke Kachel (klickbar): nutzt dein Card-Design;
+       der <a> umschließt Bild + Body → gesamte Karte ist klickbar */
+    .agent-tile a{
+      display:block;
+      color:inherit;
+      text-decoration:none;
+    }
+    .agent-tile a:focus-visible{
+      outline:3px solid rgba(15,67,145,.35);
+      outline-offset:4px;
+      border-radius: .7rem;
+    }
+
+    /* Rechte Erklärungskarte (semantisch als Aside gekennzeichnet) */
+    .agent-note{
+      display:flex;
+      flex-direction:column;
+      gap:.5rem;
+    }
+    .agent-name{
+      margin:.2rem 0 .1rem 0;
+      font-weight:700;
+      color:var(--brand-red-ink, #7d212b);
+      font-size:1.05rem;
+    }
+    .agent-desc{
+      margin:0;
+      color:var(--muted, #54616e);
+      line-height:1.55;
+    }
+    .agent-bullets{
+      margin:.2rem 0 0 1rem;
+      padding:0;
+      color:var(--muted, #54616e);
+      line-height:1.5;
+    }
+    .agent-bullets li{ margin:.2rem 0; }
+
+    /* Kleine Hilfsklasse für zentrierte Einzelbilder (falls benötigt) */
     .centered-img{ display:block; margin-inline:auto; }
   </style>
 </head>
@@ -54,62 +123,67 @@
 
   <!-- =========================================================
        (4) GLOBALER HEADER-PLATZHALTER
-       - WICHTIG: In jeder HTML-Seite exakt EIN Host-Element.
-       - site.js lädt hier dynamisch: includes/header.html
-       - KEIN statischer Header in der Seite → keine Duplikate.
+       - site.js injiziert includes/header.html in dieses Element.
+       - Keine lokalen Header-Duplikate erzeugen.
        ========================================================= -->
   <header id="site-header" class="site-header" role="banner"></header>
 
   <!-- =========================================================
-       (5) HERO – nutzt globale Klassen (.hero, .hero-inner, .hero__title, .hero__lead)
-       - Keine Redefinition der Typo hier; global.css regelt Look & Spacing.
+       (5) HERO – Kopfbereich
+       - Typografie/Abstände kommen aus global.css
+       - Textbreite/Blocksatz sind dort so eingerichtet,
+         dass sie mit der Bild-/Containerkante fluchten.
        ========================================================= -->
   <section class="hero" aria-label="Seitenkopf Projekte">
     <div class="container hero-inner">
       <h1 class="hero__title">Digitale Verwaltung gestalten</h1>
-      <p class="hero__lead">Eine moderne IT-Organisation braucht mehr als nur operative Stabilität sie braucht Steuerung, Transparenz und strategische Ausrichtung. 
-      Genau hier setzt IT-Service-Management (ITSM) nach ITIL® 4 an: Es schafft eine strukturierte Grundlage, um IT-Prozesse, Budgets, Kennzahlen und 
-      Verantwortlichkeiten klar zu definieren und wirksam zu steuern.</p>
-      <p class="hero__lead">Dashboards und Visualisierungen liefern den Fach- und Führungsebenen Echtzeit-Transparenz – von Budgetentwicklungen über 
-      Service-Performance bis hin zu Bürger-Services. Gekoppelt mit Prozessmanagement entsteht eine Verwaltung, die nicht nur reagiert, sondern aktiv gestaltet.</p>
+      <p class="hero__lead">
+        Eine moderne IT-Organisation braucht mehr als nur operative Stabilität – sie braucht Steuerung, Transparenz und strategische Ausrichtung.
+        Genau hier setzt IT-Service-Management (ITSM) nach ITIL® 4 an: Es schafft eine strukturierte Grundlage, um IT-Prozesse, Budgets, Kennzahlen
+        und Verantwortlichkeiten klar zu definieren und wirksam zu steuern.
+      </p>
+      <p class="hero__lead">
+        Dashboards und Visualisierungen liefern den Fach- und Führungsebenen Echtzeit-Transparenz – von Budgetentwicklungen über Service-Performance
+        bis hin zu Bürger-Services. Gekoppelt mit Prozessmanagement entsteht eine Verwaltung, die nicht nur reagiert, sondern aktiv gestaltet.
+      </p>
       <p class="hero__lead"><strong>Von Daten zu Entscheidungen.</strong></p>
     </div>
   </section>
 
   <!-- =========================================================
        (6) MAIN – Seiteninhalt
-       - Nutzt globale Layout-Klassen: .main, .section, .container, .grid, .card
-       - Seiten-spezifische Ergänzung: .grid--two
        ========================================================= -->
   <main id="mainContent" class="main" role="main">
 
     <!-- (6.1) PROJEKTE – A: ZWEI KARTEN NEBENEINANDER -->
     <section id="projekte" class="section container" aria-labelledby="projTitle">
-      <!-- Sektions-Header: globale Pattern .sec-head / .sec-dot / .sec-title -->
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
         <h2 id="projTitle" class="sec-title">Measurement &amp; Reporting nach ITIL®&nbsp;4 Framework</h2>
       </div>
 
-      <!-- Gruppe A zusammenhalten: 2 Karten im seiten-spezifischen Grid -->
+      <!-- 2 Karten im 2er-Grid (mobil einspaltig) -->
       <div class="grid--two">
+        <!-- Karte A1 -->
         <article class="card">
-          <!-- Bilder nutzen globales Card-Design; LCP/CLS durch feste Größe in CSS global -->
-          <img src="assets/images/projekte/ITIL_Monitoring.png"
-               alt="ITIL Monitoring – Continual Improvement Dashboard"
-               loading="lazy" decoding="async"
-               data-full="assets/images/projekte/ITIL_Monitoring.png">
+          <img
+            src="assets/images/projekte/ITIL_Monitoring.png"
+            alt="ITIL Monitoring – Continual Improvement Dashboard"
+            loading="lazy" decoding="async"
+            data-full="assets/images/projekte/ITIL_Monitoring.png">
           <div class="card-body">
             <h4>ITIL® Monitoring mit Continual Improvement</h4>
             <p>Reifegrade verschiedener ITIL®-4-Practices; KPI-Ampeln &amp; Phasenpriorisierung zeigen Optimierungspotenziale.</p>
           </div>
         </article>
 
+        <!-- Karte A2 -->
         <article class="card">
-          <img src="assets/images/projekte/IT32ReferatKapa.png"
-               alt="Kapazitäts-Dashboard – Auslastung und Kapazität je Team"
-               loading="lazy" decoding="async"
-               data-full="assets/images/projekte/IT32ReferatKapa.png">
+          <img
+            src="assets/images/projekte/IT32ReferatKapa.png"
+            alt="Kapazitäts-Dashboard – Auslastung und Kapazität je Team"
+            loading="lazy" decoding="async"
+            data-full="assets/images/projekte/IT32ReferatKapa.png">
           <div class="card-body">
             <h4>Kapazitäts-Dashboard</h4>
             <p>Transparente Auslastung/Planung per Power BI (Teams, Story-Status, Kapazitätstage/-stunden).</p>
@@ -117,22 +191,23 @@
         </article>
       </div>
 
-      <!-- Gruppe B separat, damit A1 + A2 semantisch & visuell zusammenbleiben -->
+      <!-- Weitere Karte separat, damit Gruppe A logisch zusammenbleibt -->
       <div class="grid">
         <article class="card">
-          <img src="assets/images/projekte/KPIs_Dashboard.png"
-               alt="KPI-Dashboard – Tickets/Changes/Assets/Verträge"
-               loading="lazy" decoding="async"
-               data-full="assets/images/projekte/KPIs_Dashboard.png">
+          <img
+            src="assets/images/projekte/KPIs_Dashboard.png"
+            alt="KPI-Dashboard – Tickets/Changes/Assets/Verträge"
+            loading="lazy" decoding="async"
+            data-full="assets/images/projekte/KPIs_Dashboard.png">
           <div class="card-body">
             <h4>KPI-Design, Reporting &amp; ITSM-Controlling</h4>
-            <p>Kern-KPIs nach ITIL® 4, Prozesskennzahlen &amp; Service-Performance auf einen Blick, faktenbasiert steuerbar.</p>
+            <p>Kern-KPIs nach ITIL® 4, Prozesskennzahlen &amp; Service-Performance auf einen Blick – faktenbasiert steuerbar.</p>
           </div>
         </article>
       </div>
     </section>
 
-    <!-- (6.2) DATENMODELL – gleiche Struktur wie oben (sec-head + grid + card) -->
+    <!-- (6.2) DATENMODELL -->
     <section id="architektur" class="section container" aria-labelledby="archTitle">
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
@@ -141,10 +216,11 @@
 
       <div class="grid">
         <article class="card">
-          <img src="assets/images/projekte/Datenmodell_2.png"
-               alt="Power BI Datenmodell – Fakten & Dimensionen"
-               loading="lazy" decoding="async"
-               data-full="assets/images/projekte/Datenmodell_2.png" />
+          <img
+            src="assets/images/projekte/Datenmodell_2.png"
+            alt="Power BI Datenmodell – Fakten & Dimensionen"
+            loading="lazy" decoding="async"
+            data-full="assets/images/projekte/Datenmodell_2.png" />
           <div class="card-body stack">
             <h4>Steuerung &amp; Reporting von ITSM-Daten</h4>
             <p>Verknüpft Incidents, Changes, Assets &amp; SLAs über eine Datumstabelle – Basis für belastbare KPIs &amp; Dashboards.</p>
@@ -153,40 +229,21 @@
       </div>
     </section>
 
-        <!-- =========================================================
-         (6.3) KI-AGENTEN – Bildkarte + Erklärungskarte NEBENEINANDER
-         -------------------------------------------------------------
-         Ziel:
-         - Jede Agenten-Kachel (linke Karte) bekommt RECHTS daneben
-           eine Erklärungskarte mit kurzer Beschreibung (responsive).
-         - Auf schmalen Screens < 900px werden beide Karten untereinander
-           gestapelt, ab 900px stehen sie nebeneinander (1fr / 1fr).
-         - Semantik:
-             • <article class="card agent-tile">   = klickbare Bildkarte
-             • <aside   class="card agent-note">   = erklärende Begleitkarte
-         - A11y:
-             • aria-labelledby verknüpft Aside-Überschrift mit dem Aside.
-         WICHTIG:
-         - Keine verschachtelten .agent-card mehr in <article> (war fehlerhaft).
-         ========================================================= -->
+    <!-- (6.3) KI-AGENTEN – Bildkarte + Erklärungskarte nebeneinander -->
     <section id="ki-agents" class="section container" aria-labelledby="kiTitle">
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
         <h2 id="kiTitle" class="sec-title">Einige von mir geprompte KI-Agenten</h2>
       </div>
 
-      <!-- Wrapper für alle Paare (je Agent 2 Karten) -->
+      <!-- Wrapper für alle Agenten-Paare -->
       <div class="agents">
-        <!-- =====================================================
-             PAAR 1: ITSM-Standards Consultant
-             ===================================================== -->
+
+        <!-- ===== PAAR 1: ITSM-Standards Consultant ===== -->
         <div class="agent-pair">
-          <!-- (A) Link-Kachel zum Agenten (Bild + kurzer Teaser) -->
+          <!-- (A) Bild-/Link-Karte -->
           <article class="card agent-tile">
-            <!-- Externe Links IMMER mit rel="noopener" -->
-            <a href="https://chatgpt.com/g/g-UYiBEofKD-itsm-standards-consultant"
-               target="_blank" rel="noopener">
-              <!-- fester Seitenverhältnis-Schutz gegen CLS -->
+            <a href="https://chatgpt.com/g/g-UYiBEofKD-itsm-standards-consultant" target="_blank" rel="noopener">
               <img
                 src="assets/images/projekte/GPT_ITSM_StandardsConsultant.png"
                 alt="KI-Agent: ITSM-Standards Consultant"
@@ -198,29 +255,25 @@
             </a>
           </article>
 
-          <!-- (B) Erklärungskarte (steht neben der Bildkarte) -->
+          <!-- (B) Erklärungskarte -->
           <aside class="card agent-note" aria-labelledby="agent-itsm-title">
             <h3 id="agent-itsm-title" class="agent-name">Kurz erklärt: ITSM-Standards Consultant</h3>
             <p class="agent-desc">
-              Dieser Agent hilft bei der **Norm-/Framework-Konformität**: Gap-Analysen,
-              Prozesszuordnung (ITIL® 4 Practices), **RACI/Rollen**, Audit-Vorbereitung und
-              **Messkonzepte** (KPIs/SLAs).
+              Unterstützung bei <strong>Norm-/Framework-Konformität</strong>: Gap-Analysen, Zuordnung zu ITIL® 4-Practices,
+              <strong>RACI/Rollen</strong>, Audit-Vorbereitung sowie <strong>Messkonzepte</strong> (KPIs/SLAs).
             </p>
             <ul class="agent-bullets">
-              <li>Checklisten & Best-Practice-Vorlagen</li>
-              <li>Reifegrad-Bewertung & Maßnahmenplan</li>
-              <li>Konkrete KPI-Vorschläge inkl. Definitionen</li>
+              <li>Checklisten &amp; Best-Practice-Vorlagen</li>
+              <li>Reifegrad-Bewertung &amp; Maßnahmenplan</li>
+              <li>Konkrete KPI-Definitionen (inkl. Formel/Frequenz)</li>
             </ul>
           </aside>
         </div>
 
-        <!-- =====================================================
-             PAAR 2: Modellierung betrieblicher Informationssysteme
-             ===================================================== -->
+        <!-- ===== PAAR 2: Modellierung betrieblicher Informationssysteme ===== -->
         <div class="agent-pair">
           <article class="card agent-tile">
-            <a href="https://chatgpt.com/g/g-6734f04e060c8190a7fadc8c552b0e6e-modellierung-betrieblichen-informationssystemen"
-               target="_blank" rel="noopener">
+            <a href="https://chatgpt.com/g/g-6734f04e060c8190a7fadc8c552b0e6e-modellierung-betrieblichen-informationssystemen" target="_blank" rel="noopener">
               <img
                 src="assets/images/projekte/GPT_ModellierungBetrieblicheInformationssystemen.png"
                 alt="KI-Agent: Modellierung betrieblicher Informationssysteme"
@@ -235,30 +288,27 @@
           <aside class="card agent-note" aria-labelledby="agent-bis-title">
             <h3 id="agent-bis-title" class="agent-name">Kurz erklärt: Modellierungs-Agent</h3>
             <p class="agent-desc">
-              Unterstützt bei **Prozess- und Informationsarchitekturen**:
-              BPMN/ArchiMate-Skizzen, Schnittstellen-Mapping und **Soll-/Ist-Vergleiche**.
+              Hilft bei <strong>Prozess- &amp; Informationsarchitekturen</strong> (BPMN/ArchiMate), Schnittstellen-Mapping
+              und <strong>Soll-/Ist-Vergleichen</strong> inkl. Quick-Wins.
             </p>
             <ul class="agent-bullets">
-              <li>Domänen-/Kontext-Diagramme & Data-Flows</li>
-              <li>Handlungsfelder & Quick-Wins ableiten</li>
-              <li>Export-Hints für gängige Modellierungs-Tools</li>
+              <li>Domänen-/Kontext-Diagramme &amp; Data-Flows</li>
+              <li>Handlungsfelder priorisieren</li>
+              <li>Export-Hinweise für Modellierungs-Tools</li>
             </ul>
           </aside>
         </div>
 
-        <!-- =====================================================
-             PAAR 3: Dashboard Design
-             ===================================================== -->
+        <!-- ===== PAAR 3: Dashboard Design ===== -->
         <div class="agent-pair">
           <article class="card agent-tile">
-            <a href="https://chatgpt.com/g/g-68150f83fda081919d979c8418039ee5-dashboard-design"
-               target="_blank" rel="noopener">
+            <a href="https://chatgpt.com/g/g-68150f83fda081919d979c8418039ee5-dashboard-design" target="_blank" rel="noopener">
               <img
                 src="assets/images/projekte/GPT_DashboardDesingn.png"
                 alt="KI-Agent: Dashboard Design"
                 loading="lazy" decoding="async">
               <div class="card-body">
-                <h4>Dashboard Design</h4>
+                <h4>Dashboard-Design</h4>
                 <p>Power-BI-Dashboards &amp; KPI-Design – verständlich und wartbar.</p>
               </div>
             </a>
@@ -267,35 +317,37 @@
           <aside class="card agent-note" aria-labelledby="agent-dash-title">
             <h3 id="agent-dash-title" class="agent-name">Kurz erklärt: Dashboard-Agent</h3>
             <p class="agent-desc">
-              Hilft beim **KPI-Zuschnitt**, bei Layout-Guidelines (z. B. IBCS-nah),
-              Farbsystemen, DAX-Hinweisen und **Storytelling** in Dashboards.
+              Unterstützung bei <strong>KPI-Zuschnitt</strong>, Layout-Guidelines (z. B. IBCS-nah), Farbkonzepten,
+              DAX-Hinweisen und <strong>Storytelling</strong> in Dashboards.
             </p>
             <ul class="agent-bullets">
-              <li>KPI-Definition & Filter-Konzept</li>
-              <li>Drill-Down/Drill-Through Empfehlungen</li>
-              <li>Performance-Tipps (Modell & DAX)</li>
+              <li>KPI-Definition &amp; Filter-Konzept</li>
+              <li>Drill-Down/Drill-Through-Empfehlungen</li>
+              <li>Performance-Tipps (Modell &amp; DAX)</li>
             </ul>
           </aside>
         </div>
-      </div>
+
+      </div><!-- /.agents -->
     </section>
 
   </main>
 
   <!-- =========================================================
        (7) GLOBALER FOOTER-PLATZHALTER
-       - site.js lädt hier dynamisch: includes/footer.html
-       - KEINE lokalen Kontakt-/Footer-Duplikate in Seiten!
-       - Neutrales Host-Element verwenden (kein <footer>),
-         weil das Include selbst <footer> enthält.
+       - site.js lädt includes/footer.html in dieses Element.
        ========================================================= -->
   <div id="site-footer" class="site-footer-host"></div>
 
   <!-- =========================================================
        (8) SCRIPTS
-       - assets/js/site.js lädt Header & Footer, markiert Active-Link,
-         setzt Jahr & E-Mail (Spam-sicher) und initialisiert ggf. RZ-Zoom.
-       - defer: blockiert Rendering nicht; läuft nach dem Parsen.
+       - assets/js/site.js übernimmt:
+         • Header/Footer laden
+         • Burger-Navigation (Collapsible)
+         • aktiven Menüpunkt markieren
+         • Jahr/E-Mail hydratisieren
+         • optional RZ-Zoom initialisieren
+       - defer: Ausführung nach dem Parsen, ohne Render-Block.
        ========================================================= -->
   <script src="assets/js/site.js" defer></script>
 </body>
