@@ -153,37 +153,133 @@
       </div>
     </section>
 
-    <!-- (6.3) KI-AGENTEN – Karten als vollständige Links -->
+        <!-- =========================================================
+         (6.3) KI-AGENTEN – Bildkarte + Erklärungskarte NEBENEINANDER
+         -------------------------------------------------------------
+         Ziel:
+         - Jede Agenten-Kachel (linke Karte) bekommt RECHTS daneben
+           eine Erklärungskarte mit kurzer Beschreibung (responsive).
+         - Auf schmalen Screens < 900px werden beide Karten untereinander
+           gestapelt, ab 900px stehen sie nebeneinander (1fr / 1fr).
+         - Semantik:
+             • <article class="card agent-tile">   = klickbare Bildkarte
+             • <aside   class="card agent-note">   = erklärende Begleitkarte
+         - A11y:
+             • aria-labelledby verknüpft Aside-Überschrift mit dem Aside.
+         WICHTIG:
+         - Keine verschachtelten .agent-card mehr in <article> (war fehlerhaft).
+         ========================================================= -->
     <section id="ki-agents" class="section container" aria-labelledby="kiTitle">
       <div class="sec-head">
         <span class="sec-dot" aria-hidden="true"></span>
         <h2 id="kiTitle" class="sec-title">Einige von mir geprompte KI-Agenten</h2>
       </div>
 
-      <div class="grid">
-        <article class="card">
-          <!-- Externe Links: sicher mit rel="noopener" (und optional noreferrer) -->
-          <a href="https://chatgpt.com/g/g-UYiBEofKD-itsm-standards-consultant" target="_blank" rel="noopener">
-            <img src="assets/images/projekte/GPT_ITSM_StandardsConsultant.png" alt="KI-Agent: ITSM-Standards Consultant" loading="lazy" decoding="async">
-            <div class="card-body"><h4>ITSM-Standards Consultant</h4><p>ITIL® 4, ISO/IEC 20000, COBIT – Implementierung &amp; Optimierung.</p></div>
-          </a>
-        </article>
+      <!-- Wrapper für alle Paare (je Agent 2 Karten) -->
+      <div class="agents">
+        <!-- =====================================================
+             PAAR 1: ITSM-Standards Consultant
+             ===================================================== -->
+        <div class="agent-pair">
+          <!-- (A) Link-Kachel zum Agenten (Bild + kurzer Teaser) -->
+          <article class="card agent-tile">
+            <!-- Externe Links IMMER mit rel="noopener" -->
+            <a href="https://chatgpt.com/g/g-UYiBEofKD-itsm-standards-consultant"
+               target="_blank" rel="noopener">
+              <!-- fester Seitenverhältnis-Schutz gegen CLS -->
+              <img
+                src="assets/images/projekte/GPT_ITSM_StandardsConsultant.png"
+                alt="KI-Agent: ITSM-Standards Consultant"
+                loading="lazy" decoding="async">
+              <div class="card-body">
+                <h4>ITSM-Standards Consultant</h4>
+                <p>ITIL® 4, ISO/IEC 20000, COBIT – Implementierung &amp; Optimierung.</p>
+              </div>
+            </a>
+          </article>
 
-        <article class="card">
-          <a href="https://chatgpt.com/g/g-6734f04e060c8190a7fadc8c552b0e6e-modellierung-betrieblichen-informationssystemen" target="_blank" rel="noopener">
-            <img src="assets/images/projekte/GPT_ModellierungBetrieblicheInformationssystemen.png" alt="KI-Agent: Modellierung betrieblicher Informationssysteme" loading="lazy" decoding="async">
-            <div class="card-body"><h4>Modellierung betrieblicher Informationssysteme</h4><p>Analyse, Visualisierung &amp; Optimierung von Prozessen/Architekturen.</p></div>
-          </a>
-        </article>
+          <!-- (B) Erklärungskarte (steht neben der Bildkarte) -->
+          <aside class="card agent-note" aria-labelledby="agent-itsm-title">
+            <h3 id="agent-itsm-title" class="agent-name">Kurz erklärt: ITSM-Standards Consultant</h3>
+            <p class="agent-desc">
+              Dieser Agent hilft bei der **Norm-/Framework-Konformität**: Gap-Analysen,
+              Prozesszuordnung (ITIL® 4 Practices), **RACI/Rollen**, Audit-Vorbereitung und
+              **Messkonzepte** (KPIs/SLAs).
+            </p>
+            <ul class="agent-bullets">
+              <li>Checklisten & Best-Practice-Vorlagen</li>
+              <li>Reifegrad-Bewertung & Maßnahmenplan</li>
+              <li>Konkrete KPI-Vorschläge inkl. Definitionen</li>
+            </ul>
+          </aside>
+        </div>
 
-        <article class="card">
-          <a href="https://chatgpt.com/g/g-68150f83fda081919d979c8418039ee5-dashboard-design" target="_blank" rel="noopener">
-            <img src="assets/images/projekte/GPT_DashboardDesingn.png" alt="KI-Agent: Dashboard Design" loading="lazy" decoding="async">
-            <div class="card-body"><h4>Dashboard Design</h4><p>Power-BI-Dashboards &amp; KPI-Design – verständlich und wartbar.</p></div>
-          </a>
-        </article>
+        <!-- =====================================================
+             PAAR 2: Modellierung betrieblicher Informationssysteme
+             ===================================================== -->
+        <div class="agent-pair">
+          <article class="card agent-tile">
+            <a href="https://chatgpt.com/g/g-6734f04e060c8190a7fadc8c552b0e6e-modellierung-betrieblichen-informationssystemen"
+               target="_blank" rel="noopener">
+              <img
+                src="assets/images/projekte/GPT_ModellierungBetrieblicheInformationssystemen.png"
+                alt="KI-Agent: Modellierung betrieblicher Informationssysteme"
+                loading="lazy" decoding="async">
+              <div class="card-body">
+                <h4>Modellierung betrieblicher Informationssysteme</h4>
+                <p>Analyse, Visualisierung &amp; Optimierung von Prozessen/Architekturen.</p>
+              </div>
+            </a>
+          </article>
+
+          <aside class="card agent-note" aria-labelledby="agent-bis-title">
+            <h3 id="agent-bis-title" class="agent-name">Kurz erklärt: Modellierungs-Agent</h3>
+            <p class="agent-desc">
+              Unterstützt bei **Prozess- und Informationsarchitekturen**:
+              BPMN/ArchiMate-Skizzen, Schnittstellen-Mapping und **Soll-/Ist-Vergleiche**.
+            </p>
+            <ul class="agent-bullets">
+              <li>Domänen-/Kontext-Diagramme & Data-Flows</li>
+              <li>Handlungsfelder & Quick-Wins ableiten</li>
+              <li>Export-Hints für gängige Modellierungs-Tools</li>
+            </ul>
+          </aside>
+        </div>
+
+        <!-- =====================================================
+             PAAR 3: Dashboard Design
+             ===================================================== -->
+        <div class="agent-pair">
+          <article class="card agent-tile">
+            <a href="https://chatgpt.com/g/g-68150f83fda081919d979c8418039ee5-dashboard-design"
+               target="_blank" rel="noopener">
+              <img
+                src="assets/images/projekte/GPT_DashboardDesingn.png"
+                alt="KI-Agent: Dashboard Design"
+                loading="lazy" decoding="async">
+              <div class="card-body">
+                <h4>Dashboard Design</h4>
+                <p>Power-BI-Dashboards &amp; KPI-Design – verständlich und wartbar.</p>
+              </div>
+            </a>
+          </article>
+
+          <aside class="card agent-note" aria-labelledby="agent-dash-title">
+            <h3 id="agent-dash-title" class="agent-name">Kurz erklärt: Dashboard-Agent</h3>
+            <p class="agent-desc">
+              Hilft beim **KPI-Zuschnitt**, bei Layout-Guidelines (z. B. IBCS-nah),
+              Farbsystemen, DAX-Hinweisen und **Storytelling** in Dashboards.
+            </p>
+            <ul class="agent-bullets">
+              <li>KPI-Definition & Filter-Konzept</li>
+              <li>Drill-Down/Drill-Through Empfehlungen</li>
+              <li>Performance-Tipps (Modell & DAX)</li>
+            </ul>
+          </aside>
+        </div>
       </div>
     </section>
+
   </main>
 
   <!-- =========================================================
