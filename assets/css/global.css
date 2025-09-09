@@ -299,13 +299,26 @@ a:hover, a:focus{ text-decoration:underline; }
 
 
 /* ===========================================================
-   20) TEXT-AUSRICHTUNG AN BILDERN (NEU)
+   20) TEXT-AUSRICHTUNG AN BILDERN (NEU, angepasst)
+   -----------------------------------------------------------
+   - Überschriften (Hero-Title) zentriert
+   - Fließtexte (Absätze, Lead) im Blocksatz (text-align: justify)
+   - Max-Breite = Kanten der Bilder (Containerbreite)
    =========================================================== */
-.hero__title,
+
+.hero__title {
+  max-width: 1120px;   /* gleiche Breite wie Bilder/Kacheln */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;  /* Titel mittig */
+}
+
 .hero__lead,
-.section p{
-  max-width:1120px;     /* gleiche Breite wie Bilder/Kacheln */
-  margin-left:auto;
-  margin-right:auto;
-  text-align:left;      /* bündig mit den Bildkanten */
+.section p {
+  max-width: 1120px;   /* gleiche Breite wie Bilder/Kacheln */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: justify;         /* Blocksatz */
+  text-justify: inter-word;    /* optimierte Wortabstände */
+  line-height: 1.75;
 }
