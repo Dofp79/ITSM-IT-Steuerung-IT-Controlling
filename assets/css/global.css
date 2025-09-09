@@ -1,16 +1,16 @@
 /* ===========================================================
-   GLOBAL.CSS – Haupt-Stylesheet für deine Seite
+   GLOBAL.CSS – Haupt-Stylesheet
    -----------------------------------------------------------
    Inhalt:
-   1) FONTS
-   2) DESIGN TOKENS
-   3) BASE / HELPERS
-   4) SKIP-LINK
-   5) HEADER
-   6) HERO
-   7) TILES
-   8) SECTION-HEADINGS
-   9) CARDS
+   1)  FONTS
+   2)  DESIGN TOKENS (Variablen)
+   3)  BASE / HELPERS
+   4)  SKIP-LINK
+   5)  HEADER (inkl. Logo-Fix gegen Verzerrungen)
+   6)  HERO (H1 zentriert, Fließtext Blocksatz)
+   7)  TILES
+   8)  SECTION-HEADINGS
+   9)  CARDS
    10) ACCORDION
    11) BREADCRUMB
    12) KONTAKTBLOCK
@@ -19,14 +19,18 @@
    15) PRINT
    16) REDUCED MOTION
    17) CV / ÜBER MICH
-   18) ZOOM / MODAL
-   19) GALERIE
-   20) TEXT-AUSRICHTUNG AN BILDERN (NEU)
+   18) ZOOM / MODAL (Lupe + Vollbild)
+   19) GALERIE (horizontales Karussell)
+   20) AGENTEN-KARTEN (NEU)
+   21) TEXT-AUSRICHTUNG AN BILDERN (NEU, zentriert/Blocksatz)
    =========================================================== */
 
 
 /* ===========================================================
-   1) FONTS
+   1) FONTS – Lato (self-hosted)
+   -----------------------------------------------------------
+   → Dateien liegen unter /assets/fonts/*.woff
+   → "font-display: swap" verhindert FOIT.
    =========================================================== */
 @font-face { font-family:"Lato"; src:url("../fonts/lato-regular-woff-data.woff") format("woff"); font-weight:400; font-style:normal; font-display:swap; }
 @font-face { font-family:"Lato"; src:url("../fonts/lato-italic-woff-data.woff") format("woff");  font-weight:400; font-style:italic; font-display:swap; }
@@ -38,37 +42,47 @@
 
 
 /* ===========================================================
-   2) DESIGN TOKENS
+   2) DESIGN TOKENS – zentrale Variablen
+   -----------------------------------------------------------
+   → Ein Ort für Farben, Abstände, Breiten, Effekte.
+   → --content-max / --content-pad steuern die Inhaltsbreite.
    =========================================================== */
 :root{
+  /* Typografie */
   --font-sans: "Lato", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   --font-cond: "Lato", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
 
+  /* Farben */
   --brand-red:     #e30613;
   --brand-red-ink: #7d212b;
-
   --header-bg: #ffffff;
   --hero-bg:   #0e3659;
   --tile-bg:   #0b2f4d;
   --bg:        #ffffff;
   --bg-alt:    #f5f7f8;
+  --text:      #222;
+  --muted:     #54616e;
+  --border:    #e3e6e8;
 
-  --text:   #222;
-  --muted:  #54616e;
-  --border: #e3e6e8;
-
+  /* Flächen/Effekte */
   --radius: 14px;
   --shadow: 0 6px 18px rgba(0,0,0,.06);
   --header-shadow: 0 2px 6px rgba(0,0,0,.05);
 
+  /* Drawer (Kompatibilität) */
   --drawer-bg: #0c2a45;
   --drawer-fg: #ffffff;
   --drawer-chip-bg:   #ffffff;
   --drawer-chip-bord: rgba(0,0,0,0.08);
   --drawer-chip-hov:  rgba(0,0,0,0.05);
 
-  --logo-h: 48px;
-  --header-h: 56px;
+  /* Größen */
+  --logo-h: 48px;     /* Zielhöhe Logo (max-height, nicht height!) */
+  --header-h: 56px;   /* Fallback; JS misst real nach */
+
+  /* Layoutbreite (wichtig für bündige Kanten) */
+  --content-max: 1200px; /* gleiche Breite wie Bilder/Kacheln */
+  --content-pad: 1rem;   /* seitlicher Innenabstand auf kleinen Screens */
 }
 @media (max-width: 640px){
   :root{ --logo-h: 36px; }
@@ -76,33 +90,61 @@
 
 
 /* ===========================================================
-   3) BASE / HELPERS
+   3) BASE / HELPERS – Grundlayout & Utilities
    =========================================================== */
 *,*::before,*::after{ box-sizing:border-box; }
 html{ scroll-behavior:smooth; }
 body{
-  margin:0; color:var(--text); background:var(--bg);
-  font-family:var(--font-sans); line-height:1.6;
-  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  margin:0;
+  color:var(--text);
+  background:var(--bg);
+  font-family:var(--font-sans);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
 }
 img{ max-width:100%; height:auto; display:block; }
 a{ color:#0b3a66; text-decoration:none; }
 a:hover, a:focus{ text-decoration:underline; }
 
-.container{ width:min(1200px,92vw); margin-inline:auto; padding-inline:1rem; }
+/* Einheitlicher Inhaltscontainer – Referenz für Bild-/Textkanten */
+.container{
+  /* gleiche Logik überall verwenden */
+  width: min(var(--content-max), 100% - (2 * var(--content-pad)));
+  margin-inline: auto;
+  padding-inline: var(--content-pad);
+}
+
 .section{ padding:3rem 0; }
 .section--alt{ background:var(--bg-alt); }
 
-.grid-2{ display:grid; gap:2rem; grid-template-columns:1fr; }
-@media (min-width:900px){ .grid-2{ grid-template-columns:2fr 1fr; } }
+.grid-2{
+  display:grid; gap:2rem; grid-template-columns:1fr;
+}
+@media (min-width:900px){
+  .grid-2{ grid-template-columns:2fr 1fr; }
+}
 
-.lead{ color:var(--muted); line-height:1.75; text-align:justify; text-justify:inter-word; }
+.lead{
+  color:var(--muted);
+  line-height:1.75;
+  text-align:justify;        /* Blocksatz (gewünscht) */
+  text-justify:inter-word;
+}
 .checklist{ list-style:"✔  "; padding-left:1.1rem; }
 
-.card{ background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:1.1rem; box-shadow:var(--shadow); }
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:1.1rem;
+  box-shadow:var(--shadow);
+}
+
 .link-list{ padding-left:1rem; }
 .link-list li{ margin-bottom:.4rem; }
 
+/* Screenreader-Utility */
 .visually-hidden{
   position:absolute !important; width:1px; height:1px; padding:0; margin:-1px;
   overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
@@ -110,45 +152,55 @@ a:hover, a:focus{ text-decoration:underline; }
 
 
 /* ===========================================================
-   4) SKIP-LINK
+   4) SKIP-LINK – Tastaturzugänglichkeit
    =========================================================== */
 .skip-link{
   position:absolute; left:-9999px; top:auto; z-index:1000;
-  background:var(--brand-red); color:#fff; padding:.5rem .75rem; border-radius:.5rem;
+  background:var(--brand-red); color:#fff;
+  padding:.5rem .75rem; border-radius:.5rem;
 }
 .skip-link:focus{ left:.5rem; top:.5rem; }
 
 
 /* ===========================================================
-   5) HEADER
+   5) HEADER (mit Logo-Fix gegen Verzerrungen)
    =========================================================== */
 .brand-bar{ height:6px; background:var(--brand-red); }
+
 .site-header{
   background:var(--header-bg);
   border-bottom:1px solid var(--border);
   position:sticky; top:0; z-index:1000;
   box-shadow:var(--header-shadow);
 }
+
+/* Innenlayout */
 .header-bar,
 .nav-container{
   display:flex; align-items:center; justify-content:space-between;
   gap:12px; padding:.6rem 0;
 }
+
+/* Logo-Wrapper: flex darf NICHT strecken */
 .brand-right,
 .nav-logo{
   display:inline-flex; align-items:center; justify-content:flex-start;
   flex:0 0 auto;
   min-width:0;
 }
+
+/* Logo-Bild: nie verzerren, nur begrenzen */
 .brand-right__logo,
 .nav-logo img{
   display:block;
-  width:auto !important;
-  height:auto !important;
-  max-height:var(--logo-h);
+  width:auto !important;      /* proportional */
+  height:auto !important;     /* proportional */
+  max-height:var(--logo-h);   /* nur Obergrenze */
   max-width:clamp(120px, 28vw, 240px);
   object-fit:contain;
 }
+
+/* HTML width/height neutralisieren (sonst Verzerrung) */
 .site-header img.brand-right__logo[width],
 .site-header img.brand-right__logo[height],
 .site-header .nav-logo img[width],
@@ -157,7 +209,9 @@ a:hover, a:focus{ text-decoration:underline; }
   height:auto !important;
   max-height:var(--logo-h) !important;
 }
-.nav-container{ padding:12px 24px; max-width:1200px; margin-inline:auto; }
+
+/* Navigation */
+.nav-container{ padding:12px 24px; max-width:var(--content-max); margin-inline:auto; }
 .nav-list{ display:flex; align-items:center; gap:24px; list-style:none; margin:0; padding:0; }
 .nav-list a{
   text-decoration:none; font-weight:600; color:#0F4391;
@@ -169,46 +223,80 @@ a:hover, a:focus{ text-decoration:underline; }
 
 
 /* ===========================================================
-   6) HERO
+   6) HERO – H1 zentriert, Fließtext Blocksatz, bündig zu Bildern
    =========================================================== */
-.hero{ background:var(--hero-bg); color:#fff; border-bottom:1px solid #08243e; }
-.hero-inner{ padding:2.2rem 0 2.6rem; }
+.hero{
+  background:var(--hero-bg);
+  color:#fff;
+  border-bottom:1px solid #08243e;
+}
+.hero-inner{
+  /* keine Center-Layout-Verschiebung über Flex – einfacher Blockfluss */
+  padding:2.2rem 0 2.6rem;
+}
+
+/* Headline bewusst zentriert */
 .hero__title{
   line-height:1.15;
-  font-family:var(--font-cond); font-weight:700; letter-spacing:.2px;
+  font-family:var(--font-cond);
+  font-weight:700;
+  letter-spacing:.2px;
   font-size:clamp(1.6rem, 2.2vw + 1.1rem, 2.4rem);
+  text-align:center;     /* gewünschte Zentrierung */
+  margin:0 0 .75rem 0;
 }
+
+/* Fließtext: Blocksatz, bündig auf Containerbreite */
 .hero__lead{
   color:#d7e3ef;
-  font-size:clamp(1rem, 1.1vw, 1.2rem); line-height:1.75;
+  font-size:clamp(1rem, 1.1vw, 1.2rem);
+  line-height:1.75;
+  /* dieselbe Kante wie Bilder dank .container → zusätzlich mittig ausrichten */
+  max-width:var(--content-max);
+  margin-inline:auto;
+  text-align:justify;
+  text-justify:inter-word;
 }
 
 
 /* ===========================================================
-   7) TILES
+   7) TILES – Bildkacheln
    =========================================================== */
 .section--tiles{ background:var(--hero-bg); }
 .tiles{ display:grid; gap:1.2rem; grid-template-columns:repeat(2,1fr); }
 @media (max-width:680px){ .tiles{ grid-template-columns:1fr; } }
 .tile{
-  background:var(--tile-bg); border:1px solid rgba(255,255,255,.15); border-radius:14px;
-  overflow:hidden; display:block; text-decoration:none; box-shadow:0 6px 18px rgba(0,0,0,.25);
+  background:var(--tile-bg);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:14px;
+  overflow:hidden;
+  display:block;
+  text-decoration:none;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);
 }
-.tile img{ width:100%; aspect-ratio:16/9; object-fit:cover; transition:transform .25s ease; }
+.tile figure{ margin:0; display:grid; grid-template-rows:auto auto; }
+.tile img{ width:100%; aspect-ratio:16/9; object-fit:cover; display:block; filter:saturate(.96); transition:transform .25s ease; }
 .tile:hover img{ transform:scale(1.02); }
-.tile figcaption{ padding:.6rem .8rem; color:#fff; font-weight:700; font-family:var(--font-cond); }
+.tile figcaption{
+  padding:.6rem .8rem; color:#fff; font-weight:700; font-family:var(--font-cond);
+  background:linear-gradient(0deg, rgba(255,255,255,.06), rgba(255,255,255,0));
+}
 
 
 /* ===========================================================
-   8) SECTION-HEADINGS
+   8) SECTION-HEADINGS – roter Punkt + Titel
    =========================================================== */
 .sec-head{ display:flex; align-items:center; gap:10px; margin:0 0 12px; }
 .sec-dot{ width:12px; height:12px; border-radius:999px; background:var(--brand-red-ink); }
-.sec-title{ margin:0; color:var(--brand-red-ink); font-family:var(--font-cond); font-size:clamp(1.2rem, 1.2vw + 1rem, 1.6rem); font-weight:700; }
+.sec-title{
+  margin:0; color:var(--brand-red-ink);
+  font-family:var(--font-cond); font-weight:700; letter-spacing:.2px;
+  font-size:clamp(1.2rem, 1.2vw + 1rem, 1.6rem);
+}
 
 
 /* ===========================================================
-   9) CARDS
+   9) CARDS – Projektkarten
    =========================================================== */
 .cards{ display:grid; gap:1.2rem; grid-template-columns:repeat(3,1fr); }
 @media (max-width:900px){ .cards{ grid-template-columns:1fr 1fr; } }
@@ -216,18 +304,22 @@ a:hover, a:focus{ text-decoration:underline; }
 
 
 /* ===========================================================
-   10) ACCORDION
+   10) ACCORDION – leichtgewichtig
    =========================================================== */
 .accordion__trigger{
   width:100%; text-align:left; background:#fff; border:1px solid var(--border); border-radius:.75rem;
   padding:.8rem 1rem; font-weight:700; font-family:var(--font-cond);
 }
 .accordion__trigger[aria-expanded="true"]{ border-color:var(--brand-red); color:var(--brand-red); }
-.accordion__panel{ border-left:3px solid var(--brand-red); margin:.5rem 0 1rem; padding:.6rem 1rem; background:#fff; border-radius:.5rem; box-shadow:var(--shadow); }
+.accordion__panel{
+  border-left:3px solid var(--brand-red);
+  margin:.5rem 0 1rem; padding:.6rem 1rem;
+  background:#fff; border-radius:.5rem; box-shadow:var(--shadow);
+}
 
 
 /* ===========================================================
-   11) BREADCRUMB
+   11) BREADCRUMB – optional
    =========================================================== */
 .breadcrumb{ background:#fff; border-block:1px solid var(--border); }
 .breadcrumb ol{ list-style:none; margin:0; padding:.5rem 0; display:flex; gap:.75rem; flex-wrap:wrap; }
@@ -236,29 +328,36 @@ a:hover, a:focus{ text-decoration:underline; }
 
 
 /* ===========================================================
-   12) KONTAKTBLOCK
+   12) KONTAKTBLOCK – kompakt
    =========================================================== */
 .contact-block{ padding:1.2rem 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--bg-alt); }
+@media (min-width:900px){ .contact-block{ padding:1.4rem 0; } }
 .contact-inner{ max-width:800px; margin:0 auto; text-align:center; }
 .contact-title{ font-family:var(--font-cond); font-size:1.6rem; margin-bottom:.35rem; color:var(--brand-red-ink); }
+.contact-name{ font-weight:600; margin-bottom:.3rem; }
+.contact-email a{ font-weight:700; color:var(--brand-red); text-decoration:none; }
+.contact-email a:hover{ text-decoration:underline; }
 
 
 /* ===========================================================
-   13) FOOTER
+   13) FOOTER – kompakter Bereich + „Nach oben“
    =========================================================== */
 .site-footer{ background:#0b0f13; color:#cbd3d8; margin-top:2rem; }
-.subfooter__inner{ display:flex; justify-content:space-between; gap:1rem; align-items:center; padding:.3rem 0; }
-.to-top{ color:#9ab; } .to-top:hover{ color:#fff; }
+.subfooter__inner{
+  display:flex; justify-content:space-between; gap:1rem; align-items:center; padding:.3rem 0;
+}
+.to-top{ color:#9ab; }
+.to-top:hover{ color:#fff; }
 
 
 /* ===========================================================
-   14) FOCUS
+   14) FOCUS – Tastaturfokus sichtbar
    =========================================================== */
 :focus-visible{ outline:3px solid #0a7cff; outline-offset:2px; }
 
 
 /* ===========================================================
-   15) PRINT
+   15) PRINT – Druckfreundlich
    =========================================================== */
 @media print{
   .nav-drawer, .burger, .nav-toggle, .tiles, .brand-bar{ display:none !important; }
@@ -267,7 +366,7 @@ a:hover, a:focus{ text-decoration:underline; }
 
 
 /* ===========================================================
-   16) REDUCED MOTION
+   16) REDUCED MOTION – weniger Animationen
    =========================================================== */
 @media (prefers-reduced-motion:reduce){
   html{ scroll-behavior:auto; }
@@ -276,49 +375,125 @@ a:hover, a:focus{ text-decoration:underline; }
 
 
 /* ===========================================================
-   17) CV / ÜBER MICH
+   17) CV / ÜBER MICH – Auszüge
    =========================================================== */
-.cv-card{ background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:1rem; box-shadow:var(--shadow); position:relative; }
-.cv-card::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; border-radius:4px 0 0 4px; background:linear-gradient(180deg, var(--brand-red) 0%, rgba(227,6,19,.15) 100%); }
+.cv-card{
+  background:#fff; border:1px solid var(--border); border-radius:var(--radius);
+  padding:1rem; box-shadow:var(--shadow); position:relative;
+}
+.cv-card::before{
+  content:""; position:absolute; left:0; top:0; bottom:0; width:4px; border-radius:4px 0 0 4px;
+  background:linear-gradient(180deg, var(--brand-red) 0%, rgba(227,6,19,.15) 100%);
+}
 
 
 /* ===========================================================
-   18) ZOOM / MODAL
+   18) ZOOM / MODAL – (Lupe + Vollbild)
    =========================================================== */
 .rz-zoom{ position:relative; }
-.rz-zoom__lens{ display:none; position:absolute; width:130px; height:130px; border-radius:999px; pointer-events:none; background-repeat:no-repeat; background-position:center; background-size:200%; z-index:1; }
+.rz-zoom__lens{
+  display:none; position:absolute; width:130px; height:130px; border-radius:999px;
+  pointer-events:none; background-repeat:no-repeat; background-position:center; background-size:200%; z-index:1;
+}
 
 
 /* ===========================================================
-   19) GALERIE
+   19) GALERIE – horizontales Karussell (native Scroll + Snap)
    =========================================================== */
 .gallery{ margin:2rem 0; }
-.gallery__viewport{ overflow-x:auto; scroll-snap-type:x mandatory; border:1px solid var(--border); border-radius:var(--radius); background:#fff; }
+.gallery__viewport{
+  overflow-x:auto; scroll-snap-type:x mandatory;
+  border:1px solid var(--border); border-radius:var(--radius); background:#fff;
+}
 .gallery__track{ display:grid; grid-auto-flow:column; grid-auto-columns:100%; }
 .gallery__slide{ scroll-snap-align:start; padding:.75rem; }
 
 
 /* ===========================================================
-   20) TEXT-AUSRICHTUNG AN BILDERN (NEU, angepasst)
+   20) AGENTEN-KARTEN – „Einige von mir geprompte KI-Agenten“
    -----------------------------------------------------------
-   - Überschriften (Hero-Title) zentriert
-   - Fließtexte (Absätze, Lead) im Blocksatz (text-align: justify)
-   - Max-Breite = Kanten der Bilder (Containerbreite)
+   HTML-Gerüst (Beispiel):
+   <section class="agents container">
+     <h2>Einige von mir geprompte KI-Agenten</h2>
+     <div class="agent-grid">
+       <article class="agent-card">
+         <img src="..." alt="Agent Avatar" class="agent-avatar">
+         <div class="agent-info">
+           <h3 class="agent-name">ITSM-Standards Consultant</h3>
+           <p class="agent-desc">Kurzbeschreibung …</p>
+         </div>
+       </article>
+       <!-- weitere .agent-card … -->
+     </div>
+   </section>
    =========================================================== */
 
-.hero__title {
-  max-width: 1120px;   /* gleiche Breite wie Bilder/Kacheln */
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;  /* Titel mittig */
+/* Grid für alle Agenten */
+.agent-grid{
+  display:grid;
+  gap:1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  margin-top:1rem;
 }
 
-.hero__lead,
-.section p {
-  max-width: 1120px;   /* gleiche Breite wie Bilder/Kacheln */
-  margin-left: auto;
-  margin-right: auto;
-  text-align: justify;         /* Blocksatz */
-  text-justify: inter-word;    /* optimierte Wortabstände */
+/* Jede Karte mit Bild links, Text rechts */
+.agent-card{
+  display:flex; align-items:flex-start;
+  background:#fff; border:1px solid var(--border); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:1rem;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.agent-card:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.08);
+}
+
+/* Avatar links */
+.agent-avatar{
+  flex:0 0 72px; width:72px; height:72px;
+  border-radius:50%; object-fit:cover; margin-right:1rem;
+}
+
+/* Info rechts */
+.agent-info{ flex:1; }
+.agent-name{
+  margin:0 0 .4rem; font-weight:700; color:var(--brand-red-ink);
+}
+.agent-desc{
+  margin:0; color:var(--muted); font-size:.95rem; line-height:1.55;
+}
+
+/* Kleine Bildschirme: Karte stapeln */
+@media (max-width:520px){
+  .agent-card{ flex-direction:column; align-items:center; text-align:center; }
+  .agent-avatar{ margin-right:0; margin-bottom:.6rem; }
+}
+
+
+/* ===========================================================
+   21) TEXT-AUSRICHTUNG AN BILDERN (NEU)
+   -----------------------------------------------------------
+   Ziel:
+   - H1 (Hero) zentriert.
+   - Fließtexte im Blocksatz.
+   - Max-Breite = Containerbreite (entspricht Bildkanten).
+   → Diese Regeln sorgen dafür, dass die Textkanten mit deinen
+     Bild-/Kachelkanten visuell übereinstimmen.
+   =========================================================== */
+
+/* H1 bleibt zentriert und mittig innerhalb der Containerkante */
+.hero__title{
+  max-width: var(--content-max);
+  margin-inline: auto;      /* bündig + mittig */
+  text-align: center;
+}
+
+/* Fließtexte in Sektionen: Blocksatz + gleiche Kanten wie Bilder */
+.section p,
+.hero__lead{
+  max-width: var(--content-max);
+  margin-inline: auto;      /* bündig + mittig */
+  text-align: justify;
+  text-justify: inter-word;
   line-height: 1.75;
 }
