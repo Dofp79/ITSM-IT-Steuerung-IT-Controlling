@@ -29,6 +29,24 @@
        - Diese Datei ist die Single Source of Truth → hier nichts überschreiben.
        ========================================================= -->
   <link rel="stylesheet" href="assets/css/global.css" />
+
+  <!-- =========================================================
+       (2b) MINI-FALLBACK-STYLES (nur falls global.css nicht greift)
+       - Sichert Button-Optik & Aktionen ab.
+       - Kann entfernt werden, sobald alles stabil ist.
+       ========================================================= -->
+  <style>
+    /* Buttons – Fallback */
+    .cv-actions{ display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1rem; }
+    .btn{
+      display:inline-block; padding:.6rem .9rem; border-radius:.7rem;
+      background:#e30613; color:#fff; font-weight:700; font-family:"Lato",system-ui,sans-serif;
+      border:1px solid transparent; text-decoration:none;
+    }
+    .btn:hover,.btn:focus{ filter:brightness(1.05); text-decoration:none; }
+    .btn--ghost{ background:#fff; color:#0e3659; border:1px solid #e3e6e8; }
+    .btn--ghost:hover,.btn--ghost:focus{ background:#f5f7f8; }
+  </style>
 </head>
 
 <body id="top">
@@ -106,13 +124,11 @@
 
         <!-- =====================================================
              (6.1.1) BERUFSERFAHRUNG – Timeline mit Karten
-             - .timeline steuert Raster & Abstände
-             - .cv-card gestaltet jede Station + linke Gradientenleiste
              ===================================================== -->
         <h3 class="cv-block-title">Berufserfahrung</h3>
 
         <div class="timeline" aria-label="Berufserfahrung">
-          <!-- Karte 1: aktuelle Rolle -->
+          <!-- Karte 1 -->
           <article class="cv-card">
             <h4 class="cv-title">ITSM – Prozessadministrator</h4>
             <div class="cv-meta">Polizei Hamburg · 01/2024 – heute</div>
@@ -177,7 +193,6 @@
 
         <!-- =====================================================
              (6.1.2) SKILLS • ZERTIFIKATE • SPRACHEN – 3-Spalten-Grid
-             - Mobil 1 Spalte; ab ~860px 3 Spalten (global.css)
              ===================================================== -->
         <div class="cv-grid">
           <!-- Spalte 1: Skills -->
@@ -221,11 +236,11 @@
         </div>
 
         <!-- =====================================================
-             (6.1.3) AKTIONEN – Buttons (PDF, LinkedIn)
-             - .btn / .btn--ghost kommen aus global.css
+             (6.1.3) AKTIONEN – Buttons (PDF, LinkedIn)  ✅ WICHTIG
+             - .btn / .btn--ghost kommen aus global.css (Fallback siehe <style> oben)
+             - target="_blank" + rel="noopener" für sichere neue Tabs
              ===================================================== -->
         <div class="cv-actions" aria-label="Weiterführende Aktionen">
-          <!-- PDF-Pfad ggf. an Build/Hosting anpassen -->
           <a class="btn"
              href="assets/docs/LebenslaufDonimanPeña_052025_1.0.0.pdf"
              target="_blank" rel="noopener"
