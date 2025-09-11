@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+  <!-- =========================================================
+       (0) DOKUMENT-SETUP & META
+       - Korrektes Encoding + Responsive Viewport
+       - SEO: Titel & Description
+       - WICHTIG: Im <head> nur Meta/Links/Styles (kein Header/Footer-Markup!)
+       ========================================================= -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prozessmodellierung – Use-Cases · Swimlanes · BPMN · Komponenten</title>
+  <meta name="description" content="Prozessmodellierung: Use-Case, Swimlanes, BPMN-Modelle und Komponentendiagramme für transparente, steuerbare Abläufe." />
+
+  <!-- =========================================================
+       (1) FONTS (self-hosted, schneller First Paint)
+       - Die Dateien liegen bereits in /assets/fonts
+       ========================================================= -->
+  <link rel="preload" href="assets/fonts/lato-regular-woff-data.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="assets/fonts/lato-bold-woff-data.woff"    as="font" type="font/woff" crossorigin>
+
+  <!-- =========================================================
+       (2) GLOBAL CSS – zentrale Styles (Tokens, Layout, Komponenten)
+       - Enthält .container, .section, .hero, .sec-head, .grid, .card, .btn etc.
+       - NICHT überschreiben → Seite bleibt konsistent zu index/projekte/ueber-mich
+       ========================================================= -->
+  <link rel="stylesheet" href="assets/css/global.css" />
+
+  <!-- =========================================================
+       (2b) SEITENSPEZIFISCHES MINI-CSS
+       - Nur sehr kleine Ergänzungen, die es global (absichtlich) nicht gibt.
+       - z. B. ein 2er-Grid oder eine zentrierte 1-Spalten-Box.
+       ========================================================= -->
+  <style>
+    /* 2er-Grid ab 900px: Use-Case + Swimlanes nebeneinander */
+    .grid--two {
+      display: grid;
+      gap: 1.2rem;
+      grid-template-columns: 1fr;
+      align-items: stretch;
+    }
+    @media (min-width: 900px){
+      .grid--two { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Hilfs-Wrapper, um eine einzelne Karte schön zu zentrieren */
+    .grid-1-centered{
+      display: grid;
+      grid-template-columns: min(1024px, 100%);
+      justify-content: center;
+      margin-inline: auto;
+    }
+
+    /* Buttonzeile unter einem Diagramm */
+    .media-actions{
+      display:flex; flex-wrap:wrap; gap:.6rem; margin:.6rem 0 0;
+    }
+  </style>
+</head>
+
+<body id="top">
+  <!-- =========================================================
+       (3) SKIP-LINK – Tastaturnutzern direkten Zugang geben
+       - Verweist auf #mainContent (siehe <main>)
+       ========================================================= -->
+  <a class="skip-link" href="#mainContent">Zum Inhalt springen</a>
+
+  <!-- =========================================================
+       (4) GLOBALER HEADER-PLATZHALTER
+       - Wird von assets/js/site.js dynamisch mit includes/header.html befüllt
+       - Bitte KEIN statisches Header-Markup hier → vermeidet Duplikate
+       ========================================================= -->
+  <header id="site-header" class="site-header" role="banner">
+    <noscript>
+      <!-- Minimaler, barrierefreier Fallback ohne JS (optional) -->
+      <div class="container nav-container">
+        <a class="nav-logo" href="index.html" aria-label="Startseite">
+          <img src="assets/DoniLogo_1.0.0.png" width="150" height="40" alt="Logo Doniman F. Peña Parra">
+        </a>
+        <nav class="nav-main" aria-label="Hauptnavigation">
+          <ul class="nav-list">
+            <li><a href="index.html">Start</a></li>
+            <li><a href="projekte.html">Projekte</a></li>
+            <li><a href="prozessmodellierung.html" aria-current="page" class="is-active">Prozessmodellierung</a></li>
+            <li><a href="rz-architektur.html">Rechenzentrumsstruktur</a></li>
+            <li><a href="ueber-mich.html">Über mich</a></li>
+          </ul>
+        </nav>
+      </div>
+    </noscript>
+  </header>
+
+  <!-- =========================================================
+       (5) HERO – Seitenkopf (Typografie/Spacing kommen aus global.css)
+       - Titel zentriert, Lead-Text im Blocksatz (siehe global.css Abschnitt 20)
+       ========================================================= -->
+  <section class="hero" aria-label="Seitenkopf Prozessmodellierung">
+    <div class="container hero-inner">
+      <h1 class="hero__title">Prozessmodellierung</h1>
+      <p class="hero__lead">
+        Transparenz schaffen · Faktenbasierte Steuerung · Governance &amp; Compliance · Optimierung &amp; Effizienz
+      </p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       (6) MAIN – Seiteninhalt
+       - Nutzt globale Layout-Klassen: .main, .section, .container, .grid, .card
+       - WICHTIG: Für eventuelle Zoom/Lightbox-Funktionen können Bilder ein
+         data-full Attribut bekommen (siehe unten bei den Diagrammen).
+       ========================================================= -->
+  <main id="mainContent" class="main" role="main">
+
+    <!-- =======================================================
+         (6.1) AUFGABENBESCHREIBUNG
+         - Beispiel: Supportprozess/Service-Desk-Szenario
+         ======================================================= -->
+    <section id="aufgabe" class="section">
+      <div class="container">
+        <div class="sec-head">
+          <span class="sec-dot" aria-hidden="true"></span>
+          <h2 class="sec-title">Beispielszenario: Vertriebsprozessmodellierung zur Managementunterstützung</h2>
+        </div>
+
+        <div class="text-block">
+          <h4>Visualisierung der Zusammenhänge zwischen Support-Bearbeitung, beteiligten Komponenten und Auftraggebern.</h4>
+          <p class="lead">
+            Interne Nutzer (User) arbeiten mit unterschiedlichen Anwendungen und Tools. Bei Problemen wird Support benötigt –
+            idealerweise transparent, nachvollziehbar und mit klaren Verantwortlichkeiten.
+          </p>
+          <p class="lead">
+            Der User meldet seinen Fall über ein Self-Service-Portal (Formular), das in ein ITSM-Ticketsystem überführt wird.
+            Der First-Level-Support prüft und löst, sofern möglich, andernfalls eskaliert er an den Second-Level. Der User
+            wird per E-Mail über Statusänderungen informiert.
+          </p>
+          <p class="lead">
+            Über das Portal kann der User jederzeit den Status seines Tickets einsehen.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         (6.2) VORGEHEN / ANALYSE – Use-Case + Swimlanes
+         - 2er-Grid ab 900px, darunter gestapelt
+         ======================================================= -->
+    <section id="vorgehen" class="section">
+      <div class="container">
+        <div class="sec-head">
+          <span class="sec-dot" aria-hidden="true"></span>
+          <h2 class="sec-title">Vorgehen / Analyse</h2>
+        </div>
+
+        <div class="grid--two">
+          <!-- Karte A: Use-Case -->
+          <article class="card">
+            <!-- HINWEIS: Wenn deine Datei noch in /assets/img liegt, passe den Pfad an. -->
+            <img
+              src="assets/images/UseCase.png"
+              alt="Use-Case-Modell"
+              loading="lazy" decoding="async"
+              data-full="assets/images/UseCase.png">
+            <div class="card-body stack">
+              <h4>Use-Case</h4>
+              <p>
+                Zeigt Akteure und Systemfunktionen, trennt Verantwortlichkeiten und macht die Interaktion schnell
+                nachvollziehbar. Ideal für einen ersten „Scope-Blick“.
+              </p>
+            </div>
+          </article>
+
+          <!-- Karte B: Swimlanes -->
+          <article class="card">
+            <img
+              src="assets/images/PAP.png"
+              alt="Ablaufdarstellung mit Swimlanes"
+              loading="lazy" decoding="async"
+              data-full="assets/images/PAP.png">
+            <div class="card-body stack">
+              <h4>Aktivitätsdiagramm mit Swimlanes</h4>
+              <p>
+                Verantwortlichkeiten (Lanes) sind klar abgegrenzt: User, 1st-Level, 2nd-Level, ITSM. So werden
+                Übergaben, Wartezeiten und Engpässe schnell sichtbar.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         (6.3) ARCHITEKTUR / KOMPONENTEN – Zentrierte Einzelkarte
+         ======================================================= -->
+    <section id="architektur" class="section">
+      <div class="container">
+        <div class="sec-head">
+          <span class="sec-dot" aria-hidden="true"></span>
+          <h2 class="sec-title">Architektur / Komponenten</h2>
+        </div>
+
+        <div class="grid-1-centered">
+          <article class="card">
+            <img
+              src="assets/images/Komponentendiagramm.png"
+              alt="Komponentendiagramm"
+              loading="lazy" decoding="async"
+              data-full="assets/images/Komponentendiagramm.png">
+            <div class="card-body stack">
+              <h4>Kontext &amp; Schnittstellen</h4>
+              <p>
+                Überblick über die Bausteine: Self-Service-Portal, Formular, Mail-Service, ITSM-System und
+                Support-Organisation. Dient als Landkarte für Verantwortlichkeiten.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         (6.4) BPMN-MODELLE – Zwei Varianten mit Buttons
+         - Jedes Diagramm: Bild → Buttons (in neuem Tab öffnen / Download)
+         - Nutzt .btn / .btn--ghost aus global.css
+         ======================================================= -->
+    <section id="bpmn-modelle" class="section">
+      <div class="container">
+        <div class="sec-head">
+          <span class="sec-dot" aria-hidden="true"></span>
+          <h2 class="sec-title">BPMN – Modelle</h2>
+        </div>
+
+        <!-- Modell 1.0.0 -->
+        <article class="card" style="margin:0 auto; max-width:1024px;">
+          <img
+            class="diagram"
+            src="assets/images/DataportSuport_1.0.0.svg"
+            alt="BPMN-Modell 1.0.0 – Kernprozess Supportfall"
+            loading="lazy" decoding="async"
+            data-full="assets/images/DataportSuport_1.0.0.svg">
+
+          <div class="media-actions">
+            <a class="btn" href="assets/images/DataportSuport_1.0.0.svg" target="_blank" rel="noopener">BPMN in neuem Tab</a>
+            <a class="btn btn--ghost" href="assets/images/DataportSuport_1.0.0.svg" download>Download</a>
+          </div>
+
+          <div class="card-body" style="padding-top:8px;">
+            <div class="text-block">
+              <h3>Beschreibung</h3>
+              <p class="lead">
+                <strong>1.0.0</strong> bildet den <strong>Kernprozess</strong> eines Supportfalls ab – von der
+                Störungsmeldung über 1st/2nd-Level-Bearbeitung bis zum Abschluss inkl. Benachrichtigungen.
+              </p>
+              <h3>Ablauf (Hauptschritte)</h3>
+              <ol>
+                <li>User: Formular mit Kurz-/Langbeschreibung senden.</li>
+                <li>ITSM: Ticketanlage &amp; Zuweisung an 1st-Level.</li>
+                <li>1st-Level: Lösen oder an 2nd-Level eskalieren.</li>
+                <li>2nd-Level: Analyse, Fix, Rückmeldung.</li>
+                <li>E-Mail: Status/Abschluss an den User.</li>
+              </ol>
+            </div>
+          </div>
+        </article>
+
+        <!-- Abstand -->
+        <div style="height:24px"></div>
+
+        <!-- Modell 2.0.0 -->
+        <article class="card" style="margin:0 auto; max-width:1024px;">
+          <img
+            class="diagram"
+            src="assets/images/DataportSuport_2.0.0.svg"
+            alt="BPMN-Modell 2.0.0 – Erweiterter Supportprozess"
+            loading="lazy" decoding="async"
+            data-full="assets/images/DataportSuport_2.0.0.svg">
+
+          <div class="media-actions">
+            <a class="btn" href="assets/images/DataportSuport_2.0.0.svg" target="_blank" rel="noopener">BPMN in neuem Tab</a>
+            <a class="btn btn--ghost" href="assets/images/DataportSuport_2.0.0.svg" download>Download</a>
+          </div>
+
+          <div class="card-body" style="padding-top:8px;">
+            <div class="text-block">
+              <h3>Beschreibung</h3>
+              <p class="lead">
+                <strong>2.0.0</strong> erweitert um **Authentifizierung**, **Wissensdatenbank-Abfragen (DBSM)**,
+                **Feedback-Schleifen** und **Timer-Events** (z. B. Auto-Close).
+              </p>
+              <h3>Wesentliche Unterschiede</h3>
+              <ul>
+                <li>Login/Validierung vor Ticketanlage</li>
+                <li>DBSM-Abfragen zur schnellen Lösungssuche</li>
+                <li>Rückfragen/Bestätigung vor dem Schließen</li>
+                <li>Timer-Events für Automatisierung/SLA</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       (7) GLOBALER FOOTER-PLATZHALTER
+       - site.js lädt hier dynamisch: includes/footer.html
+       - Container als neutrales Host-Element (kein <footer>),
+         da das Include selbst <footer> enthält.
+       ========================================================= -->
+  <div id="site-footer" class="site-footer-host">
+    <noscript>
+      <!-- Minimaler Fallback: Kontakt + kompaktes Footer-Band -->
+      <section class="contact-block" aria-labelledby="kontaktTitle">
+        <div class="contact-inner container">
+          <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
+          <p class="contact-name">Doniman F. Peña Parra</p>
+          <p class="contact-email"><a href="mailto:dofp79@hotmail.com" rel="nofollow">dofp79@hotmail.com</a></p>
+        </div>
+      </section>
+      <footer class="site-footer" role="contentinfo">
+        <div class="container subfooter__inner">
+          <p>&copy; <span data-year>2025</span> IT-Steuerung &amp; IT-Controlling</p>
+          <a class="to-top" href="#top">Nach oben ↑</a>
+        </div>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- =========================================================
+       (8) SCRIPTS (genau EINMAL, mit defer)
+       - assets/js/site.js:
+         • lädt Header/Footer via include()
+         • markiert aktiven Menüpunkt (aria-current/.is-active) in .nav-list
+         • setzt Jahr & E-Mail (Spam-sicher)
+         • optional: Zoom/Lightbox (falls Hooks vorhanden)
+       ========================================================= -->
+  <script src="assets/js/site.js" defer></script>
+
+  <!-- (Optional) Mini-Fallback: Falls site.js ausfällt, Includes nachziehen. -->
+  <script>
+    (function(){
+      const include = (sel, url) => {
+        const host = document.querySelector(sel);
+        if (!host) return;
+        const has = host.children.length > 0 && !host.querySelector('noscript');
+        if (has) return; // bereits durch site.js gefüllt
+        fetch(url).then(r => r.ok ? r.text() : '').then(html => { if (html) host.innerHTML = html; });
+      };
+      document.addEventListener('DOMContentLoaded', () => {
+        include('#site-header', 'includes/header.html');
+        include('#site-footer', 'includes/footer.html');
+      });
+    })();
+  </script>
+</body>
+</html>
