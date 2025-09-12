@@ -1,26 +1,26 @@
 /* ===========================================================
-   GLOBAL.CSS – Haupt-Stylesheet (fertig & kommentiert)
+   GLOBAL.CSS – Haupt-Stylesheet (bereinigt & kommentiert)
    -----------------------------------------------------------
    Inhalt / Reihenfolge
-   1)  FONTS  (self-hosted Lato)
-   2)  DESIGN TOKENS  (Farben, Abstände, Breiten, Effekte)
-   3)  BASE / HELPERS  (Container, Grids, Utilities)
-   4)  SKIP-LINK  (A11y)
-   5)  HEADER  (Desktop-Navi + Mobile Off-Canvas; Logo-Fix)
-   6)  HERO  (H1 zentriert, Fließtext Blocksatz)
-   7)  TILES  (Bildkacheln)
-   8)  SECTION-HEADINGS  (roter Punkt + Titel)
-   9)  CARDS  (+ .card-body, .stack)
+   1)  FONTS
+   2)  DESIGN TOKENS
+   3)  BASE / HELPERS
+   4)  SKIP-LINK
+   5)  HEADER (Desktop + Mobile Off-Canvas; Logo-Fix)
+   6)  HERO
+   7)  TILES
+   8)  SECTION-HEADINGS
+   9)  CARDS
    10) ACCORDION
    11) BREADCRUMB
    12) KONTAKTBLOCK
    13) FOOTER
-   14) BUTTONS  (Primär, Ghost)
-   15) GALLERY / MEDIA  (Karussell, Lightbox-Hooks)
-   16) CV / ÜBER MICH  (Timeline, Boxes, Tags, Actions)
-   17) AGENTEN-BEREICH  (Bildkarte + Erklärungskarte)
-   18) ZOOM / MODAL  (Lupe + Vollbild)
-   19) FOCUS (sichtbarer Tastaturfokus)
+   14) BUTTONS
+   15) GALLERY / MEDIA
+   16) CV / ÜBER MICH
+   17) AGENTEN (Bildkarte + Erklärung)
+   18) ZOOM / MODAL (Lupe + Vollbild)
+   19) FOCUS
    20) PRINT
    21) REDUCED MOTION
    =========================================================== */
@@ -28,7 +28,6 @@
 
 /* ===========================================================
    1) FONTS – Lato (self-hosted)
-   → Dateien: /assets/fonts/*.woff     (font-display: swap)
    =========================================================== */
 @font-face{font-family:"Lato";src:url("../fonts/lato-regular-woff-data.woff") format("woff");font-weight:400;font-style:normal;font-display:swap;}
 @font-face{font-family:"Lato";src:url("../fonts/lato-italic-woff-data.woff") format("woff");font-weight:400;font-style:italic;font-display:swap;}
@@ -41,10 +40,9 @@
 
 /* ===========================================================
    2) DESIGN TOKENS – zentrale Variablen
-   • --content-max/--content-pad steuern die Kanten aller Inhalte
    =========================================================== */
 :root{
-  /* Typografie */
+  /* Typo */
   --font-sans: "Lato", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   --font-cond: "Lato", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
 
@@ -60,20 +58,20 @@
   --muted:     #54616e;
   --border:    #e3e6e8;
 
-  /* Flächen/Effekte */
+  /* Effekte/Radius */
   --radius: 14px;
   --shadow: 0 6px 18px rgba(0,0,0,.06);
   --header-shadow: 0 2px 6px rgba(0,0,0,.05);
 
   /* Off-Canvas (mobil) */
-  --offcanvas-bg: #006bb3;
-  --offcanvas-active: #d0021b;
+  --offcanvas-bg: #006bb3;     /* Seitenleiste */
+  --offcanvas-active: #d0021b; /* aktiver Menüpunkt */
 
   /* Größen */
-  --logo-h: 48px;     /* Zielhöhe Logo (max-height, nicht height!) */
-  --header-h: 56px;   /* Fallback; JS misst real nach */
+  --logo-h: 48px;    /* Logo-Höhe (max-height) */
+  --header-h: 56px;  /* Fallback – JS setzt realen Wert */
 
-  /* Gemeinsame Inhaltsbreite – Kanten für Text/Bilder */
+  /* Einheitliche Inhaltskante (Text & Medien) */
   --content-max: 1200px;
   --content-pad: 1rem;
 }
@@ -94,18 +92,16 @@ img{ max-width:100%; height:auto; display:block; }
 a{ color:#0b3a66; text-decoration:none; }
 a:hover,a:focus{ text-decoration:underline; }
 
-/* Einheitliche Inhaltskante → passt zu Bildern/Karten */
+/* Einheitliche Inhaltskante */
 .container{
   width:min(var(--content-max), 100% - (2 * var(--content-pad)));
   margin-inline:auto;
   padding-inline:var(--content-pad);
 }
 
-/* Standard-Sektion */
+/* Sektionen / Layouthelfer */
 .section{ padding:3rem 0; }
 .section--alt{ background:var(--bg-alt); }
-
-/* Grids / Helfer */
 .grid{ display:grid; gap:1.2rem; grid-template-columns:1fr; }
 .grid-2{ display:grid; gap:2rem; grid-template-columns:1fr; }
 @media (min-width:900px){
@@ -115,10 +111,10 @@ a:hover,a:focus{ text-decoration:underline; }
 .grid-1-centered{ display:grid; grid-template-columns:minmax(0,1024px); justify-content:center; gap:1.2rem; }
 .center-wrap{ max-width:var(--content-max); margin-inline:auto; }
 .centered{ text-align:center; }
-.stack > * + *{ margin-top:.6rem; } /* vertikale Mini-Abstände */
-.main{ display:block; }             /* semantischer Wrapper */
+.stack > * + *{ margin-top:.6rem; }
+.main{ display:block; }
 
-/* Lead-Absätze: Blocksatz erwünscht */
+/* Fließtexte im Blocksatz */
 .lead{ color:var(--muted); line-height:1.75; text-align:justify; text-justify:inter-word; }
 
 /* Listen */
@@ -127,13 +123,10 @@ a:hover,a:focus{ text-decoration:underline; }
 .link-list li{ margin-bottom:.4rem; }
 
 /* Kartenbasis */
-.card{
-  background:#fff; border:1px solid var(--border); border-radius:var(--radius);
-  box-shadow:var(--shadow); overflow:hidden;
-}
+.card{ background:#fff; border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
 .card-body{ padding:1.1rem; }
 
-/* Screenreader-Utility */
+/* A11y-Helfer */
 .visually-hidden{
   position:absolute !important; width:1px; height:1px; padding:0; margin:-1px;
   overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
@@ -141,7 +134,7 @@ a:hover,a:focus{ text-decoration:underline; }
 
 
 /* ===========================================================
-   4) SKIP-LINK – Tastatur-Shortcuts
+   4) SKIP-LINK – Tastaturzugang
    =========================================================== */
 .skip-link{
   position:absolute; left:-9999px; top:auto; z-index:1000;
@@ -151,11 +144,15 @@ a:hover,a:focus{ text-decoration:underline; }
 
 
 /* ===========================================================
-   5) HEADER – Desktop-Navigation + Mobile Off-Canvas
+   5) HEADER – Desktop-Navi + Mobile Off-Canvas
    -----------------------------------------------------------
-   • Logo-Fix: niemals verzerren (max-height statt fester height)
-   • Desktop ≥ 960px: horizontale Navigation
-   • Mobile < 960px: Burger + Off-Canvas Sidebar
+   HTML-Hooks (siehe includes/header.html):
+     • .brand-bar         – rote Linie oben (optional)
+     • .nav-container     – Flex-Container
+     • .nav-logo img      – Logo (niemals verzerren)
+     • .nav-main .nav-list a – Desktop-Menü (>= 960px sichtbar)
+     • .nav-toggle        – Burger (zeigt < 960px)
+     • .offcanvas[...]    – Mobile Sidebar (siehe JS in site.js)
    =========================================================== */
 .brand-bar{ height:6px; background:var(--brand-red); }
 
@@ -171,17 +168,17 @@ a:hover,a:focus{ text-decoration:underline; }
   gap:12px; padding:12px 24px; max-width:var(--content-max); margin-inline:auto;
 }
 
-/* Logo – verzerrungsfrei */
+/* Logo – nie verzerren (max-height statt fester height) */
 .nav-logo{ display:inline-flex; align-items:center; flex:0 0 auto; min-width:0; }
 .nav-logo img{
   display:block; width:auto !important; height:auto !important;
   max-height:var(--logo-h); max-width:clamp(120px,28vw,240px); object-fit:contain;
 }
-/* Vorsicht bei width/height-Attributen im HTML */
+/* HTML-Attribute width/height dürfen bleiben – wir neutralisieren sie hier */
 .site-header .nav-logo img[width],
 .site-header .nav-logo img[height]{ width:auto !important; height:auto !important; max-height:var(--logo-h) !important; }
 
-/* Desktop-Nav */
+/* Desktop-Menü */
 .nav-main{}
 .nav-list{
   display:flex; align-items:center; gap:24px; list-style:none; margin:0; padding:0;
@@ -194,7 +191,7 @@ a:hover,a:focus{ text-decoration:underline; }
 .nav-list a.is-active,
 .nav-list a[aria-current="page"]{ background:#e7effc; color:#0b3170; }
 
-/* Burger-Button (mobil) */
+/* Burger (mobil) */
 .nav-toggle{
   display:none; border:0; background:transparent; padding:8px 10px;
   border-radius:8px; color:#0F4391; line-height:1; cursor:pointer;
@@ -210,22 +207,28 @@ a:hover,a:focus{ text-decoration:underline; }
 .nav-toggle__bars::after { position:absolute; top: 7px; left:0; }
 
 @media (max-width:960px){
-  .nav-main{ display:none; }          /* Desktop-Nav ausblenden */
+  .nav-main{ display:none; }          /* Desktop-Menü ausblenden */
   .nav-toggle{ display:inline-flex; align-items:center; gap:.5rem; }
 }
 
-/* --- Off-Canvas Sidebar (mobil, CiberCuba-Style) ----------------------- */
+/* ------- Off-Canvas (mobil, inspiriert CiberCuba) ------------------------ */
+/* Body-Scroll sperren, wenn Panel offen (per JS: body.offcanvas-open) */
+body.offcanvas-open{ overflow:hidden; }
+
+/* Wurzel des Off-Canvas; initial "zu" (per .is-open wird es aktiv) */
 .offcanvas{
   position:fixed; inset:0; z-index:1200; pointer-events:none;
-  /* A11y: wird mit [aria-hidden="true"] initialisiert; JS setzt .is-open */
 }
 .offcanvas.is-open{ pointer-events:auto; }
+
+/* Overlay */
 .offcanvas__overlay{
   position:absolute; inset:0; background:rgba(0,0,0,.45);
   opacity:0; transition:opacity .22s ease;
 }
 .offcanvas.is-open .offcanvas__overlay{ opacity:1; }
 
+/* Panel (links einschiebend) */
 .offcanvas__panel{
   position:absolute; top:0; left:0; bottom:0;
   width:min(360px, 88vw);
@@ -236,6 +239,7 @@ a:hover,a:focus{ text-decoration:underline; }
 }
 .offcanvas.is-open .offcanvas__panel{ transform:translateX(0); }
 
+/* Kopf + Schließen */
 .offcanvas__head{
   display:flex; align-items:center; justify-content:space-between;
   padding:.8rem 1rem; border-bottom:1px solid rgba(255,255,255,.18);
@@ -248,6 +252,7 @@ a:hover,a:focus{ text-decoration:underline; }
 }
 .offcanvas__close:hover,.offcanvas__close:focus{ background:rgba(255,255,255,.08); }
 
+/* Menüliste im Panel */
 .offcanvas__nav{ padding:.5rem 0 1rem; overflow:auto; }
 .offcanvas__list{ list-style:none; margin:0; padding:0; }
 .offcanvas__list>li{ border-top:1px solid rgba(255,255,255,.12); }
@@ -260,12 +265,9 @@ a:hover,a:focus{ text-decoration:underline; }
 .offcanvas__list a:hover,
 .offcanvas__list a:focus{ background:var(--offcanvas-active); }
 
-/* Body-Scroll sperren wenn Menü geöffnet */
-body.offcanvas-open{ overflow:hidden; }
-
 
 /* ===========================================================
-   6) HERO – Titel zentriert, Fließtexte im Blocksatz
+   6) HERO – Titel zentriert, Texte Blocksatz
    =========================================================== */
 .hero{ background:var(--hero-bg); color:#fff; border-bottom:1px solid #08243e; }
 .hero-inner{ padding:2.2rem 0 2.6rem; }
@@ -313,7 +315,7 @@ body.offcanvas-open{ overflow:hidden; }
 
 
 /* ===========================================================
-   9) CARDS – Raster + Inhalte
+   9) CARDS – Raster
    =========================================================== */
 .cards{ display:grid; gap:1.2rem; grid-template-columns:repeat(3,1fr); }
 @media (max-width:900px){ .cards{ grid-template-columns:1fr 1fr; } }
@@ -357,18 +359,16 @@ body.offcanvas-open{ overflow:hidden; }
 
 
 /* ===========================================================
-   13) FOOTER – kompakt + „Nach oben“
+   13) FOOTER
    =========================================================== */
 .site-footer{ background:#0b0f13; color:#cbd3d8; margin-top:2rem; }
-.subfooter__inner{
-  display:flex; justify-content:space-between; gap:1rem; align-items:center; padding:.3rem 0;
-}
+.subfooter__inner{ display:flex; justify-content:space-between; gap:1rem; align-items:center; padding:.3rem 0; }
 .to-top{ color:#9ab; }
 .to-top:hover{ color:#fff; }
 
 
 /* ===========================================================
-   14) BUTTONS – primär / ghost
+   14) BUTTONS
    =========================================================== */
 .btn{
   display:inline-block; padding:.6rem .9rem; border-radius:.7rem;
@@ -381,7 +381,7 @@ body.offcanvas-open{ overflow:hidden; }
 .btn--ghost{ background:#fff; color:#0b3a66; border:1px solid var(--border); }
 .btn--ghost:hover,.btn--ghost:focus{ background:#f5f7f8; }
 
-/* Buttons unter Medien (BPMN etc.) */
+/* Buttons unter Medien (z. B. BPMN) */
 .media-actions{ display:flex; gap:.6rem; flex-wrap:wrap; padding:.8rem 1rem 0 1rem; }
 .diagram{ width:100%; height:auto; display:block; }
 
@@ -415,25 +415,12 @@ body.offcanvas-open{ overflow:hidden; }
 
 
 /* ===========================================================
-   17) AGENTEN-BEREICH – Bildkarte + Erklärungskarte (Pairs)
-   -----------------------------------------------------------
-   HTML (vgl. projekte.html):
-   <div class="agents">
-     <div class="agent-pair">
-       <article class="card agent-tile">…</article>
-       <aside class="card agent-note">…</aside>
-     </div>
-     …
-   </div>
+   17) AGENTEN – Paare (Bildkarte + Erklärungskarte)
    =========================================================== */
 .agents{ display:grid; gap:1.4rem; }
 .agent-pair{ display:grid; gap:1.2rem; grid-template-columns:1fr; }
 @media (min-width:900px){ .agent-pair{ grid-template-columns:1fr 1fr; } }
-
-/* Link-Kachel (links) erbt .card; nur Bild responsiv */
 .agent-tile img{ width:100%; height:auto; display:block; }
-
-/* Erklärungskarte (rechts) */
 .agent-note{ padding:1rem; }
 .agent-name{ margin:.1rem 0 .4rem; font:700 1.05rem/1.3 var(--font-cond); color:var(--brand-red-ink); }
 .agent-desc{ margin:0 0 .5rem; color:var(--muted); }
@@ -441,7 +428,7 @@ body.offcanvas-open{ overflow:hidden; }
 
 
 /* ===========================================================
-   18) ZOOM / MODAL – (Lupe + Vollbild)
+   18) ZOOM / MODAL – RZ: Lupe + Vollbild
    =========================================================== */
 .rz-zoom{ position:relative; }
 .rz-zoom__open{
@@ -480,7 +467,7 @@ body.offcanvas-open{ overflow:hidden; }
 
 
 /* ===========================================================
-   20) PRINT – reduziert Deko
+   20) PRINT – reduzierte Deko
    =========================================================== */
 @media print{
   .brand-bar, .nav-toggle, .nav-main, .offcanvas, .tiles{ display:none !important; }
