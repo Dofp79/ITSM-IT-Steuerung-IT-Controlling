@@ -1,33 +1,25 @@
 <!-- includes/header.html -->
 <!-- ============================================================================
-     GLOBALER HEADER – Sticky, horizontal; mit Burger-Menü für kleine Screens
-     - Wird via site.js in #site-header geladen
+     GLOBALER HEADER – Sticky, horizontal; mit Off-Canvas-Menü für Mobil
+     - Wird via site.js in #site-header geladen (kein doppelter Header im HTML!)
      - Desktop: Logo links, Navigation rechts (horizontal)
-     - Mobile: Burger-Button klappt Navigation unter dem Header ein
-     - A11y: aria-controls/aria-expanded, klare Rollen & Labels
+     - Mobile: Burger öffnet eine ganzseitige Sidebar (links, wie CiberCuba)
+     - A11y: saubere ARIA, Fokus-Management, ESC/Overlay schließt
      ============================================================================ -->
-
 <header class="site-header sticky" role="banner">
+  <!-- Dünne Markenleiste oben (optional) -->
+  <div class="brand-bar" aria-hidden="true"></div>
+
+  <!-- (A) Kopfzeile: Logo, Desktop-Navi, Burger -->
   <div class="container nav-container">
-    <!-- (A) LOGO – Link zur Startseite; Bildhöhe skaliert per CSS automatisch -->
+    <!-- Logo → Startseite. Bild wird nicht verzerrt (Regeln in global.css). -->
     <a class="nav-logo" href="index.html" aria-label="Startseite">
       <img src="assets/DoniLogo_1.0.0.png" alt="Logo Doniman F. Peña Parra">
     </a>
 
-    <!-- (B) BURGER-BUTTON (nur < 960px sichtbar)
-         - aria-controls zeigt auf die Navigation (id="primary-nav")
-         - aria-expanded wird durch JS auf true/false gesetzt -->
-    <button class="nav-toggle" type="button"
-            aria-controls="primary-nav" aria-expanded="false">
-      <span class="nav-toggle__bars" aria-hidden="true"></span>
-      <span class="nav-toggle__label">Menü</span>
-    </button>
-
-    <!-- (C) NAVIGATION
-         - data-collapsible ist ein JS-Hook (Collapsible wird über .is-open gesteuert)
-         - id muss mit aria-controls des Buttons übereinstimmen -->
-    <nav id="primary-nav" class="nav-main" role="navigation"
-         aria-label="Hauptnavigation" data-collapsible>
+    <!-- Desktop-Navigation (>= 960px sichtbar) -->
+    <!-- WICHTIG: .nav-list bleibt erhalten, damit site.js aktive Links markieren kann -->
+    <nav class="nav-main" aria-label="Hauptnavigation">
       <ul class="nav-list">
         <li><a href="index.html">Start</a></li>
         <li><a href="ueber-mich.html">Über mich</a></li>
@@ -36,152 +28,202 @@
         <li><a href="rz-architektur.html">Rechenzentrumsstruktur</a></li>
       </ul>
     </nav>
+
+    <!-- Burger-Button (nur < 960px sichtbar). data-offcanvas-trigger verbindet zum Panel. -->
+    <button class="nav-toggle"
+            type="button"
+            aria-controls="mobileMenu"
+            aria-expanded="false"
+            data-offcanvas-trigger>
+      <span class="visually-hidden">Menü öffnen</span>
+      <span class="nav-toggle__bars" aria-hidden="true"></span>
+    </button>
   </div>
+
+  <!-- (B) Off-Canvas-Sidebar (Mobil) ------------------------------------------------
+       role="dialog" + aria-modal: Screenreader sehen ein modales Panel
+       tabindex="-1": Fokusfang beim Öffnen
+       data-offcanvas: JS-Hook
+       --------------------------------------------------------------------------- -->
+  <aside id="mobileMenu"
+         class="offcanvas"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="mobileMenuTitle"
+         aria-hidden="true"
+         tabindex="-1"
+         data-offcanvas>
+    <!-- Halbtransparenter Overlay-Hintergrund → Klick schließt -->
+    <div class="offcanvas__overlay" data-offcanvas-close tabindex="-1" aria-hidden="true"></div>
+
+    <!-- Das eigentliche Panel, das von links einschiebt -->
+    <div class="offcanvas__panel" role="document">
+      <div class="offcanvas__head">
+        <h2 id="mobileMenuTitle" class="offcanvas__title">Menü</h2>
+        <button class="offcanvas__close" type="button" data-offcanvas-close aria-label="Menü schließen">×</button>
+      </div>
+
+      <!-- Große, gut tappbare Liste. .nav-list bleibt, damit site.js aktiv markieren kann -->
+      <nav class="offcanvas__nav" aria-label="Mobile Navigation">
+        <ul class="offcanvas__list nav-list">
+          <li><a href="index.html">Startseite</a></li>
+          <li><a href="ueber-mich.html">Über mich</a></li>
+          <li><a href="projekte.html">Projekte</a></li>
+          <li><a href="prozessmodellierung.html">Prozessmodellierung</a></li>
+          <li><a href="rz-architektur.html">Rechenzentrumsstruktur</a></li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
 </header>
 
 <!-- ============================================================================
-     STYLE-BLOCK (lokal)
-     HINWEIS: Für Produktivbetrieb gerne in assets/css/global.css verschieben.
+     LOKALE STYLES (kannst du später in assets/css/global.css verschieben)
+     - nutzt deine bestehenden Design-Tokens (Farben/Radius/Shadow) wo sinnvoll
      ============================================================================ -->
 <style>
-  /* ================================
-     (1) Sticky-Header (immer oben)
-     ================================ */
-  .site-header.sticky{
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background: #fff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  }
+  /* --- Sticky Header + Grundlayout ---------------------------------------- */
+  .site-header.sticky{ position:sticky; top:0; z-index:1000; background:#fff; box-shadow:var(--header-shadow,0 2px 6px rgba(0,0,0,.05)); }
+  .brand-bar{ height:6px; background:var(--brand-red,#e30613); } /* optional */
 
-  /* ================================
-     (2) Header-Innenlayout
-     ================================ */
   .nav-container{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 12px 24px;
-    max-width: 1200px;      /* zentrierte Maximalbreite */
-    margin-inline: auto;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:12px 24px; max-width:1200px; margin-inline:auto;
   }
+  .nav-logo img{ display:block; width:auto; height:clamp(32px,6vw,56px); }
 
-  /* ================================
-     (3) Logo – auto-responsiv
-     - Höhe passt sich via clamp() an die Viewportbreite an
-     ================================ */
-  .nav-logo img{
-    height: clamp(32px, 6vw, 56px);
-    width: auto;
-    display: block;
-  }
-
-  /* ================================
-     (4) Navigation (Desktop: horizontal)
-     ================================ */
-  .nav-main {}
-  .nav-list{
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
+  /* --- Desktop-Navigation -------------------------------------------------- */
+  .nav-main{ display:block; }
+  .nav-list{ display:flex; gap:24px; list-style:none; margin:0; padding:0; align-items:center; }
   .nav-list a{
-    text-decoration: none;
-    font-weight: 600;
-    color: #0F4391;
-    padding: 8px 12px;
-    border-radius: 6px;
-    transition: background-color .2s ease, color .2s ease;
+    text-decoration:none; font-weight:600; color:#0F4391;
+    padding:8px 12px; border-radius:6px; transition:background-color .2s ease,color .2s ease;
   }
-  .nav-list a:hover,
-  .nav-list a.is-active,
-  .nav-list a[aria-current="page"]{
-    background: #e7effc;
-    color: #0b3170;
-  }
+  .nav-list a:hover, .nav-list a.is-active, .nav-list a[aria-current="page"]{ background:#e7effc; color:#0b3170; }
 
-  /* ================================
-     (5) Burger-Button
-     - Desktop: ausgeblendet
-     - Mobile: sichtbar (unter 960px)
-     ================================ */
-  .nav-toggle{
-    display: none;
-    border: 0;
-    background: transparent;
-    padding: 8px 10px;
-    border-radius: 8px;
-    color: #0F4391;
-    font-weight: 600;
-    line-height: 1;
-  }
-  .nav-toggle:focus-visible{
-    outline: 2px solid #0F4391;
-    outline-offset: 2px;
-  }
-  /* Icon (3 Balken) */
+  /* --- Burger (nur mobil sichtbar) ---------------------------------------- */
+  .nav-toggle{ display:none; border:0; background:transparent; padding:8px 10px; border-radius:8px; color:#0F4391; }
   .nav-toggle__bars,
   .nav-toggle__bars::before,
   .nav-toggle__bars::after{
-    display: block;
-    width: 24px;
-    height: 2px;
-    background: currentColor;
-    border-radius: 2px;
-    position: relative;
-    content: "";
-    transition: transform .2s ease, opacity .2s ease;
+    display:block; width:24px; height:2px; background:currentColor; border-radius:2px; position:relative; content:"";
+    transition:transform .2s ease, opacity .2s ease;
   }
-  .nav-toggle__bars::before{ position: absolute; top: -7px; left: 0; }
-  .nav-toggle__bars::after { position: absolute; top:  7px; left: 0; }
+  .nav-toggle__bars::before{ position:absolute; top:-7px; left:0; }
+  .nav-toggle__bars::after { position:absolute; top: 7px; left:0; }
 
-  /* ================================
-     (6) Mobile-Layout < 960px
-     - Burger sichtbar
-     - Navigation als Collapsible unter der Headerzeile
-     ================================ */
-  @media (max-width: 960px){
-    .nav-toggle{ display: flex; align-items: center; gap: .5rem; }
-    .nav-toggle__label{ font-size: .95rem; }
+  /* --- Off-Canvas Sidebar -------------------------------------------------- */
+  .offcanvas{ position:fixed; inset:0; z-index:1500; pointer-events:none; }
+  .offcanvas[aria-hidden="true"] .offcanvas__overlay{ opacity:0; visibility:hidden; }
+  .offcanvas[aria-hidden="true"] .offcanvas__panel{ transform:translateX(-100%); }
 
-    /* Collapsible-Grundlage */
-    [data-collapsible]{
-      overflow: hidden;
-      max-height: 0;                /* eingeklappt */
-      transition: max-height .25s ease;
-      width: 100%;
-    }
-    [data-collapsible].is-open{
-      max-height: 60vh;             /* ausreichend groß zum Einblenden */
-    }
-
-    /* Liste wird vertikal; Trennlinien zwischen Items */
-    .nav-list{
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0;
-      padding-block: .5rem;
-    }
-    .nav-list li{ border-top: 1px solid rgba(0,0,0,.06); }
-    .nav-list li:first-child{ border-top: none; }
-    .nav-list a{
-      padding: 14px 8px;
-      border-radius: 0;
-    }
+  .offcanvas__overlay{
+    position:absolute; inset:0; background:rgba(0,0,0,.5); transition:opacity .2s ease, visibility .2s ease;
+  }
+  .offcanvas__panel{
+    position:absolute; top:0; bottom:0; left:0; width:min(360px,86vw);
+    background:var(--hero-bg,#0e3659); color:#fff;
+    display:flex; flex-direction:column;
+    box-shadow:var(--shadow,0 6px 18px rgba(0,0,0,.25));
+    transform:translateX(0); transition:transform .25s ease;
+    pointer-events:auto; /* Panel bleibt interaktiv, Overlay übernimmt Klick zum Schließen */
+  }
+  .offcanvas__head{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; padding:.8rem 1rem; border-bottom:1px solid rgba(255,255,255,.15); }
+  .offcanvas__title{ font:700 1.1rem/1 var(--font-cond,"Lato",system-ui); margin:0; }
+  .offcanvas__close{
+    width:36px; height:36px; border-radius:8px; border:1px solid rgba(255,255,255,.35);
+    background:transparent; color:#fff; font-size:22px; line-height:1; cursor:pointer;
+  }
+  .offcanvas__nav{ overflow:auto; padding:6px 0 16px; }
+  .offcanvas__list{ list-style:none; margin:0; padding:0; }
+  .offcanvas__list li + li{ border-top:1px solid rgba(255,255,255,.12); }
+  .offcanvas__list a{
+    display:block; padding:14px 16px; color:#fff; text-decoration:none; font-weight:700; font-family:var(--font-cond,"Lato",system-ui);
+  }
+  .offcanvas__list a:hover, .offcanvas__list a.is-active, .offcanvas__list a[aria-current="page"]{
+    background:var(--brand-red,#e30613);
   }
 
-  /* ================================
-     (7) Bewegungsarme Nutzer respektieren
-     ================================ */
-  @media (prefers-reduced-motion: reduce){
-    [data-collapsible]{ transition: none; }
-    .nav-toggle__bars,
-    .nav-toggle__bars::before,
-    .nav-toggle__bars::after{ transition: none; }
+  /* --- Breakpoint: Mobil vs. Desktop -------------------------------------- */
+  @media (max-width:960px){
+    .nav-main{ display:none; }         /* Desktop-Menü ausblenden */
+    .nav-toggle{ display:inline-flex; align-items:center; gap:.5rem; }
+  }
+
+  /* Bewegungsarme Nutzer respektieren */
+  @media (prefers-reduced-motion:reduce){
+    .offcanvas__panel, .offcanvas__overlay{ transition:none; }
+    .nav-toggle__bars, .nav-toggle__bars::before, .nav-toggle__bars::after{ transition:none; }
+  }
+
+  /* A11y-Helfer */
+  .visually-hidden{
+    position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
   }
 </style>
+
+<!-- ============================================================================
+     MINI-JS für die Off-Canvas-Steuerung
+     - Öffnen/Schließen, ESC, Overlay, Fokus-Management (Return-Fokus)
+     - Kann 1:1 in assets/js/site.js verschoben werden (dann hier löschen).
+     ============================================================================ -->
+<script>
+  (function () {
+    'use strict';
+    const header = document.currentScript.closest('.site-header'); // nur innerhalb dieses Includes arbeiten
+    const panel  = header.querySelector('[data-offcanvas]');
+    const overlay= header.querySelector('.offcanvas__overlay');
+    const openBtn= header.querySelector('[data-offcanvas-trigger]');
+    const closeBtns = header.querySelectorAll('[data-offcanvas-close]');
+    let lastFocus = null;
+
+    if (!panel || !openBtn) return;
+
+    function open() {
+      lastFocus = document.activeElement;
+      panel.setAttribute('aria-hidden', 'false');
+      header.classList.add('is-offcanvas-open');
+      document.body.style.overflow = 'hidden';            // scroll lock
+      // Fokus ins Panel setzen
+      panel.focus({ preventScroll: true });
+      openBtn.setAttribute('aria-expanded', 'true');
+    }
+
+    function close() {
+      panel.setAttribute('aria-hidden', 'true');
+      header.classList.remove('is-offcanvas-open');
+      document.body.style.overflow = '';
+      openBtn.setAttribute('aria-expanded', 'false');
+      // Fokus zurück zum Auslöser
+      if (lastFocus && typeof lastFocus.focus === 'function') {
+        lastFocus.focus({ preventScroll: true });
+      } else {
+        openBtn.focus({ preventScroll: true });
+      }
+    }
+
+    // Öffnen
+    openBtn.addEventListener('click', open);
+
+    // Schließen via X-Button(s) & Overlay
+    closeBtns.forEach(btn => btn.addEventListener('click', close));
+    overlay.addEventListener('click', close);
+
+    // ESC schließt
+    document.addEventListener('keydown', (e) => {
+      if (panel.getAttribute('aria-hidden') === 'false' && e.key === 'Escape') {
+        close();
+      }
+    });
+
+    // Einfacher Fokus-Trap (optional: verfeinern)
+    panel.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const focusables = panel.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])');
+      if (!focusables.length) return;
+      const first = focusables[0], last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+  })();
+</script>
