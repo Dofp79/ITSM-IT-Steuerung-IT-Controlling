@@ -4,45 +4,42 @@
    Zweck:
    - Globalen Header/Footer laden (horizontales Sticky-Menü auf allen Seiten)
    - Responsive Collapsible-Navigation (Burger) inkl. A11y
-   - aktiven Menüpunkt markieren (aria-current, .is-active)
+   - Aktiven Menüpunkt markieren (aria-current, .is-active)
    - Footer-Jahr & E-Mail sicher einsetzen
-   - Kontaktblock-Deduplizierung
+   - Kontaktblock-Deduplizierung (nur 1x anzeigen)
    - (optional) RZ-Lupe + Vollbild (Pan & Zoom), nur wenn Hooks vorhanden sind
+   - NEU: Off-Canvas-Menü (mobil), inspiriert von CiberCuba
 
-   Abhängigkeiten im HTML (MINDESTENS):
+   HTML-Abhängigkeiten (MINDESTENS):
    -----------------------------------------------------------------------------
    <header id="site-header" class="site-header" role="banner"></header>
    <div id="site-footer"></div>
    <script src="assets/js/site.js" defer></script>
 
-   Abhängigkeiten im Header-Include (includes/header.html) für Mobile:
+   Header-Include (includes/header.html) – Mobile Hooks:
    -----------------------------------------------------------------------------
-   - Button:  <button class="nav-toggle" aria-controls="primary-nav">Menü</button>
-   - Nav:     <nav id="primary-nav" class="nav-main" data-collapsible>…</nav>
-              (Links darin haben Klasse .nav-list a[…])
-
-   Abhängigkeiten für RZ-Lupe/Vollbild (nur auf RZ-Seite nötig):
-   -----------------------------------------------------------------------------
-   figure.rz-zoom > img.diagram[data-full] + .rz-zoom__lens + .rz-zoom__open
-   #rzModal .rz-stage > .rz-stage__img   (+ Schließen/Zoom-Buttons optional)
+   - Button (Burger):   [data-offcanvas-trigger]
+   - Panel (Offcanvas): [data-offcanvas] (enthält Overlay [data-offcanvas-close])
+   - Collapsible Nav:   <nav id="primary-nav" class="nav-main" data-collapsible>…</nav>
 
    Hinweise:
-   - Alles ist in eine IIFE gekapselt (keine Globals).
-   - Kommentare zeigen exakte Aufgaben & Stolpersteine.
+   - Alles ist in eine IIFE gekapselt → keine Globals.
+   - Kommentare markieren Stolpersteine und A11y-Details.
    ============================================================================= */
 
 (() => {
   'use strict';
 
   /* ---------------------------------------------------------------------------
-   * (0) Utilities
+   * (0) Mini-Utilities
    * ------------------------------------------------------------------------ */
   const $  = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
   /**
    * HTML-Snippet (Header/Footer) per fetch() laden und in Host einsetzen.
-   * Progressive Enhancement: wird NICHT geladen, wenn bereits Content (ohne <noscript>) vorhanden ist.
+   * Progressive Enhancement: wird NICHT geladen, wenn bereits Content
+   * (ohne <noscript>) vorhanden ist.
    */
   const include = (sel, url) => {
     const host = $(sel);
@@ -57,9 +54,6 @@
 
   /* ---------------------------------------------------------------------------
    * (1) Kontaktblock-Deduplizierung
-   *  - Behalte den im Footer (#site-footer .contact-block) oder den zuletzt
-   *    vorhandenen. Entferne alle anderen Vorkommen.
-   *  - Läuft initial + via MutationObserver (falls später noch Inhalt injected wird).
    * ------------------------------------------------------------------------ */
   function ensureSingleContact() {
     const all = $$('.contact-block');
@@ -80,9 +74,7 @@
   })();
 
   /* ---------------------------------------------------------------------------
-   * (2) Headerhöhe → CSS-Var --header-h
-   *  - Nützlich als Sticky-Offset oder wenn etwas „unter dem Header“ starten soll.
-   *  - Robust, falls .brand-bar (alte Variante) noch existiert.
+   * (2) Headerhöhe → CSS-Var --header-h (z. B. für Sticky-Offset)
    * ------------------------------------------------------------------------ */
   function setHeaderHeightVar() {
     const header   = $('.site-header');
@@ -97,13 +89,11 @@
   }
 
   /* ---------------------------------------------------------------------------
-   * (3) Aktiven Menüpunkt markieren (OHNE Drawer)
-   *  - Vergleich auf Dateinamebene, Query/Hash werden ignoriert.
-   *  - Setzt a[aria-current="page"] + .is-active (für CSS).
+   * (3) Aktiven Menüpunkt markieren (Dateiname vergleichen)
    * ------------------------------------------------------------------------ */
   function markActiveLink() {
     const current = location.pathname.split('/').pop() || 'index.html';
-    const links = $$('.nav-list a[href]'); // kommt aus includes/header.html
+    const links = $$('.nav-list a[href]');
     links.forEach(a => {
       const href = (a.getAttribute('href') || '')
         .split('/').pop().split('#')[0].split('?')[0];
@@ -115,10 +105,7 @@
   }
 
   /* ---------------------------------------------------------------------------
-   * (3b) Responsive Navigation (Burger / Collapsible)
-   *  - Button .nav-toggle toggelt #primary-nav[data-collapsible]
-   *  - A11y: aria-expanded, ESC schließt, Klick auf Link schließt
-   *  - Resize: beim Wechsel auf Desktop schließen
+   * (3b) Collapsible-Navigation (Burger über dem Header – NICHT Off-Canvas)
    * ------------------------------------------------------------------------ */
   function initResponsiveNav() {
     const header = document.getElementById('site-header');
@@ -126,42 +113,38 @@
 
     const toggle = header.querySelector('.nav-toggle');
     const nav    = header.querySelector('#primary-nav[data-collapsible]');
-    if (!toggle || !nav) return; // Header-Markup fehlt → ruhig aussteigen
+    if (!toggle || !nav) return;
 
-    // Startzustand
+    // sauberer Startzustand
     toggle.setAttribute('aria-expanded', 'false');
     toggle.classList.remove('is-open');
     nav.classList.remove('is-open');
 
     const setOpen = (open) => {
       toggle.setAttribute('aria-expanded', String(open));
-      toggle.classList.toggle('is-open', open); // ermöglicht Icon-Animation via CSS
-      nav.classList.toggle('is-open', open);    // triggert Collapsible (z. B. max-height)
+      toggle.classList.toggle('is-open', open);
+      nav.classList.toggle('is-open', open);
     };
 
-    // Toggle per Klick
     toggle.addEventListener('click', () => {
       const open = toggle.getAttribute('aria-expanded') === 'true';
       setOpen(!open);
     });
 
-    // ESC schließt
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') setOpen(false);
     });
 
-    // Klick auf Link schließt (Mobile-Usability)
     nav.addEventListener('click', (e) => {
       const link = (e.target instanceof HTMLElement) ? e.target.closest('a[href]') : null;
       if (link) setOpen(false);
     });
 
-    // Bei Resize von klein → groß: sicherheitshalber schließen
     let lastW = window.innerWidth;
     window.addEventListener('resize', () => {
       const w = window.innerWidth;
       if (w !== lastW) {
-        if (w > 960) setOpen(false); // Breakpoint zum CSS passend halten
+        if (w > 960) setOpen(false);
         lastW = w;
       }
     });
@@ -183,46 +166,77 @@
     if (!user || !dom) return;
     const addr = `${user}@${dom}`;
     link.href = `mailto:${addr}`;
-    // Ersetze nur Platzhalter wie „E-Mail anzeigen“
     if (/anzeigen/i.test(link.textContent || '')) link.textContent = addr;
-    // rel="nofollow" kann bleiben oder entfernt werden (SEO-Policy)
-    // link.removeAttribute('rel');
   }
 
   /* ---------------------------------------------------------------------------
-   * (5) Bootstrapping
-   *  - Includes laden → dann Initialisierungen → dann Schutz/Optionals
-   *  - Nur EIN zentraler DOMContentLoaded-Listener (keine Duplikate!)
+   * (5) Off-Canvas-Menü (mobil) – inspiriert von CiberCuba
+   *  - NICHT sofort starten → erst nach dem Header-Include aufrufen!
    * ------------------------------------------------------------------------ */
-  document.addEventListener('DOMContentLoaded', () => {
-    Promise.all([
-      include('#site-header', 'includes/header.html'),
-      include('#site-footer', 'includes/footer.html'),
-    ]).then(() => {
-      // Alles da → Features aktivieren
-      setHeaderHeightVar();   // CSS-Var für Sticky-Offset
-      initResponsiveNav();    // Burger/Collapsible
-      markActiveLink();       // aktives Menü
-      setYear();              // Jahr im Footer
-      hydrateContactEmail();  // E-Mail-Link
+  function initOffcanvas(){
+    const oc = document.querySelector('[data-offcanvas]');
+    const trigger = document.querySelector('[data-offcanvas-trigger]');
+    if (!oc || !trigger) return; // Header/Markup noch nicht da → ruhig aussteigen
 
-      // Schutz: doppelte Kontaktblöcke vermeiden
-      ensureSingleContact();
-      observeOnceForContacts();
+    const overlay  = oc.querySelector('[data-offcanvas-close]'); // Klick → schließen
+    const closeBtn = oc.querySelector('.offcanvas__close');       // X-Button
+    const focusablesSel = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    let lastActive = null;
 
-      // Optionales Feature (tut nichts, wenn Hooks fehlen):
-      initRZZoom();
+    const setOpen = (open) => {
+      oc.classList.toggle('is-open', open);
+      document.body.classList.toggle('offcanvas-open', open);
+      oc.setAttribute('aria-hidden', String(!open));
+      trigger.setAttribute('aria-expanded', String(open));
+
+      if (open) {
+        lastActive = document.activeElement;
+        oc.focus(); // Fokus auf Panel (A11y)
+        document.addEventListener('keydown', onKeydown);
+      } else {
+        document.removeEventListener('keydown', onKeydown);
+        lastActive && lastActive.focus && lastActive.focus();
+      }
+    };
+
+    const onKeydown = (e) => {
+      // ESC schließt
+      if (e.key === 'Escape') { setOpen(false); return; }
+      // einfache Fokus-Falle
+      if (e.key === 'Tab') {
+        const items = oc.querySelectorAll(focusablesSel);
+        if (!items.length) return;
+        const first = items[0], last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first){ last.focus(); e.preventDefault(); }
+        else if (!e.shiftKey && document.activeElement === last){ first.focus(); e.preventDefault(); }
+      }
+    };
+
+    // Öffnen
+    trigger.addEventListener('click', () => setOpen(true));
+
+    // Schließen (Overlay + X + Link-Klick)
+    overlay?.addEventListener('click', () => setOpen(false));
+    closeBtn?.addEventListener('click', () => setOpen(false));
+    oc.addEventListener('click', (e) => {
+      const a = (e.target instanceof HTMLElement) ? e.target.closest('a[href]') : null;
+      if (a) setOpen(false);
     });
-  });
+
+    // Sicherheitsnetz: bei Resize → Desktop schließen
+    let lastW = window.innerWidth;
+    window.addEventListener('resize', () => {
+      const w = window.innerWidth;
+      if (w !== lastW && w > 960) setOpen(false);
+      lastW = w;
+    });
+  }
 
   /* ---------------------------------------------------------------------------
    * (6) RZ-Diagramm: Lupe + Vollbild (Pan & Zoom)
-   *  - Aktiv nur, wenn alle DOM-Hooks vorhanden sind.
-   *  - Starker Linsen-Zoom (400 % Standard, ALT → 600 % Turbo).
-   *  - NEU: Linsen-Zoom per Mausrad (konfigurierbar, mit Min/Max).
+   *  - Wird nur aktiv, wenn alle DOM-Hooks vorhanden sind.
    * ------------------------------------------------------------------------ */
   function initRZZoom() {
-    // (A) DOM-Hooks
     const fig   = $('.rz-zoom');
     const img   = fig?.querySelector('img.diagram');
     const lens  = fig?.querySelector('.rz-zoom__lens');
@@ -233,32 +247,25 @@
     const full  = modal?.querySelector('.rz-stage__img');
     const closers = modal?.querySelectorAll('[data-close], .rz-modal__backdrop, .rz-modal__close') || [];
 
-    if (!fig || !img || !lens || !openB || !modal || !stage || !full) return; // sauber aussteigen
+    if (!fig || !img || !lens || !openB || !modal || !stage || !full) return;
 
-    // (B) Konfiguration – zentrale Stellschrauben
     const CFG = {
-      /* L U P E  (Overlay auf dem Vorschaubild) */
-      lensSize: 180,         // Durchmesser der Lupe in px
-      lensBgScale: 4.0,      // Standard-Vergrößerung der Lupe   → 4.0 = 400 %
-      lensBgMin:   1.5,      // Untere Grenze für Lupe            (150 %)
-      lensBgMax:  10.0,      // Obere Grenze für Lupe             (1000 %)
-      wheelStepLens: 1.25,   // Mausrad-Schrittweite für Linse
-      wheelTurbo:   1.10,    // Zusatzfaktor wenn ALT gehalten
-
-      /* M O D A L  (Vollbild mit Pan & Zoom) */
+      lensSize: 180,
+      lensBgScale: 4.0,
+      lensBgMin:   1.5,
+      lensBgMax:  10.0,
+      wheelStepLens: 1.25,
+      wheelTurbo:   1.10,
       wheelStep: 1.15,
       zoomMin:   0.5,
       zoomMax:   6.0,
     };
 
-    // (C) State & Helfer
-    const destroy = []; // falls später Cleanup nötig
+    const destroy = [];
     const on = (el, ev, fn, opts) => { el.addEventListener(ev, fn, opts); destroy.push(() => el.removeEventListener(ev, fn, opts)); };
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
     const fullSrc = img.getAttribute('data-full') || img.currentSrc || img.src;
-
-    // Vollbild-Zoomzustand
     const Z = { scale: 1, min: CFG.zoomMin, max: CFG.zoomMax, x: 0, y: 0 };
 
     const apply  = () => { full.style.transform = `translate(${Z.x}px, ${Z.y}px) scale(${Z.scale})`; };
@@ -268,32 +275,24 @@
       const prev = Z.scale;
       const next = clamp(prev * factor, Z.min, Z.max);
       if (next === prev) return;
-
       const r = stage.getBoundingClientRect();
       const px = (cx ?? r.width  / 2);
       const py = (cy ?? r.height / 2);
-
-      // zum Cursorpunkt zoomen
       Z.x = px - (next / prev) * (px - Z.x);
       Z.y = py - (next / prev) * (py - Z.y);
       Z.scale = next;
       apply();
     }
 
-    // (E) Lupe auf dem Vorschaubild
-    let turbo = false;            // ALT-Taste = Turbo-Zoom
-    let lensScale = CFG.lensBgScale; // aktueller Linsen-Zoom (in „Faktoren“)
-
-    function applyLensZoom() {
-      lens.style.backgroundSize = `${lensScale * 100}%`;
-    }
+    let turbo = false;
+    let lensScale = CFG.lensBgScale;
+    const applyLensZoom = () => { lens.style.backgroundSize = `${lensScale * 100}%`; };
 
     function initLens() {
-      // Größe & Hintergrund der Linse
       lens.style.width  = `${CFG.lensSize}px`;
       lens.style.height = `${CFG.lensSize}px`;
       lens.style.backgroundImage = `url("${fullSrc}")`;
-      applyLensZoom(); // Start: 400 %
+      applyLensZoom();
 
       const showLens = (show) => { lens.style.display = show ? 'block' : 'none'; };
 
@@ -319,19 +318,15 @@
         lens.style.backgroundPosition = `${fx * 100}% ${fy * 100}%`;
       }
 
-      // Maus
       on(img, 'mouseenter', () => showLens(true));
       on(img, 'mouseleave', () => showLens(false));
       on(img, 'mousemove',  moveLens);
 
-      // Touch
       on(img, 'touchstart', (e) => { showLens(true);  moveLens(e); }, { passive: true });
       on(img, 'touchmove',  (e) => { moveLens(e); }, { passive: true });
       on(img, 'touchend',   ()  => { showLens(false); });
 
-      // **NEU:** Mausrad auf dem Vorschaubild ändert Linsen-Zoom (mit Min/Max)
       on(img, 'wheel', (e) => {
-        // Kein Scrollen der Seite, wir zoomen in der Linse
         e.preventDefault();
         const step = e.deltaY < 0 ? CFG.wheelStepLens : (1 / CFG.wheelStepLens);
         const turboFactor = e.altKey ? CFG.wheelTurbo : 1;
@@ -340,7 +335,6 @@
       }, { passive: false });
     }
 
-    // Turbo-Zoom (ALT gedrückt halten) – setzt fix auf Turbo, loslassen = Standard
     on(document, 'keydown', (e) => {
       if (e.altKey && !turbo) { turbo = true; lensScale = clamp(CFG.lensBgScale * 1.5, CFG.lensBgMin, CFG.lensBgMax); applyLensZoom(); }
     });
@@ -348,25 +342,24 @@
       if (turbo) { turbo = false; lensScale = CFG.lensBgScale; applyLensZoom(); }
     });
 
-    // (F) Vollbild-Modal mit Pan & Zoom
     function initModal() {
+      const modalEl = modal;
       function openModal() {
-        modal.hidden = false;
+        modalEl.hidden = false;
         center();
         stage.focus?.({ preventScroll: true });
         document.body.style.overflow = 'hidden';
       }
       function closeModal() {
-        modal.hidden = true;
+        modalEl.hidden = true;
         document.body.style.overflow = '';
         openB.focus?.();
       }
 
       on(openB, 'click', openModal);
       closers.forEach(el => on(el, 'click', closeModal));
-      on(document, 'keydown', (e) => { if (!modal.hidden && e.key === 'Escape') closeModal(); });
+      on(document, 'keydown', (e) => { if (!modalEl.hidden && e.key === 'Escape') closeModal(); });
 
-      // Pan (Maus)
       let drag = null;
       on(stage, 'mousedown', (e) => { drag = { sx: e.clientX, sy: e.clientY, x: Z.x, y: Z.y }; });
       on(document, 'mousemove', (e) => {
@@ -377,7 +370,6 @@
       });
       on(document, 'mouseup', () => { drag = null; });
 
-      // Pan (Touch)
       on(stage, 'touchstart', (e) => {
         const t = e.touches[0];
         drag = { sx: t.clientX, sy: t.clientY, x: Z.x, y: Z.y };
@@ -391,7 +383,6 @@
       }, { passive: true });
       on(stage, 'touchend', () => { drag = null; });
 
-      // Wheel-Zoom (zum Cursor) – nicht passive, da preventDefault
       on(stage, 'wheel', (e) => {
         e.preventDefault();
         const r = stage.getBoundingClientRect();
@@ -400,18 +391,40 @@
         setZoom((e.deltaY < 0) ? CFG.wheelStep : 1 / CFG.wheelStep, cx, cy);
       }, { passive: false });
 
-      // Tool-Buttons (optional vorhanden)
-      modal.querySelector('[data-zoom="in"]')   ?.addEventListener('click', () => setZoom(1.2));
-      modal.querySelector('[data-zoom="out"]')  ?.addEventListener('click', () => setZoom(1 / 1.2));
-      modal.querySelector('[data-zoom="reset"]')?.addEventListener('click', () => { Z.scale = 1; Z.x = 0; Z.y = 0; apply(); });
+      modalEl.querySelector('[data-zoom="in"]')   ?.addEventListener('click', () => setZoom(1.2));
+      modalEl.querySelector('[data-zoom="out"]')  ?.addEventListener('click', () => setZoom(1 / 1.2));
+      modalEl.querySelector('[data-zoom="reset"]')?.addEventListener('click', () => { Z.scale = 1; Z.x = 0; Z.y = 0; apply(); });
     }
 
-    // (G) Boot
     initLens();
     initModal();
-
-    // (H) Optionales Cleanup (falls SPA/Hot-Reload): destroy.forEach(fn => fn());
   }
 
-  // Ende Modul
+  /* ---------------------------------------------------------------------------
+   * (7) Bootstrapping
+   *  - Includes laden → dann Initialisierungen → dann Schutz/Optionals
+   *  - Nur EIN zentraler DOMContentLoaded-Listener (keine Duplikate!)
+   * ------------------------------------------------------------------------ */
+  document.addEventListener('DOMContentLoaded', () => {
+    Promise.all([
+      include('#site-header', 'includes/header.html'),
+      include('#site-footer', 'includes/footer.html'),
+    ]).then(() => {
+      // Alles da → Features aktivieren (JETZT ist der Header-DOM vorhanden!)
+      setHeaderHeightVar();   // CSS-Var für Sticky-Offset
+      initResponsiveNav();    // Burger/Collapsible (innerhalb des Headers)
+      markActiveLink();       // aktiver Menüpunkt
+      initOffcanvas();        // ⚠️ Off-Canvas NACH Include initialisieren
+      setYear();              // Jahr im Footer
+      hydrateContactEmail();  // E-Mail-Link
+
+      // Schutz: doppelte Kontaktblöcke vermeiden
+      ensureSingleContact();
+      observeOnceForContacts();
+
+      // Optional (tut nichts, wenn Hooks fehlen)
+      initRZZoom();
+    });
+  });
+
 })();
