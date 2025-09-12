@@ -50,7 +50,7 @@
   --brand-red:     #e30613;
   --brand-red-ink: #7d212b;
   --header-bg: #ffffff;
-  --hero-bg:   #0e3659;
+  --hero-bg:   #0e3659;   /* << maßgebliches Blau */
   --tile-bg:   #0b2f4d;
   --bg:        #ffffff;
   --bg-alt:    #f5f7f8;
@@ -63,13 +63,13 @@
   --shadow: 0 6px 18px rgba(0,0,0,.06);
   --header-shadow: 0 2px 6px rgba(0,0,0,.05);
 
-  /* Off-Canvas (mobil) */
-  --offcanvas-bg: #006bb3;     /* Seitenleiste */
-  --offcanvas-active: #d0021b; /* aktiver Menüpunkt */
+  /* Off-Canvas (mobil) – nutzt bewusst das Hero-Blau */
+  --offcanvas-bg: var(--hero-bg);
+  --offcanvas-active: #d0021b;
 
   /* Größen */
   --logo-h: 48px;    /* Logo-Höhe (max-height) */
-  --header-h: 56px;  /* Fallback – JS setzt realen Wert */
+  --header-h: 56px;  /* Fallback – site.js setzt realen Wert */
 
   /* Einheitliche Inhaltskante (Text & Medien) */
   --content-max: 1200px;
@@ -211,7 +211,14 @@ a:hover,a:focus{ text-decoration:underline; }
   .nav-toggle{ display:inline-flex; align-items:center; gap:.5rem; }
 }
 
-/* ------- Off-Canvas (mobil, inspiriert CiberCuba) ------------------------ */
+/* ------- Off-Canvas (mobil, inspiriert CiberCuba) ------------------------
+   WICHTIG:
+   - Panel verwendet exakt das Seitenblau (--offcanvas-bg = --hero-bg)
+   - Menüeinträge werden VERTIKAL gelistet (eigene .nav-list-Regel im Panel),
+     unabhängig von der horizontalen Flex-Navi am Desktop.
+   - Im Panel nur vertikales Scrollen; X-Scroll wird unterdrückt.
+--------------------------------------------------------------------------- */
+
 /* Body-Scroll sperren, wenn Panel offen (per JS: body.offcanvas-open) */
 body.offcanvas-open{ overflow:hidden; }
 
@@ -228,11 +235,12 @@ body.offcanvas-open{ overflow:hidden; }
 }
 .offcanvas.is-open .offcanvas__overlay{ opacity:1; }
 
-/* Panel (links einschiebend) */
+/* Panel (links einschiebend) – Farbe = Seitenblau */
 .offcanvas__panel{
   position:absolute; top:0; left:0; bottom:0;
   width:min(360px, 88vw);
-  background:var(--offcanvas-bg); color:#fff;
+  background:var(--offcanvas-bg); /* identisch mit --hero-bg */
+  color:#fff;
   display:flex; flex-direction:column;
   transform:translateX(-100%); transition:transform .22s ease;
   box-shadow:4px 0 22px rgba(0,0,0,.2);
@@ -252,18 +260,36 @@ body.offcanvas-open{ overflow:hidden; }
 }
 .offcanvas__close:hover,.offcanvas__close:focus{ background:rgba(255,255,255,.08); }
 
-/* Menüliste im Panel */
-.offcanvas__nav{ padding:.5rem 0 1rem; overflow:auto; }
-.offcanvas__list{ list-style:none; margin:0; padding:0; }
-.offcanvas__list>li{ border-top:1px solid rgba(255,255,255,.12); }
-.offcanvas__list>li:first-child{ border-top:0; }
-.offcanvas__list a{
+/* Panel-Navigation – nur VERTIKALES Layout, keine X-Scroll */
+.offcanvas__nav{
+  padding:.5rem 0 1rem;
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+
+/* Liste im Panel */
+/* ACHTUNG: .nav-list ist am Desktop horizontal (flex); im Panel erzwingen wir
+   bewusst eine vertikale Liste. Das !important verhindert das Erben. */
+.offcanvas .nav-list{
+  display:block !important;   /* vertikal */
+  gap:0 !important;
+  margin:0; padding:0;
+  list-style:none;
+}
+.offcanvas .nav-list > li{ border-top:1px solid rgba(255,255,255,.12); }
+.offcanvas .nav-list > li:first-child{ border-top:0; }
+
+.offcanvas .nav-list a{
   display:block; padding:1rem 1.1rem; color:#fff; text-decoration:none;
   font-weight:800; font-family:var(--font-cond); letter-spacing:.2px;
+  border-radius:.65rem;
 }
-.offcanvas__list li.is-active>a,
-.offcanvas__list a:hover,
-.offcanvas__list a:focus{ background:var(--offcanvas-active); }
+.offcanvas .nav-list a:hover,
+.offcanvas .nav-list a:focus{ background:rgba(255,255,255,.08); outline:none; }
+.offcanvas .nav-list a.is-active,
+.offcanvas .nav-list a[aria-current="page"]{
+  background:var(--offcanvas-active);
+}
 
 
 /* ===========================================================
