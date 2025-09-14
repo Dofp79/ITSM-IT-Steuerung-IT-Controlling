@@ -145,15 +145,7 @@ a:hover,a:focus{ text-decoration:underline; }
 
 /* ===========================================================
    5) HEADER – Desktop-Navi + Mobile Off-Canvas
-   -----------------------------------------------------------
-   HTML-Hooks (siehe includes/header.html):
-     • .brand-bar         – rote Linie oben (optional)
-     • .nav-container     – Flex-Container
-     • .nav-logo img      – Logo (niemals verzerren)
-     • .nav-main .nav-list a – Desktop-Menü (>= 960px sichtbar)
-     • .nav-toggle        – Burger (zeigt < 960px)
-     • .offcanvas[...]    – Mobile Sidebar (siehe JS in site.js)
-   =========================================================== */
+   ----------------------------------------------------------- */
 .brand-bar{ height:6px; background:var(--brand-red); }
 
 .site-header{
@@ -174,7 +166,7 @@ a:hover,a:focus{ text-decoration:underline; }
   display:block; width:auto !important; height:auto !important;
   max-height:var(--logo-h); max-width:clamp(120px,28vw,240px); object-fit:contain;
 }
-/* HTML-Attribute width/height dürfen bleiben – wir neutralisieren sie hier */
+/* HTML-Attribute width/height neutralisieren wir für Sicherheit */
 .site-header .nav-logo img[width],
 .site-header .nav-logo img[height]{ width:auto !important; height:auto !important; max-height:var(--logo-h) !important; }
 
@@ -212,11 +204,9 @@ a:hover,a:focus{ text-decoration:underline; }
 }
 
 /* ------- Off-Canvas (mobil, inspiriert CiberCuba) ------------------------
-   WICHTIG:
-   - Panel verwendet exakt das Seitenblau (--offcanvas-bg = --hero-bg)
-   - Menüeinträge werden VERTIKAL gelistet (eigene .nav-list-Regel im Panel),
-     unabhängig von der horizontalen Flex-Navi am Desktop.
-   - Im Panel nur vertikales Scrollen; X-Scroll wird unterdrückt.
+   - Panel nutzt --offcanvas-bg (= --hero-bg)
+   - Im Panel vertikale Liste (überschreibt .nav-list vom Desktop)
+   - Nur vertikales Scrollen (overflow-x: hidden)
 --------------------------------------------------------------------------- */
 
 /* Body-Scroll sperren, wenn Panel offen (per JS: body.offcanvas-open) */
@@ -267,9 +257,7 @@ body.offcanvas-open{ overflow:hidden; }
   overflow-x:hidden;
 }
 
-/* Liste im Panel */
-/* ACHTUNG: .nav-list ist am Desktop horizontal (flex); im Panel erzwingen wir
-   bewusst eine vertikale Liste. Das !important verhindert das Erben. */
+/* Liste im Panel – überschreibt Desktop-Flex */
 .offcanvas .nav-list{
   display:block !important;   /* vertikal */
   gap:0 !important;
@@ -507,4 +495,42 @@ body.offcanvas-open{ overflow:hidden; }
 @media (prefers-reduced-motion:reduce){
   html{ scroll-behavior:auto; }
   *{ animation:none !important; transition:none !important; }
+}
+
+/* ===========================================================
+   (HARDENING) Karten-Styles gegen Fremd-Resets (MUSS ganz am Ende stehen)
+   Hintergrund: z. B. screen.css/minimal-mistakes setzt .card/.box auf 0.
+   Diese Regeln erzwingen deine Design-Tokens für alle Kartentypen.
+   -----------------------------------------------------------
+   Tipp: Wenn du künftig neue Kartentypen einführst, hier ergänzen.
+   =========================================================== */
+
+/* 1) Rahmen, Hintergrund, Rundung, Schatten sicherstellen */
+.card,
+.cv-card,
+.cv-box,
+.accordion__panel,
+.contact-block,
+.breadcrumb,
+.tile {
+  background: #fff !important;                       /* Theme setzt oft transparent */
+  border: 1px solid var(--border) !important;        /* Theme: border:0 */
+  border-radius: var(--radius) !important;           /* Theme: radius:0 */
+  box-shadow: var(--shadow) !important;              /* Theme: none */
+}
+
+/* 2) Innenabstände absichern (häufig auf 0 gesetzt) */
+.card-body,
+.cv-box,
+.accordion__panel {
+  padding: 1rem !important;
+}
+
+/* 3) Bilder in Karten immer korrekt einpassen */
+.card img,
+.cv-card img,
+.tile img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
