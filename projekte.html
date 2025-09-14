@@ -14,28 +14,38 @@
 
   <!-- =========================================================
        (2) GLOBALER HEADER-PLATZHALTER
-       WICHTIG: In JEDER HTML-Seite exakt EIN Host-Element!
-       - site.js lädt hier dynamisch: includes/header.html
-       - Bitte KEINEN statischen Header mehr in Seiten duplizieren.
+       - Wird dynamisch durch site.js ersetzt
+       - Struktur in includes/header.html gepflegt
        ========================================================= -->
   <header id="site-header" class="site-header" role="banner"></header>
 
   <!-- =========================================================
-       (3) HERO-BLOCK
-       - Titelbereich mit Subline zur thematischen Einleitung
+       (3) HERO-BLOCK: Einleitung und Kontext
+       - Enthält Titel und erklärenden Subtext
        ========================================================= -->
   <section class="hero">
     <div class="hero-inner">
       <h1 class="headline">Digitale Verwaltung gestalten</h1>
       <p class="subhead">Von Daten zu Entscheidungen</p>
-      <p class="subhead">ITSM nach ITIL® 4 · KPIs · Datenmodelle/ETL · Dashboards · Prozessmanagement</p>
+      <p class="subhead">
+        <!-- Hinweis: Dieser Textblock enthält eine umfassende Erklärung zur Methodenintegration -->
+        Digitale Transformation gelingt durch die Kombination von ITIL v4, Business Intelligence Dashboards, Scrum, ITSM, BPMN 2.0 und UML, um agile, transparente und effiziente IT-Organisationen zu schaffen.
+        <br><br>
+        <strong>ITIL v4:</strong> bringt Agilität, DevOps und Lean-IT ins ITSM – mit Fokus auf Kundennutzen und schnelle Anpassung an Veränderungen.
+        <br>
+        <strong>BI-Dashboards:</strong> visualisieren KPIs in Echtzeit und unterstützen datenbasierte Entscheidungen.
+        <br>
+        <strong>Scrum:</strong> ermöglicht iterative, flexible Projektumsetzung.
+        <br>
+        <strong>ITSM & BPMN 2.0:</strong> standardisieren und automatisieren Prozesse.
+        <br>
+        <strong>UML:</strong> hilft bei der Dokumentation und Planung komplexer IT-Strukturen.
+      </p>
     </div>
   </section>
 
   <!-- =========================================================
-       (4) LEISTUNGSSCHWERPUNKTE / DASHBOARD-KARTEN
-       - Zeigt drei zentrale Power BI Dashboards mit Beschreibung
-       - Bilder sind per data-full zoombar (siehe site.js)
+       (4) DASHBOARDS: Leistungsbeispiele (mit Zoom-Funktion)
        ========================================================= -->
   <section id="projekte" class="section container">
     <div class="sec-head">
@@ -44,43 +54,37 @@
     </div>
 
     <div class="grid">
-      <!-- Karte 1 -->
+      <!-- Dashboard 1 -->
       <article class="card">
         <img src="assets/images/projekte/ITIL_Monitoring.png" alt="ITIL Monitoring – Continual Improvement Dashboard" loading="lazy" data-full="assets/images/projekte/ITIL_Monitoring.png" />
         <div class="card-body">
           <h4>ITIL® Monitoring mit Continual Improvement</h4>
-          <p>Das Dashboard zeigt Reifegrade verschiedener ITIL® 4 Practices. Über KPI - Ampeln (Rot/Gelb/Grün) und Priorisierung nach Phasen (Service Transition, Service 
-           Design, Service Operation usw.) lassen sich kritische Handlungsfelder und Optimierungspotenziale faktenbasiert identifizieren.</p>
+          <p>Reifegrade und KPI-Ampeln nach ITIL v4 – klar priorisierte Handlungsempfehlungen durch visuelles Monitoring.</p>
         </div>
       </article>
 
-      <!-- Karte 2 -->
+      <!-- Dashboard 2 -->
       <article class="card">
         <img src="assets/images/projekte/KPIs_Dashboard.png" alt="KPI-Dashboard mit ITSM-Kennzahlen" loading="lazy" data-full="assets/images/projekte/KPIs_Dashboard.png" />
         <div class="card-body">
           <h4>KPI‑Design, Reporting & ITSM‑Controlling</h4>
-          <p>Dieses Dashboard wurde mit Power BI zu demonstrativen Zwecken erstellt und visualisiert zentrale ITSM - Kennzahlen nach ITIL® 4. Es kombiniert 
-           KPI - Ampeln, Prozesskennzahlen (z. B. Tickets, Anrufe, Durchlaufzeiten) und eine Service - Performance - Analyse, die Stärken und Optimierungspotenziale sichtbar 
-           macht. So wird eine komplexe Datenlage auf einen Blick erfassbar und bildet die Grundlage für faktenbasierte Managemententscheidungen.</p>
+          <p>Dashboard zeigt Performance und Durchlaufzeiten – Grundlage für faktenbasierte Steuerung im Service Management.</p>
         </div>
       </article>
 
-      <!-- Karte 3 -->
+      <!-- Dashboard 3 -->
       <article class="card">
         <img src="assets/images/projekte/IT32ReferatKapa.png" alt="Kapazitäts-Dashboard" loading="lazy" data-full="assets/images/projekte/IT32ReferatKapa.png" />
         <div class="card-body">
           <h4>Kapazitäts‑Dashboard</h4>
-          <p>Dieses Dashboard zeigt, wie die Kapazitäten einer bestimmten IT - Abteilung mit hilfe von Power BI transparent dargestellt werden können. Es 
-          zeigt Teamverteilung, Aufgabenstatus und Kapazitätstage/-stunden pro Story. Damit erhält das Management einen klaren Überblick über Auslastung, Fortschritt 
-          und Planungssicherheit, eine Grundlage für steuerbare Ressourcenplanung und faktenbasierte Entscheidungen im ITSM.</p>
+          <p>Transparente Darstellung von Auslastung, Teamverteilung und Story-Kapazitäten – Planungssicherheit für ITSM.</p>
         </div>
       </article>
     </div>
   </section>
 
   <!-- =========================================================
-       (5) DATENMODELL (Power BI)
-       - Bild und Beschreibung des zugrundeliegenden Datenmodells
+       (5) DATENMODELL (zentraler Architekturüberblick)
        ========================================================= -->
   <section class="section" id="architektur">
     <div class="sec-head">
@@ -92,8 +96,8 @@
         <article class="card">
           <img src="assets/images/projekte/Datenmodell_2.png" alt="Power BI Datenmodell" loading="lazy" data-full="assets/images/projekte/Datenmodell_2.png"/>
           <div class="card-body stack">
-            <h4>Steuerung und Reporting von ITSM-Daten im Power BI Datenmodell</h4>
-            <p>Power BI Datenmodell für ITSM – verknüpft Incidents, Changes, Assets & SLAs über eine zentrale Datumstabelle und liefert die Basis für belastbare KPIs und Dashboards.</p>
+            <h4>ITSM-Datensteuerung mit Power BI</h4>
+            <p>Zentrale Datumstabelle verbindet alle ITSM-Daten – Grundlage für KPIs, SLAs, Visualisierungen.</p>
           </div>
         </article>
       </div>
@@ -101,8 +105,7 @@
   </section>
 
   <!-- =========================================================
-       (6) GPT-AGENTEN
-       - Drei direkt verlinkte ChatGPT-Personas
+       (6) GPT-AGENTEN (Verlinkte Tools / Personas)
        ========================================================= -->
   <section id="ki-agents" class="section container" aria-labelledby="kiTitle">
     <div class="sec-head">
@@ -111,42 +114,35 @@
     </div>
 
     <div class="grid">
-      <!-- Agent 1 -->
+      <!-- GPT 1 -->
       <article class="card">
         <a href="https://chatgpt.com/g/g-UYiBEofKD-itsm-standards-consultant" target="_blank" rel="noopener">
           <img src="assets/images/projekte/GPT_ITSM_StandardsConsultant.png" alt="ITSM‑Standards Consultant" loading="lazy" />
           <div class="card-body">
             <h4>ITSM‑Standards Consultant</h4>
-            <p>Ich bin ein virtueller Berater für IT – Service – Management (ITSM), spezialisiert auf die Implementierung, Optimierung und unternehmensweite 
-            Einführung von ITIL® 4, ISO/IEC 20000 und COBIT.
-            Mein Ziel ist es, IT – Abteilungen und Führungskräfte zu begleiten, wenn sie ihre Organisation von klassischen IT – Betriebsstrukturen hin zu einem 
-            ganzheitlichen, wertorientierten Service Management entwickeln.</p>
+            <p>Beratung & Framework-Wissen zu ITIL® 4, COBIT, ISO/IEC 20000 – von Strategie bis Betrieb.</p>
           </div>
         </a>
       </article>
 
-      <!-- Agent 2 -->
+      <!-- GPT 2 -->
       <article class="card">
         <a href="https://chatgpt.com/g/g-6734f04e060c8190a7fadc8c552b0e6e-modellierung-betrieblichen-informationssystemen" target="_blank" rel="noopener">
           <img src="assets/images/projekte/GPT_ModellierungBetrieblicheInformationssystemen.png" alt="Modellierung betrieblicher Informationssysteme" loading="lazy" />
           <div class="card-body">
             <h4>Modellierung betrieblicher Informationssysteme</h4>
-            <p>Ich begleite dich als Assistent und Berater in allen Fragen rund um IT – Service – Management (ITSM), Prozessmodellierung und Systemarchitekturen.
-            Meine Rolle ist es, dich bei der Analyse, Visualisierung und Optimierung von ITSM – Prozessen zu unterstützen, dir Fachwissen nach ITIL® 4 praxisnah zu 
-            vermitteln und dir bei konzeptionellen wie technischen Aufgaben als verlässlicher Partner zur Seite zu stehen.</p>
+            <p>Prozessanalyse und Architekturberatung mit BPMN, UML und ITIL® 4-Praxis.</p>
           </div>
         </a>
       </article>
 
-      <!-- Agent 3 -->
+      <!-- GPT 3 -->
       <article class="card">
         <a href="https://chatgpt.com/g/g-68150f83fda081919d979c8418039ee5-dashboard-design" target="_blank" rel="noopener">
           <img src="assets/images/projekte/GPT_DashboardDesingn.png" alt="Dashboard Design" loading="lazy" />
           <div class="card-body">
             <h4>Dashboard Design</h4>
-            <p>Ich bin dein virtueller Berater, Begleiter und Umsetzungsassistent für alle Themen rund um Power BI, ITSM nach ITIL® 4
-            und agile Steuerung. Gemeinsam entwickeln wir verständliche, effiziente und managementtaugliche Dashboards – Schritt für Schritt, immer 
-            praxisnah und mit Fokus auf echten Mehrwert.</p>
+            <p>Beratung zu KPI-Visualisierung, BI-Strukturierung und barrierearmer Umsetzung.</p>
           </div>
         </a>
       </article>
@@ -154,8 +150,8 @@
   </section>
 
   <!-- =========================================================
-       (7) KONTAKTBEREICH
-       - Name, E-Mail (via JS) + Noscript-Fallback
+       (7) KONTAKTSEKTION
+       - Semantisch mit ARIA & Fallback via <noscript>
        ========================================================= -->
   <section class="contact-block" aria-labelledby="kontaktTitle">
     <div class="contact-inner">
@@ -173,8 +169,8 @@
   </section>
 
   <!-- =========================================================
-       (8) FOOTER-INCLUDE (wird via site.js geladen)
-       - Container bleibt leer; eigentlicher Footer in footer.html
+       (8) DYNAMISCH GELADENER FOOTER
+       - Inhalt kommt aus includes/footer.html (via site.js)
        ========================================================= -->
   <div id="site-footer" class="site-footer-host"></div>
 
