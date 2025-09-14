@@ -5,16 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projekte & Dashboards – Doniman F. Peña Parra</title>
 
-  <!-- Externe Styles & JS -->
+  <!-- (1) Globale Styles und Lightbox/Interaktion -->
   <link rel="stylesheet" href="assets/css/global.css" />
   <script src="assets/js/site.js" defer></script>
 </head>
+
 <body>
 
-  <!-- Header einfügen -->
+  <!-- =========================================================
+       (2) HEADER-INCLUDE (modular eingebunden per SSI)
+       - Erwartet Datei unter: includes/header.html
+       - Enthält Logo, Navigation, ggf. Skiplinks
+       ========================================================= -->
   <!--#include file="includes/header.html" -->
 
-  <!-- HERO-Bereich -->
+  <!-- =========================================================
+       (3) HERO-BLOCK: Visueller Einstieg
+       - Kurze Einführung zum Thema der Seite
+       - Großformatiger Titel + Subheadlines
+       ========================================================= -->
   <section class="hero">
     <div class="hero-inner">
       <h1 class="headline">Digitale Verwaltung gestalten</h1>
@@ -23,7 +32,11 @@
     </div>
   </section>
 
-  <!-- Leistungsschwerpunkte -->
+  <!-- =========================================================
+       (4) LEISTUNGSSCHWERPUNKTE
+       - Drei Power BI-Dashboards
+       - Zoom-Lightbox über data-full + site.js
+       ========================================================= -->
   <section id="projekte" class="section container">
     <div class="sec-head">
       <span class="sec-dot" aria-hidden="true"></span>
@@ -31,7 +44,7 @@
     </div>
 
     <div class="grid">
-      <!-- Card 1 -->
+      <!-- Karte 1: ITIL Monitoring -->
       <article class="card">
         <img src="assets/images/PowerBI/CIM.png" alt="ITIL Monitoring – Continual Improvement Dashboard mit Reifegrad, KPI-Ampeln und Priorisierung" loading="lazy" data-full="assets/images/PowerBI/CIM.png" />
         <div class="card-body">
@@ -40,7 +53,7 @@
         </div>
       </article>
 
-      <!-- Card 2 -->
+      <!-- Karte 2: KPI-Controlling -->
       <article class="card">
         <img src="assets/images/PowerBI/KPIs_Dashboard.png" alt="KPI-Dashboard – Tickets, Changes, IT-Assets und Vertragsvolumen, inklusive Performance-Übersicht" loading="lazy" data-full="assets/images/PowerBI/KPIs_Dashboard.png" />
         <div class="card-body">
@@ -49,7 +62,7 @@
         </div>
       </article>
 
-      <!-- Card 3 -->
+      <!-- Karte 3: Kapazitätsübersicht -->
       <article class="card">
         <img src="assets/images/PowerBI/ReferatKapasi.png" alt="Kapazitäts-Dashboard – Auslastung, Story-Bearbeitung, Kapazitätstage und -stunden je Team" loading="lazy" data-full="assets/images/PowerBI/ReferatKapasi.png" />
         <div class="card-body">
@@ -60,7 +73,10 @@
     </div>
   </section>
 
-  <!-- Datenmodell -->
+  <!-- =========================================================
+       (5) DATENMODELL-VISUALISIERUNG
+       - Zentriert platzierte Power BI-Grafik
+       ========================================================= -->
   <section class="section" id="architektur">
     <div class="sec-head">
       <span class="sec-dot" aria-hidden="true"></span>
@@ -79,7 +95,11 @@
     </div>
   </section>
 
-  <!-- GPT-KI-Agenten -->
+  <!-- =========================================================
+       (6) GPT-KI-AGENTEN
+       - Drei interaktive Links zu spezifischen ChatGPT-Instanzen
+       - Kein Zoom, da direkt verlinkt
+       ========================================================= -->
   <section id="ki-agents" class="section container" aria-labelledby="kiTitle">
     <div class="sec-head">
       <span class="sec-dot" aria-hidden="true"></span>
@@ -87,7 +107,7 @@
     </div>
 
     <div class="grid">
-      <!-- Agent 1 -->
+      <!-- GPT Agent 1 -->
       <article class="card">
         <a href="https://chatgpt.com/g/g-UYiBEofKD-itsm-standards-consultant" target="_blank" rel="noopener">
           <img src="assets/images/GPT_ITSM_StandardsConsultant.png" alt="ITSM‑Standards Consultant" loading="lazy" />
@@ -98,7 +118,7 @@
         </a>
       </article>
 
-      <!-- Agent 2 -->
+      <!-- GPT Agent 2 -->
       <article class="card">
         <a href="https://chatgpt.com/g/g-6734f04e060c8190a7fadc8c552b0e6e-modellierung-betrieblichen-informationssystemen" target="_blank" rel="noopener">
           <img src="assets/images/GPT_ModellierungBetrieblicheInformationssystemen.png" alt="Modellierung betrieblicher Informationssysteme" loading="lazy" />
@@ -109,7 +129,7 @@
         </a>
       </article>
 
-      <!-- Agent 3 -->
+      <!-- GPT Agent 3 -->
       <article class="card">
         <a href="https://chatgpt.com/g/g-68150f83fda081919d979c8418039ee5-dashboard-design" target="_blank" rel="noopener">
           <img src="assets/images/GPT_DashboardDesingn.png" alt="Dashboard Design" loading="lazy" />
@@ -122,7 +142,11 @@
     </div>
   </section>
 
-  <!-- Kontaktblock -->
+  <!-- =========================================================
+       (7) KONTAKTBLOCK
+       - Direkt vor dem Footer
+       - Mit ARIA und noscript-E-Mail
+       ========================================================= -->
   <section class="contact-block" aria-labelledby="kontaktTitle">
     <div class="contact-inner">
       <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
@@ -138,8 +162,13 @@
     </div>
   </section>
 
-  <!-- Footer einfügen -->
-  <!--#include file="includes/footer.html" -->
+  <!-- =========================================================
+       (8) GLOBALER FOOTER-PLATZHALTER
+       - site.js lädt hier dynamisch: includes/footer.html
+       - Container als neutrales Element belassen (kein <footer>),
+         da das Include selbst <footer> enthält.
+       ========================================================= -->
+  <div id="site-footer" class="site-footer-host"></div>
 
 </body>
 </html>
