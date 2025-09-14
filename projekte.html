@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projekte & Dashboards – Doniman F. Peña Parra</title>
 
-  <!-- (1) Globale Styles und Lightbox/Interaktion -->
+  <!-- (1) Globale Styles und Interaktivität -->
   <link rel="stylesheet" href="assets/css/global.css" />
   <script src="assets/js/site.js" defer></script>
 </head>
@@ -13,16 +13,15 @@
 <body>
 
   <!-- =========================================================
-       (2) HEADER-INCLUDE (modular eingebunden per SSI)
-       - Erwartet Datei unter: includes/header.html
-       - Enthält Logo, Navigation, ggf. Skiplinks
+       (2) HEADER-BEREICH via Server Side Include (SSI)
+       - Datei: includes/header.html
+       - Enthält Logo, Burger-Menü und Navigation
        ========================================================= -->
   <!--#include file="includes/header.html" -->
 
   <!-- =========================================================
-       (3) HERO-BLOCK: Visueller Einstieg
-       - Kurze Einführung zum Thema der Seite
-       - Großformatiger Titel + Subheadlines
+       (3) HERO-BLOCK
+       - Titelbereich mit Subline zur thematischen Einleitung
        ========================================================= -->
   <section class="hero">
     <div class="hero-inner">
@@ -33,9 +32,9 @@
   </section>
 
   <!-- =========================================================
-       (4) LEISTUNGSSCHWERPUNKTE
-       - Drei Power BI-Dashboards
-       - Zoom-Lightbox über data-full + site.js
+       (4) LEISTUNGSSCHWERPUNKTE / DASHBOARD-KARTEN
+       - Zeigt drei zentrale Power BI Dashboards mit Beschreibung
+       - Bilder sind per data-full zoombar (siehe site.js)
        ========================================================= -->
   <section id="projekte" class="section container">
     <div class="sec-head">
@@ -44,38 +43,38 @@
     </div>
 
     <div class="grid">
-      <!-- Karte 1: ITIL Monitoring -->
+      <!-- Karte 1 -->
       <article class="card">
-        <img src="assets/images/PowerBI/CIM.png" alt="ITIL Monitoring – Continual Improvement Dashboard mit Reifegrad, KPI-Ampeln und Priorisierung" loading="lazy" data-full="assets/images/PowerBI/CIM.png" />
+        <img src="assets/images/PowerBI/CIM.png" alt="ITIL Monitoring – Continual Improvement Dashboard" loading="lazy" data-full="assets/images/PowerBI/CIM.png" />
         <div class="card-body">
           <h4>ITIL® Monitoring mit Continual Improvement</h4>
-          <p>Das Dashboard zeigt Reifegrade verschiedener ITIL® 4 Practices. Über KPI-Ampeln (Rot/Gelb/Grün) und Priorisierung nach Phasen lassen sich kritische Handlungsfelder faktenbasiert identifizieren.</p>
+          <p>Das Dashboard zeigt Reifegrade verschiedener ITIL® 4 Practices. KPI-Ampeln und Priorisierung nach Phasen helfen bei der Identifikation von Handlungsfeldern.</p>
         </div>
       </article>
 
-      <!-- Karte 2: KPI-Controlling -->
+      <!-- Karte 2 -->
       <article class="card">
-        <img src="assets/images/PowerBI/KPIs_Dashboard.png" alt="KPI-Dashboard – Tickets, Changes, IT-Assets und Vertragsvolumen, inklusive Performance-Übersicht" loading="lazy" data-full="assets/images/PowerBI/KPIs_Dashboard.png" />
+        <img src="assets/images/PowerBI/KPIs_Dashboard.png" alt="KPI-Dashboard mit ITSM-Kennzahlen" loading="lazy" data-full="assets/images/PowerBI/KPIs_Dashboard.png" />
         <div class="card-body">
           <h4>KPI‑Design, Reporting & ITSM‑Controlling</h4>
-          <p>Visualisiert zentrale ITSM-Kennzahlen nach ITIL® 4. Kombination aus KPI-Ampeln, Durchlaufzeiten & Performance-Analyse für fundierte Managemententscheidungen.</p>
+          <p>Visualisierung zentraler ITSM-Kennzahlen: KPI-Ampeln, Durchlaufzeiten und Performance-Analysen für Managemententscheidungen.</p>
         </div>
       </article>
 
-      <!-- Karte 3: Kapazitätsübersicht -->
+      <!-- Karte 3 -->
       <article class="card">
-        <img src="assets/images/PowerBI/ReferatKapasi.png" alt="Kapazitäts-Dashboard – Auslastung, Story-Bearbeitung, Kapazitätstage und -stunden je Team" loading="lazy" data-full="assets/images/PowerBI/ReferatKapasi.png" />
+        <img src="assets/images/PowerBI/ReferatKapasi.png" alt="Kapazitäts-Dashboard" loading="lazy" data-full="assets/images/PowerBI/ReferatKapasi.png" />
         <div class="card-body">
           <h4>Kapazitäts‑Dashboard</h4>
-          <p>Transparente Darstellung der Teamkapazitäten: Auslastung, Aufgabenstatus und Planungssicherheit für ITSM-Ressourcensteuerung.</p>
+          <p>Zeigt Auslastung, Aufgabenstatus und Planungssicherheit für die Ressourcensteuerung in der ITSM-Organisation.</p>
         </div>
       </article>
     </div>
   </section>
 
   <!-- =========================================================
-       (5) DATENMODELL-VISUALISIERUNG
-       - Zentriert platzierte Power BI-Grafik
+       (5) DATENMODELL (Power BI)
+       - Bild und Beschreibung des zugrundeliegenden Datenmodells
        ========================================================= -->
   <section class="section" id="architektur">
     <div class="sec-head">
@@ -85,10 +84,10 @@
     <div class="center-wrap centered">
       <div class="grid-1-centered">
         <article class="card">
-          <img src="assets/images/PowerBI/Datenmodell.png" alt="Datenmodell" loading="lazy" data-full="assets/images/PowerBI/Datenmodell.png" />
+          <img src="assets/images/PowerBI/Datenmodell.png" alt="Power BI Datenmodell" loading="lazy" data-full="assets/images/PowerBI/Datenmodell.png" />
           <div class="card-body stack">
             <h4>Steuerung und Reporting von ITSM-Daten im Power BI Datenmodell</h4>
-            <p>Verknüpft Incidents, Changes, Assets & SLAs über zentrale Datumstabelle. Basis für belastbare KPIs und Dashboards.</p>
+            <p>Verknüpfung von Incidents, Changes, Assets & SLAs via zentrale Datumstabelle. Grundlage für saubere KPIs.</p>
           </div>
         </article>
       </div>
@@ -96,9 +95,8 @@
   </section>
 
   <!-- =========================================================
-       (6) GPT-KI-AGENTEN
-       - Drei interaktive Links zu spezifischen ChatGPT-Instanzen
-       - Kein Zoom, da direkt verlinkt
+       (6) GPT-AGENTEN
+       - Drei direkt verlinkte ChatGPT-Personas
        ========================================================= -->
   <section id="ki-agents" class="section container" aria-labelledby="kiTitle">
     <div class="sec-head">
@@ -107,35 +105,35 @@
     </div>
 
     <div class="grid">
-      <!-- GPT Agent 1 -->
+      <!-- Agent 1 -->
       <article class="card">
         <a href="https://chatgpt.com/g/g-UYiBEofKD-itsm-standards-consultant" target="_blank" rel="noopener">
           <img src="assets/images/GPT_ITSM_StandardsConsultant.png" alt="ITSM‑Standards Consultant" loading="lazy" />
           <div class="card-body">
             <h4>ITSM‑Standards Consultant</h4>
-            <p>Beratung zu ITIL® 4, ISO/IEC 20000 und COBIT – von Strategie bis Betrieb.</p>
+            <p>Beratung zu ITIL® 4, ISO/IEC 20000 und COBIT.</p>
           </div>
         </a>
       </article>
 
-      <!-- GPT Agent 2 -->
+      <!-- Agent 2 -->
       <article class="card">
         <a href="https://chatgpt.com/g/g-6734f04e060c8190a7fadc8c552b0e6e-modellierung-betrieblichen-informationssystemen" target="_blank" rel="noopener">
           <img src="assets/images/GPT_ModellierungBetrieblicheInformationssystemen.png" alt="Modellierung betrieblicher Informationssysteme" loading="lazy" />
           <div class="card-body">
             <h4>Modellierung betrieblicher Informationssysteme</h4>
-            <p>Beratung zu ITSM, Systemarchitekturen, Prozessmodellierung & Praxis-Knowhow nach ITIL® 4.</p>
+            <p>Beratung zu ITSM, Systemarchitektur & Prozessmodellierung.</p>
           </div>
         </a>
       </article>
 
-      <!-- GPT Agent 3 -->
+      <!-- Agent 3 -->
       <article class="card">
         <a href="https://chatgpt.com/g/g-68150f83fda081919d979c8418039ee5-dashboard-design" target="_blank" rel="noopener">
           <img src="assets/images/GPT_DashboardDesingn.png" alt="Dashboard Design" loading="lazy" />
           <div class="card-body">
             <h4>Dashboard Design</h4>
-            <p>Virtueller Assistent für Power BI, KPI-Design & barrierearme BI-Visualisierungen.</p>
+            <p>Hilfe bei Power BI, KPI-Design & barrierefreier Visualisierung.</p>
           </div>
         </a>
       </article>
@@ -143,9 +141,8 @@
   </section>
 
   <!-- =========================================================
-       (7) KONTAKTBLOCK
-       - Direkt vor dem Footer
-       - Mit ARIA und noscript-E-Mail
+       (7) KONTAKTBEREICH
+       - Name, E-Mail (via JS) + Noscript-Fallback
        ========================================================= -->
   <section class="contact-block" aria-labelledby="kontaktTitle">
     <div class="contact-inner">
@@ -163,10 +160,8 @@
   </section>
 
   <!-- =========================================================
-       (8) GLOBALER FOOTER-PLATZHALTER
-       - site.js lädt hier dynamisch: includes/footer.html
-       - Container als neutrales Element belassen (kein <footer>),
-         da das Include selbst <footer> enthält.
+       (8) FOOTER-INCLUDE (wird via site.js geladen)
+       - Container bleibt leer; eigentlicher Footer in footer.html
        ========================================================= -->
   <div id="site-footer" class="site-footer-host"></div>
 
