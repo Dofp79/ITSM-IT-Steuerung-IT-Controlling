@@ -13,11 +13,12 @@
 <body>
 
   <!-- =========================================================
-       (2) HEADER-BEREICH via Server Side Include (SSI)
-       - Datei: includes/header.html
-       - Enthält Logo, Burger-Menü und Navigation
+       (2) GLOBALER HEADER-PLATZHALTER
+       WICHTIG: In JEDER HTML-Seite exakt EIN Host-Element!
+       - site.js lädt hier dynamisch: includes/header.html
+       - Bitte KEINEN statischen Header mehr in Seiten duplizieren.
        ========================================================= -->
-  <!--#include file="includes/header.html" -->
+  <header id="site-header" class="site-header" role="banner"></header>
 
   <!-- =========================================================
        (3) HERO-BLOCK
