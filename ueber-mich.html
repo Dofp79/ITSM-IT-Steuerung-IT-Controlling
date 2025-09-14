@@ -31,12 +31,31 @@
   <link rel="stylesheet" href="assets/css/global.css" />
 
   <!-- =========================================================
-       (2b) MINI-FALLBACK-STYLES (nur falls global.css nicht greift)
-       - Sichert Button-Optik & Aktionen ab.
-       - Kann entfernt werden, sobald alles stabil ist.
+       (2b) SEITEN-LOKALE FIXES/ERGÄNZUNGEN
+       - Ziel: Korrigiert die globale „Zentrierung" der Karten aus global.css,
+               damit CV-Einträge wieder linksbündig lesbar sind.
+       - Scoping über präzise Selektoren + !important (überstimmt Hardening-Regeln).
        ========================================================= -->
   <style>
-    /* Buttons – Fallback */
+    /* --- CV-Karten wieder als „normale“ Blöcke darstellen (nicht zentriert) --- */
+    .timeline .cv-card{
+      display:block !important;             /* statt display:flex aus global.css */
+      text-align:left !important;           /* Fließtext/Listen linksbündig */
+      padding:1rem 1.25rem !important;      /* moderates Padding */
+    }
+    .timeline .cv-card .cv-title{
+      text-align:center;                    /* Wunsch: Titel bleibt zentriert */
+      margin:0 0 .35rem;
+    }
+    .timeline .cv-card .cv-meta{
+      text-align:center;                    /* Firma/Zeitraum unter dem Titel */
+      color:#54616e; margin:0 0 .5rem; font-size:.95rem;
+    }
+    .timeline .cv-card .cv-list{
+      margin:0; padding-left:1.15rem; list-style:disc; line-height:1.6;
+    }
+
+    /* --- Buttons – Mini-Fallback (falls global.css mal nicht lädt) --- */
     .cv-actions{ display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1rem; }
     .btn{
       display:inline-block; padding:.6rem .9rem; border-radius:.7rem;
@@ -46,6 +65,9 @@
     .btn:hover,.btn:focus{ filter:brightness(1.05); text-decoration:none; }
     .btn--ghost{ background:#fff; color:#0e3659; border:1px solid #e3e6e8; }
     .btn--ghost:hover,.btn--ghost:focus{ background:#f5f7f8; }
+
+    /* --- Mobile Feinheiten --- */
+    @media (max-width:700px){ .cv-actions{ justify-content:center; } }
   </style>
 </head>
 
@@ -128,7 +150,7 @@
         <h3 class="cv-block-title">Berufserfahrung</h3>
 
         <div class="timeline" aria-label="Berufserfahrung">
-          <!-- Karte 1 -->
+          <!-- Karte 1: Aktuelle Stelle -->
           <article class="cv-card">
             <!-- Titel zentriert, Meta unter dem Titel (zentriert), Liste linksbündig -->
             <h3 class="cv-title"><strong>ITSM – Prozessadministrator</strong></h3>
@@ -146,8 +168,7 @@
             </ul>
           </article>
 
-
-          <!-- Karte 2 -->
+          <!-- Karte 2: Praktikum -->
           <article class="cv-card">
             <h3 class="cv-title">Praktikum IT&nbsp;322 – ITIL Management</h3>
             <p class="cv-meta">Polizei Hamburg · 11/2022 – 01/2024</p>
@@ -162,9 +183,9 @@
             </ul>
           </article>
 
-          <!-- Karte 3 -->
+          <!-- Karte 3: Ausbildung -->
           <article class="cv-card">
-            <h4 class="cv-title">Fachinformatiker Anwendungsentwicklung</h4>
+            <h3 class="cv-title">Fachinformatiker Anwendungsentwicklung</h3>
             <div class="tags" aria-label="Ausbildungsinhalte">
               <span class="tag">Projektmanagement</span>
               <span class="tag">OOP</span>
@@ -177,9 +198,9 @@
             </div>
           </article>
 
-          <!-- Karte 4 -->
+          <!-- Karte 4: Langjährige Führungserfahrung -->
           <article class="cv-card">
-            <h4 class="cv-title">Mehr als 20 Jahre Führungs- &amp; Organisationserfahrung im Gastronomiebereich</h4>
+            <h3 class="cv-title">Mehr als 20 Jahre Führungs- &amp; Organisationserfahrung im Gastronomiebereich</h3>
             <div class="tags" aria-label="Schwerpunkte Gastronomie">
               <span class="tag">Teamführung &amp; Einsatzplanung</span>
               <span class="tag">Wareneinsatz/Budget</span>
