@@ -5,35 +5,29 @@
      Zweck
      - Sticky Header mit Desktop-Navigation
      - Mobiles Off-Canvas-Menü (links einschiebend, wie CiberCuba)
-     - A11y: sauberes Rollen-/ARIA-Setup, ESC/Overlay schließt, Fokus-Return
-     - Keine Inline-Styles/-Scripts: Styling in assets/css/global.css,
-       Verhalten in assets/js/site.js (bereits vorhanden).
-     ----------------------------------------------------------------------
-     WICHTIG
-     - Dieses Snippet wird von site.js in <header id="site-header"> injiziert.
-     - Bitte KEINEN zweiten Header im Seiten-HTML anlegen.
+     - A11y: ARIA korrekt, ESC/Overlay schließt, Fokus-Return
+     Architektur
+     - Dieses Snippet wird via site.js in <header id="site-header"> eingefügt.
+     - KEIN <link rel="stylesheet"> hier drin! (Styles gehören in <head>)
      - site.js erwartet:
-         • #primary-nav[data-collapsible]     (für Burger/Collapsible)
-         • .nav-toggle                        (Burger-Button)
-         • .nav-list a[...]                   (für aktiven Link)
-         • [data-offcanvas] + Trigger/Close   (Off-Canvas Steuerung)
+         • #primary-nav[data-collapsible]  (für Burger/Collapsible)
+         • .nav-toggle                     (Burger-Button)
+         • .nav-list a[...]                (aktive Links markieren)
+         • [data-offcanvas]*               (Off-Canvas Steuerung)
      ====================================================================== -->
-
 <header class="site-header sticky" role="banner">
-  <!-- (A) dünne Markenleiste (optional; Farbe in :root --brand-red) -->
+  <!-- (A) dünne Markenleiste (optional; Farbe: --brand-red) -->
   <div class="brand-bar" aria-hidden="true"></div>
 
   <!-- (B) Kopfzeile: Logo • Desktop-Navi • Burger -->
   <div class="container nav-container">
-    <!-- Logo → Startseite. Bildregeln (max-height etc.) liegen in global.css -->
+    <!-- Logo → Startseite. Bild-Constraints (max-height etc.) in global.css -->
     <a class="nav-logo" href="index.html" aria-label="Startseite">
-      <img
-        src="assets/DoniLogo_1.0.0.png"
-        alt="Logo Doniman F. Peña Parra">
+      <img src="assets/DoniLogo_1.0.0.png" alt="Logo Doniman F. Peña Parra">
     </a>
 
-    <!-- Desktop-Navigation (>= 960px sichtbar) -->
-    <!-- HINWEIS: .nav-list bleibt für active-link-Markierung durch site.js -->
+    <!-- Desktop-Navigation (>= 960px sichtbar)
+         HINWEIS: .nav-list bleibt, damit site.js active-link setzen kann -->
     <nav id="primary-nav" class="nav-main" aria-label="Hauptnavigation" data-collapsible>
       <ul class="nav-list">
         <li><a href="index.html">Start</a></li>
@@ -44,7 +38,7 @@
       </ul>
     </nav>
 
-    <!-- Burger (nur < 960px sichtbar). site.js liest aria-expanded & toggelt. -->
+    <!-- Burger (nur < 960px sichtbar). site.js toggelt aria-expanded und Panel -->
     <button
       class="nav-toggle"
       type="button"
@@ -52,17 +46,15 @@
       aria-expanded="false"
       data-offcanvas-trigger>
       <span class="visually-hidden">Menü öffnen</span>
-      <!-- 3 Balken; reine Deko → aria-hidden -->
       <span class="nav-toggle__bars" aria-hidden="true"></span>
     </button>
   </div>
 
-  <!-- (C) Off-Canvas-Menü (mobil) ------------------------------------------------
-       • role="dialog" + aria-modal="true"    → Screenreader verstehen „Modal“
-       • aria-hidden="true" (geschlossen)     → wird durch JS umgeschaltet
-       • tabindex="-1"                        → Fokus beim Öffnen hierhin
-       • data-offcanvas*                      → JS-Hooks (site.js)
-       ----------------------------------------------------------------------- -->
+  <!-- (C) Off-Canvas-Menü (mobil)
+       role="dialog" + aria-modal → Screenreader „Modal“
+       aria-hidden="true"         → wird via JS gesetzt/entfernt
+       tabindex="-1"              → Fokusziel beim Öffnen
+       data-offcanvas*            → JS-Hooks -->
   <aside
     id="mobileMenu"
     class="offcanvas"
@@ -72,10 +64,10 @@
     aria-hidden="true"
     tabindex="-1"
     data-offcanvas>
-    <!-- Overlay: Klick schließt (site.js hört auf [data-offcanvas-close]) -->
+    <!-- Overlay: Klick schließt -->
     <div class="offcanvas__overlay" data-offcanvas-close aria-hidden="true" tabindex="-1"></div>
 
-    <!-- Panel: schiebt von links ein -->
+    <!-- Panel: schiebt von links ein; Hintergrundfarbe = --offcanvas-bg -->
     <div class="offcanvas__panel" role="document">
       <div class="offcanvas__head">
         <h2 id="mobileMenuTitle" class="offcanvas__title">Menü</h2>
@@ -86,7 +78,8 @@
           aria-label="Menü schließen">×</button>
       </div>
 
-      <!-- Große, gut tappbare Liste. Klasse nav-list für active-Markierung. -->
+      <!-- Große, gut tappbare Liste. .nav-list wichtig für active-Markierung.
+           CSS erzwingt hier vertikale Liste, unabhängig von Desktop-Flex. -->
       <nav class="offcanvas__nav" aria-label="Mobile Navigation">
         <ul class="offcanvas__list nav-list">
           <li><a href="index.html">Start</a></li>
@@ -99,9 +92,7 @@
     </div>
   </aside>
 
-  <!-- (D) <noscript>-Fallback: einfache, horizontale Navi ohne JS -------------
-       Wird nur angezeigt, wenn JS deaktiviert ist. Styles kommen aus global.css.
-       ----------------------------------------------------------------------- -->
+  <!-- (D) <noscript>-Fallback: einfache Navigation, wenn JS aus ist -->
   <noscript>
     <div class="container nav-container">
       <nav class="nav-main" aria-label="Hauptnavigation (Fallback)">
