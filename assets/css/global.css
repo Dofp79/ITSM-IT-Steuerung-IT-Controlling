@@ -329,11 +329,22 @@ body.offcanvas-open{ overflow:hidden; }
 
 
 /* ===========================================================
-   9) CARDS – Raster
+   KARTEN-INHALTE ZENTRIEREN
+   -----------------------------------------------------------
+   Diese Styles sorgen dafür, dass Inhalte in Karten mit
+   weißem Hintergrund mittig (horizontal + vertikal) erscheinen.
    =========================================================== */
-.cards{ display:grid; gap:1.2rem; grid-template-columns:repeat(3,1fr); }
-@media (max-width:900px){ .cards{ grid-template-columns:1fr 1fr; } }
-@media (max-width:640px){ .cards{ grid-template-columns:1fr; } }
+
+.card,
+.cv-card,
+.cv-box {
+  display: flex;                  /* Flexbox aktivieren */
+  align-items: center;            /* Vertikal zentrieren */
+  justify-content: center;        /* Horizontal zentrieren */
+  text-align: center;             /* Text in der Mitte ausrichten */
+  flex-direction: column;         /* Inhalt untereinander stapeln */
+  padding: 2rem;                  /* Innenabstand für Luft */
+}
 
 
 /* ===========================================================
