@@ -26,40 +26,17 @@
        (2) GLOBAL CSS – zentrale Styles, Design Tokens & Komponenten
        - Enthält u. a. .container, .section, .hero, .sec-head, .grid, .card,
          .cv-* (Timeline/Boxen), .btn, .tags, .skip-link, .nav-*, .site-footer
+       - Diese Datei ist die Single Source of Truth → hier nichts überschreiben.
        ========================================================= -->
   <link rel="stylesheet" href="assets/css/global.css" />
 
   <!-- =========================================================
-       (2b) SEITEN-LOKALE FIXES/ERGÄNZUNGEN
-       - Ziel: Korrigiert die globale „Zentrierung“ der Karten aus global.css,
-               damit CV-Einträge wieder linksbündig lesbar sind.
-       - Scoping über präzise Selektoren + !important (überstimmt globale Hardening-Regeln).
+       (2b) MINI-FALLBACK-STYLES (nur falls global.css nicht greift)
+       - Sichert Button-Optik & Aktionen ab.
+       - Kann entfernt werden, sobald alles stabil ist.
        ========================================================= -->
   <style>
-    /* --- CV-Karten wieder als „normale“ Blöcke darstellen --- */
-    .timeline .cv-card{
-      display:block !important;            /* statt display:flex aus global.css */
-      text-align:left !important;          /* Lesbarkeit von Fließtext/Listen */
-      padding:1rem 1.25rem !important;     /* moderates Padding */
-    }
-    .timeline .cv-card .cv-title{
-      text-align:center;                   /* Wunsch: Titel bleibt zentriert */
-      margin:0 0 .35rem;
-    }
-    .timeline .cv-card .cv-meta{
-      text-align:center;                   /* Firma/Zeitraum unter dem Titel */
-      color:#54616e;
-      margin:0 0 .5rem;
-      font-size:.95rem;
-    }
-    .timeline .cv-card .cv-list{
-      margin:0;
-      padding-left:1.15rem;                /* klassische Aufzählung */
-      list-style:disc;
-      line-height:1.6;
-    }
-
-    /* --- Buttons – Mini-Fallback (falls global.css mal nicht lädt) --- */
+    /* Buttons – Fallback */
     .cv-actions{ display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1rem; }
     .btn{
       display:inline-block; padding:.6rem .9rem; border-radius:.7rem;
@@ -69,11 +46,6 @@
     .btn:hover,.btn:focus{ filter:brightness(1.05); text-decoration:none; }
     .btn--ghost{ background:#fff; color:#0e3659; border:1px solid #e3e6e8; }
     .btn--ghost:hover,.btn--ghost:focus{ background:#f5f7f8; }
-
-    /* --- Mobile Feinheiten --- */
-    @media (max-width: 700px){
-      .cv-actions{ justify-content:center; }
-    }
   </style>
 </head>
 
@@ -155,8 +127,6 @@
              ===================================================== -->
         <h3 class="cv-block-title">Berufserfahrung</h3>
 
-        <div class="timeline" aria-label="Berufserfahrung">
-          <!-- Karte 1 -->
           <article class="cv-card">
             <!-- Titel zentriert, Meta unter dem Titel (zentriert), Liste linksbündig -->
             <h3 class="cv-title"><strong>ITSM – Prozessadministrator</strong></h3>
@@ -174,6 +144,173 @@
             </ul>
           </article>
 
+
           <!-- Karte 2 -->
           <article class="cv-card">
             <h3 class="cv-title">Praktikum IT&nbsp;322 – ITIL Management</h3>
+            <p class="cv-meta">Polizei Hamburg · 11/2022 – 01/2024</p>
+            <ul class="cv-list">
+              <li>Bearbeitung von Incidents im Lizenzmanagement.</li>
+              <li>Hospitation in verschiedenen IT-Bereichen.</li>
+              <li>Einblicke ins ITD5 (Amt für IT und Digitalisierung der Senatskanzlei).</li>
+              <li>Schulungen/Meetings zu „ITIL®&nbsp;4 Management und Scrum“.</li>
+              <li>BPMN-Prozessskizzen und Modellierung.</li>
+              <li>Praxisprojekt: .NET Framework/C#, T-SQL, HTML/CSS/JS, PowerShell (Entwurf bis Doku).</li>
+              <li>Koordination &amp; Teilnahme an einer ITIL®&nbsp;4-Simulation (Apollo&nbsp;13).</li>
+            </ul>
+          </article>
+
+          <!-- Karte 3 -->
+          <article class="cv-card">
+            <h4 class="cv-title">Fachinformatiker Anwendungsentwicklung</h4>
+            <div class="tags" aria-label="Ausbildungsinhalte">
+              <span class="tag">Projektmanagement</span>
+              <span class="tag">OOP</span>
+              <span class="tag">Datenbanken</span>
+              <span class="tag">Scrum</span>
+              <span class="tag">SQL</span>
+              <span class="tag">Rechnungswesen</span>
+              <span class="tag">Systemanalyse &amp; UML</span>
+              <span class="tag">Anforderungsanalyse</span>
+            </div>
+          </article>
+
+          <!-- Karte 4 -->
+          <article class="cv-card">
+            <h4 class="cv-title">Mehr als 20 Jahre Führungs- &amp; Organisationserfahrung im Gastronomiebereich</h4>
+            <div class="tags" aria-label="Schwerpunkte Gastronomie">
+              <span class="tag">Teamführung &amp; Einsatzplanung</span>
+              <span class="tag">Wareneinsatz/Budget</span>
+              <span class="tag">Qualitätsmanagement</span>
+              <span class="tag">Kundenservice</span>
+              <span class="tag">Leitung bis 25&nbsp;MA</span>
+              <span class="tag">Prozessverbesserung</span>
+              <span class="tag">Eventmanagement</span>
+              <span class="tag">Eigenverantwortliche Betriebsführung</span>
+            </div>
+          </article>
+        </div>
+
+        <!-- =====================================================
+             (6.1.2) SKILLS • ZERTIFIKATE • SPRACHEN – 3-Spalten-Grid
+             ===================================================== -->
+        <div class="cv-grid">
+          <!-- Spalte 1: Skills -->
+          <section class="cv-box" aria-labelledby="skills">
+            <h5 id="skills" class="cv-subtitle">Skills</h5>
+            <div class="tags">
+              <span class="tag">BPMN 2.0</span>
+              <span class="tag">UML</span>
+              <span class="tag">ITIL® 4</span>
+              <span class="tag">SCRUM</span>
+              <span class="tag">Power BI</span>
+              <span class="tag">DAX</span>
+              <span class="tag">Python</span>
+              <span class="tag">C#</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">T-SQL</span>
+              <span class="tag">Java</span>
+            </div>
+          </section>
+
+          <!-- Spalte 2: Zertifikate -->
+          <section class="cv-box" aria-labelledby="certs">
+            <h5 id="certs" class="cv-subtitle">Einige meiner Zertifizierungen</h5>
+            <ul class="cv-list">
+              <li>Power BI Data Analyst (PL-300), New Elements GmbH</li>
+              <li>AEVO – Ausbildereignung (IHK), Handelskammer Hamburg</li>
+              <li>ITIL® Foundation Certificate</li>
+              <li>EXIN Agile Scrum Master</li>
+            </ul>
+          </section>
+
+          <!-- Spalte 3: Sprachen -->
+          <section class="cv-box" aria-labelledby="lang">
+            <h5 id="lang" class="cv-subtitle">Sprachen</h5>
+            <ul class="cv-list">
+              <li>Deutsch – C1</li>
+              <li>Englisch – B1</li>
+              <li>Spanisch – Muttersprache</li>
+            </ul>
+          </section>
+        </div>
+
+        <!-- =====================================================
+             (6.1.3) AKTIONEN – Buttons (PDF, LinkedIn)  ✅ WICHTIG
+             - .btn / .btn--ghost kommen aus global.css (Fallback siehe <style> oben)
+             - target="_blank" + rel="noopener" für sichere neue Tabs
+             ===================================================== -->
+        <div class="cv-actions" aria-label="Weiterführende Aktionen">
+          <a class="btn"
+             href="assets/docs/LebenslaufDonimanPeña_052025_1.0.0.pdf"
+             target="_blank" rel="noopener"
+             title="Lebenslauf als PDF öffnen (neuer Tab)">
+            Lebenslauf als PDF
+          </a>
+
+          <a class="btn btn--ghost"
+             href="https://www.linkedin.com/in/doniman-francisco-pe%C3%B1a-parra-609263232/"
+             target="_blank" rel="noopener"
+             title="LinkedIn-Profil öffnen (neuer Tab)">
+            LinkedIn
+          </a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================
+       (7) GLOBALER FOOTER-PLATZHALTER
+       - Wird per site.js mit includes/footer.html befüllt
+       - Der Include bringt globalen Kontaktblock + kompakten Footer
+       - Hier bewusst KEIN <footer>, da das Include selbst <footer> enthält.
+       ========================================================= -->
+  <div id="site-footer">
+    <noscript>
+      <!-- Minimaler Fallback ohne JS -->
+      <section class="contact-block" aria-labelledby="kontaktTitle">
+        <div class="contact-inner container">
+          <h2 id="kontaktTitle" class="contact-title">Kontakt</h2>
+          <p class="contact-name">Doniman F. Peña Parra</p>
+          <p class="contact-email"><a href="mailto:dofp79@hotmail.com" rel="nofollow">dofp79@hotmail.com</a></p>
+        </div>
+      </section>
+      <footer class="site-footer" role="contentinfo">
+        <div class="container subfooter__inner">
+          <p>&copy; <span data-year>2025</span> IT-Steuerung &amp; IT-Controlling</p>
+          <a class="to-top" href="#top">Nach oben ↑</a>
+        </div>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- =========================================================
+       (8) SCRIPTS (genau EINMAL, mit defer)
+       - assets/js/site.js:
+         • lädt Header/Footer via include()
+         • markiert aktiven Menüpunkt (aria-current/.is-active) in .nav-list
+         • setzt Jahr & E-Mail (Spam-sicher)
+         • initialisiert optional RZ-Zoom/Modal (falls Hooks vorhanden)
+       ========================================================= -->
+  <script src="assets/js/site.js" defer></script>
+
+  <!-- (Optional) Mini-Fallback: Wenn site.js ausfällt, Includes nachziehen.
+       → Kann entfernt werden, sobald site.js stabil bereitsteht. -->
+  <script>
+    (function(){
+      const include = (sel, url) => {
+        const host = document.querySelector(sel);
+        if (!host) return;
+        const has = host.children.length > 0 && !host.querySelector('noscript');
+        if (has) return; // bereits durch site.js gefüllt
+        fetch(url).then(r => r.ok ? r.text() : '').then(html => { if (html) host.innerHTML = html; });
+      };
+      document.addEventListener('DOMContentLoaded', () => {
+        include('#site-header', 'includes/header.html');
+        include('#site-footer', 'includes/footer.html');
+      });
+    })();
+  </script>
+</body>
+</html>
